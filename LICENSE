@@ -1,0 +1,42 @@
+Copyright (c) 2026 Het Patel. All rights reserved.
+
+This repository is published so the work can be read, reviewed and learned
+from. It is not published for reuse.
+
+PERMITTED
+
+  Reading the source. Cloning it and running it locally. Quoting short excerpts
+  with attribution, for review, teaching or discussion. Reusing a general
+  technique you learned here — an idea is not owned.
+
+NOT PERMITTED WITHOUT WRITTEN PERMISSION
+
+  Republishing this site or a derivative of it, in whole or in substantial
+  part, under any name. Reusing the design system, layout, motion
+  choreography, copy or the CASE / 001 exercise as the basis of another
+  portfolio or product. Redistributing this repository, modified or not.
+
+  The identity content — the name, the résumé-derived data in data/, the
+  written voice — is personal and is not licensed for any use at all.
+
+WHY THIS AND NOT MIT
+
+  A permissive licence would let anyone ship this exact portfolio under their
+  own name. For a personal portfolio that is the one outcome worth preventing,
+  so the default of "all rights reserved" is stated explicitly rather than left
+  to be inferred from the absence of a LICENSE file.
+
+  If you would rather this be open source, replacing this file with the MIT
+  text is the only change required — nothing in the build depends on it.
+
+NO WARRANTY
+
+  The software is provided "as is", without warranty of any kind, express or
+  implied, including but not limited to the warranties of merchantability,
+  fitness for a particular purpose and non-infringement. In no event shall the
+  author be liable for any claim, damages or other liability arising from, out
+  of or in connection with the software or its use.
+
+CONTACT
+
+  patel.het7996@gmail.com

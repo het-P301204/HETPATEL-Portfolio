@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* GitHub social preview: 1280x640, safe area inset because the card is
+   cropped differently on Twitter/X, Slack and LinkedIn. Palette is the
+   project's own light theme from app/globals.css. */
+:root{--surface:#f7f6f3;--ink:#0b0b0b;--accent:#3157ff;--mut:#6b6a63}
+*{box-sizing:border-box;margin:0}
+html,body{width:1280px;height:640px;overflow:hidden}
+body{background:var(--surface);color:var(--ink);font-family:Archivo,sans-serif;
+     display:flex;flex-direction:column;justify-content:space-between;
+     padding:64px 84px 58px;position:relative}
+/* hairline grid, the site's own texture */
+body::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(11,11,11,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(11,11,11,.045) 1px,transparent 1px);
+  background-size:80px 80px;pointer-events:none}
+.top{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+.kick{font-family:"IBM Plex Mono",monospace;font-size:17px;letter-spacing:.22em;
+      text-transform:uppercase;color:var(--mut)}
+.kick b{color:var(--accent);font-weight:500}
+h1{font-size:116px;font-weight:800;line-height:.86;letter-spacing:-.045em;position:relative}
+h1 .p{display:block;padding-left:98px}
+.rule{width:120px;height:6px;background:var(--accent);margin:34px 0 24px}
+.tag{font-size:27px;line-height:1.36;max-width:26ch;color:var(--ink)}
+.tag em{font-style:normal;color:var(--accent)}
+.bot{display:flex;padding-top:14px;border-top:1px solid rgba(11,11,11,.14);justify-content:space-between;align-items:flex-end;position:relative}
+.facts{display:flex;gap:52px}
+.f .n{font-size:34px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.f .l{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.16em;
+      text-transform:uppercase;color:var(--mut);margin-top:5px}
+.stack{font-family:"IBM Plex Mono",monospace;font-size:14px;letter-spacing:.1em;
+       color:var(--mut);text-align:right;line-height:1.7}
+.mark{position:absolute;right:0;top:-6px;width:104px;height:104px}
+</style></head><body>
+
+<div class="top">
+  <div class="kick">Cybersecurity <b>·</b> VAPT <b>·</b> Security engineering</div>
+  <svg class="mark" viewBox="0 0 104 104" fill="none" aria-hidden="true">
+    <rect x="1" y="1" width="102" height="102" stroke="#0b0b0b" stroke-opacity=".18"/>
+    <path d="M52 10 L88 26 v30 c0 22-16 33-36 38 -20-5-36-16-36-38V26Z"
+          stroke="#3157ff" stroke-width="2.5" fill="none"/>
+    <path d="M36 53 l11 11 21-23" stroke="#3157ff" stroke-width="3.5"
+          stroke-linecap="square" fill="none"/>
+  </svg>
+</div>
+
+<div>
+  <h1>HET<span class="p">PATEL</span></h1>
+  <div class="rule"></div>
+  <div class="tag">A portfolio built as a <em>digital instrument</em>, not a template.</div>
+</div>
+
+<div class="bot">
+  <div class="facts">
+    <div class="f"><div class="n">2</div><div class="l">interaction modes</div></div>
+    <div class="f"><div class="n">11</div><div class="l">prerendered routes</div></div>
+    <div class="f"><div class="n">0</div><div class="l">third-party requests</div></div>
+    <div class="f"><div class="n">0</div><div class="l">cookies</div></div>
+  </div>
+  <div class="stack">NEXT.JS 16 · TYPESCRIPT · TAILWIND V4<br>GSAP · LENIS · CSP ENFORCED</div>
+</div>
+
+</body></html>
