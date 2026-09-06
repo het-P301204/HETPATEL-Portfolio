@@ -28,3 +28,9 @@ awesome-design-md-main/
 
 # Local machine paths and per-user tool permissions.
 .claude/settings.local.json
+
+# Agent tooling. CLAUDE.md is re-written by `next dev` on every run (see the
+# note in AGENTS.md), so ignoring it is the only thing that keeps it from
+# reappearing in a later commit. Both stay on disk; they are just not published.
+CLAUDE.md
+.claude/
