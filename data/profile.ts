@@ -40,10 +40,13 @@ export const profile = {
   focus: "VAPT · SECURITY ENGINEERING · RISK & COMPLIANCE",
 
   /**
-   * Nothing is verified as currently being built — public GitHub supports zero
-   * original repositories. This says so rather than filling the slot.
+   * Both halves are documented. This site is a published original repository,
+   * which is what the slot previously said did not exist; and the TryHackMe
+   * streak below is carried by the profile the account links to. Nothing here
+   * is a plan or an intention — if a claim stops being true, cut it rather
+   * than soften it.
    */
-  building: "NOTHING PUBLISHED YET · DIRECTIONS SELECTED, NOT STARTED",
+  building: "THIS PORTFOLIO · 180-DAY TRYHACKME STREAK",
 
   email: "patel.het7996@gmail.com",
   linkedinHandle: "het-patel-913017345",
@@ -55,6 +58,22 @@ export const profile = {
    * GitHub affordance stays hidden. Do not guess a handle.
    */
   githubUrl: "https://github.com/het-P301204",
+
+  /**
+   * Practice profiles. Same contract as `githubUrl`: fill one and its row
+   * appears in the contact block; leave it empty and the row stays out
+   * entirely rather than rendering an unavailable link.
+   *
+   * The TryHackMe profile is where the 180-day streak and the Advent of Cyber
+   * completion are visible. It could not be checked from a build machine —
+   * TryHackMe answers automated requests with a bot challenge — so if the
+   * handle ever changes, this link needs changing by hand.
+   */
+  tryHackMeHandle: "Patel.Het",
+  tryHackMeUrl: "https://tryhackme.com/p/Patel.Het",
+
+  /** Credly holds all 16 badges, each with its own issuer-side verification. */
+  credlyUrl: "https://www.credly.com/users/het-patel.388f8bb5",
 
   /**
    * Public site origin — used for canonical URL, sitemap, robots, security.txt

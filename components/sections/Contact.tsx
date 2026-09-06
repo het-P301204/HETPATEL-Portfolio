@@ -73,6 +73,37 @@ export default function Contact() {
         : "NO REPOSITORY IS LINKED FROM THE SOURCE THIS SITE WAS BUILT FROM. NOTHING IS CLAIMED IN ITS PLACE.",
       cursorLabel: "CODE",
     },
+    /**
+     * Practice profiles. Both follow the same contract as the GitHub row above:
+     * present only when the URL is set, so an empty field removes the row
+     * rather than rendering a dead one. Neither carries a count in its label —
+     * the streak and the badge total live on the profiles themselves, where
+     * they are current by definition and cannot go stale here.
+     */
+    ...(profile.tryHackMeUrl
+      ? [
+          {
+            id: "tryhackme",
+            label: "TRYHACKME",
+            value: profile.tryHackMeHandle,
+            href: profile.tryHackMeUrl,
+            external: true,
+            cursorLabel: "PRACTICE",
+          } satisfies Channel,
+        ]
+      : []),
+    ...(profile.credlyUrl
+      ? [
+          {
+            id: "credly",
+            label: "CREDLY",
+            value: "VERIFY BADGES",
+            href: profile.credlyUrl,
+            external: true,
+            cursorLabel: "VERIFY",
+          } satisfies Channel,
+        ]
+      : []),
   ];
 
   return (

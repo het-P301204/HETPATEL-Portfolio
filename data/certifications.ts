@@ -108,7 +108,13 @@ export const certifications: Certification[] = [
     category: "COURSE",
     status: "COMPLETED",
     logo: "google",
-    credentialUrl: "",
+    /**
+     * Issuer-side verification, printed on the certificate itself and checked:
+     * it resolves to Coursera's own accomplishment page for this credential ID.
+     * This is the standard the other entries should reach — Coursera confirms
+     * the credential, rather than us hosting a copy of it.
+     */
+    credentialUrl: "https://coursera.org/verify/professional-cert/3AES6CG2F4LY",
   },
   {
     name: "Student SOC Program Foundations",
@@ -124,11 +130,21 @@ export const certifications: Certification[] = [
     name: "Junior Cybersecurity Analyst Career Path",
     nameLines: ["JUNIOR CYBERSECURITY", "ANALYST CAREER PATH"],
     provider: "Cisco Networking Academy",
-    year: "",
+    year: "2025",
     category: "PATHWAY",
     status: "COMPLETED",
     logo: "cisco",
-    credentialUrl: "",
+    /**
+     * Credly's own badge page — issuer-side verification, not a hosted copy.
+     * Issued 21 July 2025.
+     *
+     * Note this badge is also one of the sixteen counted in the Credly set
+     * further down, so the archive shows it twice: once on its own because the
+     * résumé lists it, and once inside that total. That is a double count and
+     * should be resolved deliberately rather than left to a reader to notice.
+     */
+    credentialUrl:
+      "https://www.credly.com/badges/3a77869c-88d1-4332-8360-9c8167ed08ed",
   },
   {
     name: "Cybersecurity Job Simulation",
@@ -149,6 +165,24 @@ export const certifications: Certification[] = [
      */
     credentialUrl:
       "https://drive.google.com/file/d/1xyst0iuMUrwRkMLv_vPNxlcnOkd6uLZL/view?usp=sharing",
+  },
+  {
+    /**
+     * Not previously listed — the certificate turned up in the archive Het
+     * supplied rather than on the résumé, and it reads unambiguously: awarded
+     * to Het Patel, 21 July 2025, "Cybersecurity Essentials", offered by
+     * NASSCOM through the Cisco Networking Academy program. Every field below
+     * is copied from that document; none is inferred.
+     */
+    name: "Cybersecurity Essentials",
+    nameLines: ["CYBERSECURITY", "ESSENTIALS"],
+    provider: "NASSCOM / Cisco Networking Academy",
+    year: "2025",
+    category: "COURSE",
+    status: "COMPLETED",
+    logo: "cisco",
+    credentialUrl:
+      "https://drive.google.com/file/d/16NX9vB3CliX7MZzCY56MwXBCWcJ7ud6A/view?usp=sharing",
   },
   {
     name: "CTF Excellence Certificate",
@@ -193,13 +227,19 @@ export const certifications: Certification[] = [
   {
     name: "16 Credly Certifications",
     nameLines: ["16 CREDLY", "CERTIFICATIONS"],
-    provider: "Credly — AWS, Azure, IBM and others",
-    year: "",
+    /**
+     * Corrected against the profile itself, which lists all sixteen: fifteen
+     * are Google Cloud skill badges and one is the Cisco path. There is no
+     * AWS, Azure or IBM badge on the account, and the previous wording said
+     * there was. The count is right; the attribution was not.
+     */
+    provider: "Credly — Google Cloud and Cisco",
+    year: "2024–2025",
     category: "CREDENTIAL SET",
     status: "COMPLETED",
     logo: "credly",
-    credentialUrl: "",
-    note: "Issued across cloud, AI/ML, networking and cybersecurity tracks.",
+    credentialUrl: "https://www.credly.com/users/het-patel.388f8bb5",
+    note: "Fifteen Google Cloud skill badges — compute, storage, networking, serverless, Looker, Vertex AI — plus the Cisco security path. One is security; the rest are cloud and AI/ML.",
   },
 ];
 
