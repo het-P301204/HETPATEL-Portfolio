@@ -5,9 +5,31 @@
  * labelled that way everywhere it appears.
  *
  * ── credentialUrl ──────────────────────────────────────────────────────────
- * The résumé carries NO credential URLs. Every entry therefore ships with
- * `credentialUrl: ""`. Nothing is inferred from the provider name and no
- * verification URL is constructed.
+ * Nothing is inferred from the provider name and no verification URL is ever
+ * constructed. A link is set only when the certificate behind it has been
+ * opened and confirmed to name Het.
+ *
+ * Two are set, both hosted copies of the certificate itself: Advent of Cyber
+ * 2025 and the Deloitte / Forage job simulation. Both documents carry his name
+ * and a date. Note what this claims and what it does not — a hosted copy is
+ * evidence you can read, not issuer-side verification. Where the issuer
+ * publishes a verification page (TryHackMe prints a code on its certificate;
+ * Forage prints two; Credly and Coursera both expose public credential URLs),
+ * that link is strictly better and should replace the copy.
+ *
+ * Two certificates exist but are deliberately NOT linked:
+ *
+ *   CTF Excellence (Kryptech) and Student SOC Program Foundations were both
+ *   issued as unfilled templates — the recipient line and the date line are
+ *   blank on the document. Linking a certificate that names nobody would
+ *   weaken the archive rather than support it, which is the opposite of what
+ *   this field is for. Ask each issuer to reissue a completed copy, then set
+ *   the link.
+ *
+ * A GDG on Campus Solution Challenge certificate (Hack2skill, ID
+ * 2025H2S01GSC-I07241) also exists. It is not listed here: it recognises
+ * submitting an idea to a hackathon, not completing security training, and
+ * this archive is not the place to blur that.
  *
  * To publish a credential later, change one line:
  *
@@ -112,11 +134,21 @@ export const certifications: Certification[] = [
     name: "Cybersecurity Job Simulation",
     nameLines: ["CYBERSECURITY", "JOB SIMULATION"],
     provider: "Deloitte Australia / Forage",
-    year: "",
+    year: "2025",
     category: "SIMULATION",
     status: "COMPLETED",
     logo: "deloitte",
-    credentialUrl: "",
+    /**
+     * Issued to Het Patel, 25 June 2025, signed by Deloitte's CHRO and served
+     * through Forage. The certificate prints an enrolment verification code
+     * and a user verification code; if Forage exposes a public page for those,
+     * it belongs here instead of the hosted copy.
+     *
+     * `year` is set from the certificate itself, which is a documented source —
+     * it is not inferred from anything.
+     */
+    credentialUrl:
+      "https://drive.google.com/file/d/1xyst0iuMUrwRkMLv_vPNxlcnOkd6uLZL/view?usp=sharing",
   },
   {
     name: "CTF Excellence Certificate",
@@ -136,7 +168,17 @@ export const certifications: Certification[] = [
     category: "LABS",
     status: "COMPLETED",
     logo: "tryhackme",
-    credentialUrl: "",
+    /**
+     * The certificate is issued to Het Patel, dated 30 December 2025, and
+     * carries TryHackMe's own code THM-CWIOTNWVVT. TryHackMe publishes a
+     * verification page for that code, which would be first-party proof rather
+     * than a hosted copy — swap this link for it once the page has been opened
+     * and confirmed. It is not set here because it could not be checked: the
+     * site sits behind a bot challenge that answers automated requests with a
+     * checkpoint page, and this file does not carry unverified URLs.
+     */
+    credentialUrl:
+      "https://drive.google.com/file/d/1opbXn4cec8OkARD9d1fbZgOAKzSwdHGr/view?usp=sharing",
   },
   {
     name: "Pre-Security",
