@@ -112,6 +112,26 @@ export default function About() {
               <dt className="t-mono text-grey-soft">BUILDING</dt>
               <dd className="t-mono">{profile.building}</dd>
             </div>
+            {/* The one count on this page, so it carries its evidence rather
+                than asking to be taken on trust. No URL, no row. */}
+            {profile.practice ? (
+              <div>
+                <dt className="t-mono text-grey-soft">PRACTICE</dt>
+                <dd className="t-mono">
+                  {profile.practiceEvidenceUrl ? (
+                    <a
+                      href={profile.practiceEvidenceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {profile.practice}
+                    </a>
+                  ) : (
+                    profile.practice
+                  )}
+                </dd>
+              </div>
+            ) : null}
           </dl>
         </div>
       </div>

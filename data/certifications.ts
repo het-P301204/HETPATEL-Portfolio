@@ -124,7 +124,16 @@ export const certifications: Certification[] = [
     category: "TRAINING",
     status: "COMPLETED",
     logo: "microsoft",
-    credentialUrl: "",
+    /**
+     * Linked at Het's instruction. Same caveat as the Kryptech certificate:
+     * the issuer shipped it as an unfilled template — the line after
+     * "Presented to" is empty and so is the one after "Completed on", which
+     * is also why `year` stays empty here rather than being guessed. It
+     * evidences the training, not the attendee. Replace with a completed copy
+     * when the issuer provides one.
+     */
+    credentialUrl:
+      "https://drive.google.com/file/d/1F42iayTbbg1vNjOiTTPdAdtRG2-hsmip/view?usp=sharing",
   },
   {
     name: "Junior Cybersecurity Analyst Career Path",
@@ -187,12 +196,21 @@ export const certifications: Certification[] = [
   {
     name: "CTF Excellence Certificate",
     nameLines: ["CTF EXCELLENCE", "CERTIFICATE"],
-    provider: "Kryptech",
-    year: "",
+    provider: "Kryptech Cyber Solutions",
+    year: "2025",
     category: "COMPETITION",
     status: "COMPLETED",
     logo: "kryptech",
-    credentialUrl: "",
+    /**
+     * Kryptech Cyber Solutions — CTF 2025, signed by their CEO. Linked at
+     * Het's instruction. Read it before relying on it: the issuer left the
+     * recipient line and the participation date blank on the document, so it
+     * evidences the event rather than who attended. `year` is taken from the
+     * award text ("CTF 2025"), which is printed, not from the blank date.
+     * A reissued copy carrying his name should replace this link.
+     */
+    credentialUrl:
+      "https://drive.google.com/file/d/1_4fSzEz3oKM1spZuY2ltXC8L3cK-ANDM/view?usp=sharing",
   },
   {
     name: "Advent of Cyber 2025",

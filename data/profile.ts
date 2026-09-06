@@ -40,13 +40,24 @@ export const profile = {
   focus: "VAPT · SECURITY ENGINEERING · RISK & COMPLIANCE",
 
   /**
-   * Both halves are documented. This site is a published original repository,
-   * which is what the slot previously said did not exist; and the TryHackMe
-   * streak below is carried by the profile the account links to. Nothing here
-   * is a plan or an intention — if a claim stops being true, cut it rather
-   * than soften it.
+   * This site is a published original repository, which is what the slot
+   * previously said did not exist. Nothing here is a plan or an intention —
+   * if a claim stops being true, cut it rather than soften it.
    */
-  building: "THIS PORTFOLIO · 180-DAY TRYHACKME STREAK",
+  building: "THIS PORTFOLIO — PUBLISHED AND DEPLOYED",
+
+  /**
+   * A count, and the site does not carry counts unless they are evidenced —
+   * so this one ships with its evidence attached and the two move together.
+   * The badge names the account (Patel.Het) and states the figure. Empty the
+   * URL and the row disappears rather than making an unbacked claim.
+   *
+   * A streak is perishable. If it lapses, change the number or remove both
+   * fields; do not leave a stale figure standing because it flatters.
+   */
+  practice: "180-DAY TRYHACKME STREAK",
+  practiceEvidenceUrl:
+    "https://drive.google.com/file/d/1WUMZpuSX8b2Ud62PH3xG1-nI2K6ihUdX/view?usp=sharing",
 
   email: "patel.het7996@gmail.com",
   linkedinHandle: "het-patel-913017345",
