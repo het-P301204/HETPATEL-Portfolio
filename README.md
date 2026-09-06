@@ -6,9 +6,12 @@
 
 An editorial, single-page portfolio built as a **digital instrument** rather than a template.
 
+### **[→ hetpatel-lemon.vercel.app](https://hetpatel-lemon.vercel.app)**
+
 <br>
 
 [![CI](https://github.com/het-P301204/HETPATEL-Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/het-P301204/HETPATEL-Portfolio/actions/workflows/ci.yml)
+[![Live](https://img.shields.io/website?url=https%3A%2F%2Fhetpatel-lemon.vercel.app&label=live&up_message=online&up_color=047857)](https://hetpatel-lemon.vercel.app)
 ![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind-v4-38BDF8?logo=tailwindcss&logoColor=white)
@@ -188,7 +191,7 @@ preview URLs.
 <br>
 
 ```bash
-curl -sI https://<your-deployment>.vercel.app \
+curl -sI https://hetpatel-lemon.vercel.app \
   | grep -iE "content-security|strict-transport|x-frame|permissions-policy"
 ```
 
