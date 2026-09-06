@@ -1,0 +1,45 @@
+# Typecheck and production build on every push and pull request.
+#
+# This does not deploy. Vercel builds from its own Git integration, so a second
+# deploying workflow here would duplicate that build and race it. What this adds
+# is a check that runs on a clean machine: it catches the class of failure that
+# only appears when node_modules is not already warm and the lockfile is the
+# only source of truth.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A newer push makes an in-flight run irrelevant; don't burn minutes finishing it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` over `npm install`: it installs exactly the lockfile and fails
+      # if package.json and package-lock.json have drifted apart.
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Production build
+        run: npm run build

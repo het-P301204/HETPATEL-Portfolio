@@ -1,0 +1,1116 @@
+{
+  "$schema_note": "Research corpus for the Het Patel personal website project. Every entry records HOW it was observed. Fields that could not be verified are the literal string UNKNOWN. No field is inferred or invented.",
+  "compiled_by": "Claude (Opus 5), acting as research analyst for this project",
+  "compiled_on": "2026-08-14",
+  "observation_methods": {
+    "browser_runtime": "Loaded in a real browser engine; computed styles, fonts, colours, DOM structure and text extracted programmatically. Highest confidence — colour and typography values are measured, not estimated.",
+    "text_fetch": "Page fetched and converted to markdown, then analysed. Structure, navigation, wording and content architecture are observable. VISUAL properties (colour, motion, spacing) are NOT observable by this method and are recorded as UNKNOWN.",
+    "listed_only": "The site's existence, name and listing context are verified from a credible index (e.g. an Awwwards category page, a GitHub topic page). The site itself was NOT individually inspected. All design fields are UNKNOWN. These entries exist to establish population and sampling context, not to support design claims."
+  },
+  "known_limitations": [
+    "Apify was NOT available in this session. No large-scale crawl was performed. The corpus is therefore hand-collected and modest in size; conclusions are stated as observations about THIS sample, not as universal trends.",
+    "text_fetch cannot see colour, motion, or layout. Several entries therefore have rich structural data and UNKNOWN visual data. This asymmetry is deliberate and must not be papered over.",
+    "Award-gallery listings reflect a snapshot on 2026-08-14 and will drift.",
+    "No entry here should be treated as a claim about the whole web. Sample size is small by design (quality over quantity, per project brief section 15)."
+  ],
+  "category_counts": {
+    "exceptional_digital_experience": 33,
+    "technical_engineering": 6,
+    "cybersecurity": 25,
+    "editorial_research_infodesign": 6
+  },
+  "entries": [
+    {
+      "name": "Adharv K T — 'My Cyberfolio'",
+      "url": "https://adharvkt.github.io/portfolio/",
+      "category": "cybersecurity",
+      "source": "Web search for cybersecurity personal portfolios",
+      "access_date": "2026-08-14",
+      "method": "browser_runtime",
+      "navigation_model": "Fixed top nav, five items: Home, About, Services, Badges, Contact. Single-page anchor scrolling.",
+      "hero_strategy": "Name in caps + role label 'Cybersecurity Professional' + animated GIF. No thesis, no point of view.",
+      "typography": "Poppins throughout (164 of 174 sampled elements). No typographic hierarchy beyond size. Section headings set ALL CAPS: 'ABOUT ME', 'SKILLS', 'EXPERIENCE', 'COURSES COMPLETED', 'INTERNSHIPS ATTENDED', 'LICENSES ACCQUIRED' (sic).",
+      "color_strategy": "MEASURED: near-black rgb(0,0,0) dominant (343 elements), neon green rgb(44,214,38) as sole accent (31 elements), grey rgb(119,119,119) secondary. Textbook black + neon-green security palette.",
+      "layout_strategy": "Vertical stack of full-width sections. No canvas element present.",
+      "interaction_model": "Scroll + anchor jump. No discovery mechanic.",
+      "motion_strategy": "UNKNOWN (not measured dynamically)",
+      "project_presentation": "Four projects as badges: IPGeo Location, PhoneInfoga, WhatsApp Chat Analyzer, Port Scanner. Title-only; no problem, approach, or finding.",
+      "content_strategy": "Credential accumulation — courses, internships, licenses each get a dedicated counted section. Blog outsourced to Medium.",
+      "memorable_element": "None identified. The site is legible but leaves no retained idea.",
+      "generic_patterns": [
+        "black + neon green",
+        "percentage skill bars (SOC 99%, NMap 95%)",
+        "'Services' section on a personal (non-freelance) portfolio",
+        "tool names presented as if they were projects",
+        "phrases: 'dedicated cybersecurity professional', 'proven track record', 'unwavering commitment to excellence'",
+        "credential-count sections"
+      ],
+      "interesting_patterns": [],
+      "extracted_principles": [
+        "Listing tools you have used is not evidence of engineering ability; it is evidence of exposure.",
+        "Percentage skill bars invite disbelief — an unfalsifiable number reads as decoration, not proof."
+      ],
+      "possible_application_to_het": "Direct negative model. Everything measured here is on Het's forbidden list (brief §26). Useful as a genericity baseline.",
+      "copying_risk": "None — this is an anti-reference."
+    },
+    {
+      "name": "Zyekh Abdul Qadir Jailani — 'Terminal & Security Portfolio'",
+      "url": "https://zyekh.cloud/",
+      "category": "cybersecurity",
+      "source": "GitHub topic: cybersecurity-portfolio",
+      "access_date": "2026-08-14",
+      "method": "browser_runtime",
+      "navigation_model": "Top nav: Home, About, Services, Archive, Contact.",
+      "hero_strategy": "Name in caps, then lowercase role line 'full stack developer & security researcher', then a short capability paragraph. Preceded by a banner reading 'SYSTEM_STATUS: ONLINE'.",
+      "typography": "MEASURED: JetBrains Mono as the body face for the whole document (27 of 45 sampled elements); Geist/Inter used secondarily. Monospace is the default, not an accent.",
+      "color_strategy": "MEASURED: background rgb(18,19,26) (very dark blue-black); text greys rgb(196,199,200) and rgb(227,225,236). Restrained and, notably, NOT neon green — a more contemporary dark palette.",
+      "layout_strategy": "Vertical sections with SCREAMING_SNAKE_CASE headings: SYSTEM_OVERVIEW, CORE_REPOSITORIES, TECHNICAL_DOMAIN.",
+      "interaction_model": "Scroll. Terminal styling is decorative — no actual command interface was found.",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "'CORE_REPOSITORIES' section — repository listing.",
+      "content_strategy": "Machine-system metaphor applied as surface vocabulary rather than as structure.",
+      "memorable_element": "The consistency of the machine-vocabulary naming. It is coherent, though borrowed.",
+      "generic_patterns": [
+        "monospace as the entire body face",
+        "'SYSTEM_STATUS: ONLINE'",
+        "'INITIALIZE CONTACT' as a button label",
+        "SCREAMING_SNAKE_CASE section headings",
+        "terminal aesthetic without terminal function",
+        "'Services' section on a personal portfolio"
+      ],
+      "interesting_patterns": [
+        "Dark palette avoids neon green — evidence the cyber aesthetic is modernising, not disappearing.",
+        "Naming sections as system components is a real (if overused) attempt at a conceptual spine."
+      ],
+      "extracted_principles": [
+        "A metaphor applied only to vocabulary is costume. A metaphor applied to structure and navigation is architecture. The difference is what separates a concept from a theme.",
+        "Decorative terminal chrome sets an expectation of interactivity that the page then fails to honour — an interaction promise the site cannot keep."
+      ],
+      "possible_application_to_het": "Cautionary: Het's brief explicitly wants a conceptual backbone (§29). This site shows the failure mode where the concept never reaches past the labels.",
+      "copying_risk": "None — anti-reference."
+    },
+    {
+      "name": "Raif Kaya — Cyber Security Engineer portfolio",
+      "url": "https://raifkaya.nl/",
+      "category": "cybersecurity",
+      "source": "Web search for cybersecurity personal portfolios",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Linear single page: About → Portfolio → Services → Skills → Experiences → Contact.",
+      "hero_strategy": "Availability-seeking introduction stating age, junior title, and that he is seeking a traineeship in a named region.",
+      "typography": "UNKNOWN",
+      "color_strategy": "UNKNOWN (text_fetch cannot observe colour)",
+      "layout_strategy": "Conventional stacked sections.",
+      "interaction_model": "UNKNOWN",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "'Portfolio' section lists five TOOLS (Acunetix, Burp Suite, Nmap, Wireshark, SQLMap), each with one sentence in the form 'I use [tool] to [action]'. Tools occupy the slot where projects should be.",
+      "content_strategy": "Skills shown as percentage bars with year counts, e.g. 'Network Mapper 90% Professional 5 years experience'.",
+      "memorable_element": "The Skills heading reads 'Master skills that are beyond legal' — memorable, but it trades credibility for edge.",
+      "generic_patterns": [
+        "tools-as-portfolio",
+        "percentage skill bars",
+        "'Services' section",
+        "formulaic repeated sentence stems ('I use…', 'I'm able to use…')",
+        "fixed About→Portfolio→Services→Skills→Experience→Contact order"
+      ],
+      "interesting_patterns": [],
+      "extracted_principles": [
+        "Edgy 'outlaw hacker' framing actively damages credibility with the GRC/audit audience Het needs to reach. Compliance buyers are risk-averse by profession.",
+        "The tools-as-portfolio substitution is the single most common structural error observed in this category."
+      ],
+      "possible_application_to_het": "Negative model, and directly relevant: Het's toolset (Burp, Nmap, Wireshark) is the SAME list. He must present these as method, not as inventory, or he becomes indistinguishable from this.",
+      "copying_risk": "None — anti-reference."
+    },
+    {
+      "name": "James Kettle — research portfolio",
+      "url": "https://jameskettle.com/",
+      "category": "cybersecurity",
+      "source": "PortSwigger Research; web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Minimal. Single linear page; a show/hide toggle collapses past presentations.",
+      "hero_strategy": "Name, role, and a short bio establishing research focus. No visual hero, no tagline, no imagery beyond one headshot.",
+      "typography": "Text-forward, minimally styled. Exact faces UNKNOWN.",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Single column. Research grouped THEMATICALLY (HTTP Request Smuggling, Web Cache Poisoning, Tools & automation) rather than chronologically.",
+      "interaction_model": "Read and expand. No decorative interaction whatsoever.",
+      "motion_strategy": "None observed.",
+      "project_presentation": "Plain linked text entries under thematic headings, some with talk recordings. No cards. No screenshots. No tech-stack badges.",
+      "content_strategy": "The body of research IS the content. A methodology section on how to do research, plus a mentors/inspirations section.",
+      "memorable_element": "Total absence of decoration at the top of the field. The work carries the entire site.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "Thematic clustering of research by attack class — the structure itself communicates a body of expertise that a reverse-chronological list would hide.",
+        "A 'mentors and inspirations' section — rare, humanising, and a credibility signal that costs nothing.",
+        "Publicly documenting methodology, not just results."
+      ],
+      "extracted_principles": [
+        "Authority permits austerity. When the work is genuinely strong, decoration subtracts.",
+        "Thematic grouping converts a list of outputs into a demonstrated domain. This is a structural argument, not a visual one — and it is available to Het immediately.",
+        "IMPORTANT CAVEAT: Kettle can be this austere because his name alone carries the credibility. Het cannot yet borrow that austerity wholesale — an unknown engineer with a bare text page reads as unfinished, not confident. Het must earn attention with structure and clarity where Kettle earns it by reputation."
+      ],
+      "possible_application_to_het": "The thematic-clustering principle maps directly onto the 12-track roadmap. Grouping by security domain rather than by date is the single highest-value structural idea found in this category.",
+      "copying_risk": "Low — the principle is structural, not visual."
+    },
+    {
+      "name": "Sam Curry — security research blog",
+      "url": "https://samcurry.net/",
+      "category": "cybersecurity",
+      "source": "Web search; Wikipedia reference",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Minimal header: name, blog, about. Paginated archive (5 pages).",
+      "hero_strategy": "No hero. The most recent writeup is the entry point.",
+      "typography": "Clean and text-forward; exact faces UNKNOWN.",
+      "color_strategy": "Reported as near-monochrome; exact values UNKNOWN.",
+      "layout_strategy": "Reverse-chronological list.",
+      "interaction_model": "Read and paginate.",
+      "motion_strategy": "None observed.",
+      "project_presentation": "Each writeup: featured image, headline, date, read-time, excerpt. Card-like but content-bearing — the excerpt states the actual finding.",
+      "content_strategy": "Long-form vulnerability narratives; co-discoverers consistently credited.",
+      "memorable_element": "The narrative writeup itself — findings told as investigations.",
+      "generic_patterns": ["reverse-chronological blog index", "card list"],
+      "interesting_patterns": [
+        "Read-time and date as the only metadata — respects the reader's attention budget.",
+        "Consistent co-author credit signals professional maturity."
+      ],
+      "extracted_principles": [
+        "A card is acceptable when the card carries a real claim. The failure mode is the card that carries only a title and a tech-stack badge.",
+        "Security work is inherently narrative — an investigation has a beginning, a turn, and a resolution. Reverse-chronology wastes that."
+      ],
+      "possible_application_to_het": "Supports presenting anonymised professional work as investigation narratives (brief §32) rather than as summary cards.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "rez0 / Joseph Thacker",
+      "url": "https://rez0.com/",
+      "category": "cybersecurity",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Top nav: Home, Security, AI, About, Blog. Footer mimics tmux window list: '[0:main] [1:security] [2:ai] [3:about]'.",
+      "hero_strategy": "Terminal prompt string 'rez0@security:~$' as identity device.",
+      "typography": "UNKNOWN",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Three service cards: Hacking Services, AI Solutions, Blog.",
+      "interaction_model": "Standard navigation with terminal-styled chrome.",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "Service cards with calls to action; writing lives on a separate domain.",
+      "content_strategy": "Consultancy-first. Credibility via stated volume of reported vulnerabilities and a vendor recognition award.",
+      "memorable_element": "The tmux-style footer — a genuinely well-observed detail for the audience that recognises it.",
+      "generic_patterns": ["terminal prompt as identity", "three-card service layout"],
+      "interesting_patterns": [
+        "The tmux footer is an in-group signal: invisible to outsiders, precise to practitioners. It costs nothing and rewards the right reader."
+      ],
+      "extracted_principles": [
+        "Layered signalling works: a detail that is neutral to a recruiter and delightful to a practitioner serves both audiences at once. This is the only defensible use of terminal iconography found in the sample."
+      ],
+      "possible_application_to_het": "Establishes the narrow condition under which technical iconography survives Het's §26 ban: only as a precise in-group signal, never as the primary aesthetic.",
+      "copying_risk": "Medium — the tmux device is specific enough that reuse would read as imitation. Take the principle, not the device."
+    },
+    {
+      "name": "Daniel Miessler",
+      "url": "https://danielmiessler.com/",
+      "category": "cybersecurity",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Hub-and-spoke from homepage into content channels, professional platforms, and named projects. Archive back to 1999.",
+      "hero_strategy": "Leads with a thesis about AI and human value, not with a job title.",
+      "typography": "Minimal, readability-first; exact faces UNKNOWN.",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Sparse; generous whitespace.",
+      "interaction_model": "Read and navigate.",
+      "motion_strategy": "None observed.",
+      "project_presentation": "Named projects (TELOS, Human 3.0, PAI) get dedicated identities and spaces, separate from the blog.",
+      "content_strategy": "One unifying ideological thesis binds otherwise unrelated outputs.",
+      "memorable_element": "The thesis. You leave knowing what he believes, not what tools he uses.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "A 27-year archive as a credibility asset — longevity itself becomes the proof.",
+        "Named projects with their own identities scale far better than a flat project list.",
+        "Positioning built on a point of view rather than a skill set."
+      ],
+      "extracted_principles": [
+        "A thesis is more memorable and more defensible than a skill list. This is the clearest answer in the whole corpus to the brief's demand that visitors think 'this person has a point of view'.",
+        "Giving sustained projects their own names and homes lets an ecosystem grow without redesign."
+      ],
+      "possible_application_to_het": "Strong positive model for §36–37. Het's roadmap spine projects (cloudgraph-core, threatgraph, secschema, entitlement-algebra, provenance-mesh) are ALREADY named entities — the same structure, if and when they are built.",
+      "copying_risk": "Low — the principle is strategic."
+    },
+    {
+      "name": "tl;dr sec (Clint Gibler)",
+      "url": "https://tldrsec.com/",
+      "category": "cybersecurity",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Top nav: Guides, Login, Subscribe. Content axes: Posts, Authors, Guides. Archive paginated to 37 pages.",
+      "hero_strategy": "Value proposition framed as time cost: 'Keep up with Cybersecurity in 7 min/week'.",
+      "typography": "Clean sans-serif, high contrast; exact faces UNKNOWN.",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Featured posts, then recent issues; card layouts with thumbnails.",
+      "interaction_model": "Read, subscribe, browse archive.",
+      "motion_strategy": "None observed.",
+      "project_presentation": "Content typed by form: Newsletter (340+ issues), Blog, Podcast, Guides.",
+      "content_strategy": "Curation as the product. Cadence as the credibility signal.",
+      "memorable_element": "The explicit time contract with the reader.",
+      "generic_patterns": ["newsletter card grid", "subscriber-count social proof"],
+      "interesting_patterns": [
+        "Sustained cadence (340+ issues) is itself the proof of seriousness — no claim of expertise is needed.",
+        "Naming the reader's time cost up front is a rare and effective act of respect."
+      ],
+      "extracted_principles": [
+        "Consistency over time is a credibility mechanism available to someone early in their career. You cannot fake ten years of experience; you can publish every week and let the archive accumulate.",
+        "Content typed by FORM (newsletter/guide/podcast) is weaker than content typed by EPISTEMIC STATUS (settled/exploring/uncertain). Compare Maggie Appleton."
+      ],
+      "possible_application_to_het": "Directly answers brief §8 (why people return). Cadence beats volume.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "PortSwigger Research",
+      "url": "https://portswigger.net/research",
+      "category": "cybersecurity",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Hierarchical: Overview, Core Topics, Articles, Meet the Researchers, Talks, RSS. Core Topics subdivide by vulnerability class (XSS, Request Smuggling).",
+      "hero_strategy": "Featured research carousel.",
+      "typography": "Hierarchy via heading scale; exact faces UNKNOWN.",
+      "color_strategy": "Signature orange accent (exact value UNKNOWN).",
+      "layout_strategy": "Multiple parallel access paths to the same corpus.",
+      "interaction_model": "Browse by topic, by researcher, or by recency.",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "Research items with dates and linked titles; researcher profile pages as a second organising axis.",
+      "content_strategy": "An annual 'Top 10 Hacking Techniques' provides a recurring temporal anchor.",
+      "memorable_element": "The annual Top 10 — a ritual that creates a reason to return on a schedule.",
+      "generic_patterns": ["featured carousel", "duplicate 'latest' listings"],
+      "interesting_patterns": [
+        "THREE independent axes into one corpus: by vulnerability class, by person, by date. Multi-axis indexing is the professional standard for a research body.",
+        "An annual recurring artefact creates predictable return traffic."
+      ],
+      "extracted_principles": [
+        "A serious research body needs more than one way in. Domain, chronology, and maturity are all legitimate axes and should coexist.",
+        "A recurring dated artefact converts occasional visitors into scheduled ones."
+      ],
+      "possible_application_to_het": "The multi-axis model maps cleanly onto 12 tracks × build-state × chronology. Strongly informs the IA.",
+      "copying_risk": "Low — structural."
+    },
+    {
+      "name": "Trail of Bits blog",
+      "url": "https://blog.trailofbits.com/",
+      "category": "cybersecurity",
+      "source": "Web search; referenced by tl;dr sec",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Category taxonomy exceeding 100 tags spanning domains, methodologies, and focus areas.",
+      "hero_strategy": "No hero — recent posts are the entry point.",
+      "typography": "Straightforward sans-serif; exact faces UNKNOWN.",
+      "color_strategy": "Restrained; exact values UNKNOWN.",
+      "layout_strategy": "~20 recent posts chronologically, paginated.",
+      "interaction_model": "Read and filter by tag.",
+      "motion_strategy": "None observed.",
+      "project_presentation": "Headline, named authors, date, category tags, 1–2 sentence abstract.",
+      "content_strategy": "Depth signalled through precise technical titles naming specific techniques.",
+      "memorable_element": "Austere professionalism. Minimal imagery; the writing carries everything.",
+      "generic_patterns": ["chronological blog", "tag taxonomy"],
+      "interesting_patterns": [
+        "Technical specificity in TITLES is the depth signal — naming a precise technique filters the audience and proves competence before the click.",
+        "A 1–2 sentence abstract per post respects skimming without dumbing down.",
+        "Individual researcher attribution inside an institutional brand."
+      ],
+      "extracted_principles": [
+        "Precision in language is itself a credibility mechanism. 'Improving security posture' signals nothing; naming the actual technique signals everything.",
+        "This directly contradicts the marketing-flavoured vocabulary found across the student-portfolio sample."
+      ],
+      "possible_application_to_het": "Sets the vocabulary standard for all copy. Every heading should survive the test: would this sentence be acceptable in a Trail of Bits abstract?",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Dennis Snellenberg — freelance designer & developer",
+      "url": "https://www.dennissnellenberg.com/",
+      "category": "exceptional_digital_experience",
+      "source": "Cited repeatedly in portfolio round-ups; multiple award wins",
+      "access_date": "2026-08-14",
+      "method": "browser_runtime",
+      "navigation_model": "MEASURED: only three primary destinations — Work, About, Contact — plus a menu overlay listing NAVIGATION and SOCIALS.",
+      "hero_strategy": "Enormous typographic hero. MEASURED H1 at 192px.",
+      "typography": "MEASURED: a CUSTOM typeface, 'Dennis Sans', used site-wide. Heading weight held constant at 450 across all levels; hierarchy created purely by SIZE (192px / 78.4px / 48px / 41.6px), never by weight.",
+      "color_strategy": "MEASURED: rgb(28,29,32) charcoal dominant (376 elements), white (157), single blue accent rgb(69,92,233) used sparingly (8 elements). Effectively a two-colour system plus one accent.",
+      "layout_strategy": "Full-bleed typographic compositions.",
+      "interaction_model": "Scroll-driven with an overlay menu.",
+      "motion_strategy": "Known for smooth transitions; specifics UNKNOWN (not measured dynamically).",
+      "project_presentation": "Work-first.",
+      "content_strategy": "Minimal copy; the type does the talking.",
+      "memorable_element": "The scale of the typography and the personal typeface bearing his own name.",
+      "generic_patterns": ["dark charcoal background", "overlay menu"],
+      "interesting_patterns": [
+        "CRITICAL MEASURED FINDING: canvasCount = 0. An award-winning creative-developer portfolio with NO WebGL, NO 3D, NO particle system. Distinctiveness is achieved through type, scale, restraint and craft.",
+        "A custom typeface named after the person makes the site structurally impossible to replicate.",
+        "One constant weight + large size deltas is a disciplined, confident hierarchy system."
+      ],
+      "extracted_principles": [
+        "This is the strongest counter-argument in the corpus to the assumption that memorable = animated. The most-awarded portfolio inspected uses fewer effects than the student cybersecurity sites do.",
+        "A proprietary type choice is the most durable identity asset available — it cannot be copied by prompt.",
+        "Accent colour used at ~2% of elements reads as intentional; accent colour used at 20% reads as a theme."
+      ],
+      "possible_application_to_het": "Directly supports brief §27 (complexity must be meaningful). Argues for investing budget in typography and restraint rather than in a 3D scene. The accent-scarcity ratio is a concrete, adoptable rule.",
+      "copying_risk": "Medium on visual language (dark charcoal + huge type is now widespread); LOW on the underlying principles."
+    },
+    {
+      "name": "Bruno Simon — portfolio",
+      "url": "https://bruno-simon.com/",
+      "category": "exceptional_digital_experience",
+      "source": "FWA case page; CSS Design Awards Website of the Year; Awwwards SOTD; Awwwards Site of the Month Jan 2026 (per search results)",
+      "access_date": "2026-08-14",
+      "method": "listed_only",
+      "navigation_model": "Reported: a drivable 3D world in which navigation IS the game — the visitor drives a vehicle to sections. Not independently inspected.",
+      "hero_strategy": "UNKNOWN",
+      "typography": "UNKNOWN",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "UNKNOWN",
+      "interaction_model": "Reported: Three.js-rendered drivable environment.",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "Reported: sections discovered by exploration.",
+      "content_strategy": "UNKNOWN",
+      "memorable_element": "Reported: the driving mechanic.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "The interaction model IS the portfolio piece — the site proves the skill it claims. Bruno Simon is a Three.js educator, so a Three.js showpiece is evidence, not decoration."
+      ],
+      "extracted_principles": [
+        "A spectacular interaction is justified ONLY when the interaction demonstrates the exact skill being sold. The medium must be the evidence.",
+        "COROLLARY, and the reason this matters for Het: Het is not selling WebGL. The same mechanic on a security engineer's site would be pure decoration and would actively undermine credibility. This entry is the clearest illustration in the corpus of why 'impressive' and 'appropriate' are different axes."
+      ],
+      "possible_application_to_het": "Explicitly a NON-model. Its value is in defining the justification test for any ambitious interaction: does this prove a claim Het is actually making?",
+      "copying_risk": "High if imitated; the correct response is to not imitate it."
+    },
+    {
+      "name": "Awwwards — Portfolio category, featured sites",
+      "url": "https://www.awwwards.com/websites/portfolio/",
+      "category": "exceptional_digital_experience",
+      "source": "Awwwards portfolio category listing",
+      "access_date": "2026-08-14",
+      "method": "listed_only",
+      "listing_note": "31 portfolio sites were listed as featured on this date. Recorded as sampling context. Individual design fields are UNKNOWN because these were not individually inspected. Sites of the Day noted where shown: HAOQI.DESIGN (2026-08-14, + Developer Award), Studio K95 (2026-08-11), NOTHIN' (2026-08-10, + Developer Award).",
+      "listed_sites": [
+        "Nabil Issa Architect", "Mehdi Bouayaben", "Ria Scureman Designs", "HAOQI.DESIGN",
+        "CA Film Creatives", "Robby Yeager Marketing Portfolio", "Shaun Scholtz Product Designer",
+        "OKC Media — Evolved Simplicity", "Brikken+Co", "Josh Goldsmith — Director & EP",
+        "ULTRAGRID", "Léo Parpeix — Portfolio 2026", "CRISP Barbershop", "Zecco's Design Portfolio",
+        "DaveJ.com", "Studio K95", "ree|b. Handheld Portfolio", "s0", "NOTHIN'", "ZUI_OS",
+        "SLY", "Scheme Engine", "Still Making Stuff", "Gabriel Beaugonin", "Pensatori Irrazionali",
+        "Emilian | Creative Developer", "Goodgrowth", "PouyaOS", "Michael Tsirakis — Designer",
+        "Pamidor Design", "Gionatan Nese '26"
+      ],
+      "navigation_model": "UNKNOWN",
+      "hero_strategy": "UNKNOWN",
+      "typography": "UNKNOWN",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "UNKNOWN",
+      "interaction_model": "UNKNOWN",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "UNKNOWN",
+      "content_strategy": "UNKNOWN",
+      "memorable_element": "UNKNOWN",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "OBSERVABLE FROM NAMES ALONE, and only weakly: two of 31 listed portfolios use an OS metaphor in their name (ZUI_OS, PouyaOS). This is a weak signal from titles, not from inspection, but it is a caution flag: the 'personal operating system' metaphor is in active circulation in 2026 and is NOT the untrodden ground it might appear to be."
+      ],
+      "extracted_principles": [
+        "Award galleries are dominated by design/film/studio portfolios. Security engineering is almost absent from this arena — which is precisely the arbitrage opportunity for Het."
+      ],
+      "possible_application_to_het": "Establishes that craft standards in this arena are set by designers, and that a security engineer meeting those standards would be genuinely unusual.",
+      "copying_risk": "N/A — not inspected."
+    },
+    {
+      "name": "Bartosz Ciechanowski",
+      "url": "https://ciechanow.ski/",
+      "category": "editorial_research_infodesign",
+      "source": "Web search; widely cited for interactive explanation",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Minimal top nav: Blog, Archives, socials. Articles are standalone; in-article anchor links and a linked table of contents.",
+      "hero_strategy": "No hero. The article begins immediately.",
+      "typography": "Readability-first; exact faces UNKNOWN.",
+      "color_strategy": "Labelled colour used INSIDE simulations to distinguish concepts (reported yellow/teal bodies, pink/blue markers on dark simulation backgrounds). Page chrome colour UNKNOWN.",
+      "layout_strategy": "Single-column linear long-form. Explicitly NOT a card grid.",
+      "interaction_model": "Draggable, manipulable simulations embedded in the prose. Sliders control parameters.",
+      "motion_strategy": "Motion is the explanation — reader-driven, not autoplay.",
+      "project_presentation": "N/A — articles are the artefact.",
+      "content_strategy": "Progressive complexity: start with two bodies, then scale up. Accessibility affordances (metric/imperial toggle, zoom, transparency).",
+      "memorable_element": "Simulations woven into sentences rather than parked beside them.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "Interactivity is placed at the exact point of confusion — the reader manipulates the thing at the moment they need to understand it.",
+        "Progressive complexity as a pedagogical structure.",
+        "Reader-controlled motion respects both attention and accessibility by default."
+      ],
+      "extracted_principles": [
+        "THE most transferable finding in the corpus. Security concepts (attack paths, entitlement chains, trust boundaries, detection logic) are exactly the kind of relational systems that static text explains badly and manipulable diagrams explain well.",
+        "Interaction that serves comprehension is never gimmicky, because removing it would cost understanding. This is a rigorous test for whether any proposed interaction earns its place."
+      ],
+      "possible_application_to_het": "Highest-value cross-domain model. Offers a way for Het to demonstrate how he THINKS about security — the brief's stated north star (§64) — rather than merely listing what he has done.",
+      "copying_risk": "Low — the principle is pedagogical. The specific simulation subjects are unrelated to security."
+    },
+    {
+      "name": "Maggie Appleton",
+      "url": "https://maggieappleton.com/",
+      "category": "editorial_research_infodesign",
+      "source": "Web search; widely cited digital-garden reference",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Dual navigation: primary horizontal menu (Garden, Essays, Notes, Patterns, Talks, Podcasts, Library, Now, About), mirrored in the footer.",
+      "hero_strategy": "UNKNOWN",
+      "typography": "UNKNOWN",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Featured content with illustrated thumbnails.",
+      "interaction_model": "Browse by knowledge type.",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "N/A — knowledge artefacts rather than projects.",
+      "content_strategy": "THE KEY FINDING: content is typed by EPISTEMIC STATUS, not by format. Essays are 'opinionated, long-form narrative writing with an agenda'. Notes are 'loose notes on things I don't entirely understand yet'. Patterns are documented reusable observations. A Library/Antilibrary split separates books read from books merely aspired to.",
+      "memorable_element": "The digital-garden framing, which explicitly legitimises incompleteness — content is 'imperfect notes, essays, and ideas growing slowly over time'.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "Ageing is surfaced, not hidden: timestamps read 'over 3 years ago'. Most portfolios conceal staleness; this one makes it information.",
+        "Separating confident writing from uncertain writing is an integrity mechanism that also removes the pressure to only publish finished work.",
+        "A 'Now' page as a first-class navigation item."
+      ],
+      "extracted_principles": [
+        "DIRECTLY SOLVES Het's hardest structural problem. His brief (§6) demands that BUILT / IN PROGRESS / RESEARCH / FUTURE never blur. Appleton demonstrates a proven pattern for exactly this: make epistemic status a primary navigational axis rather than a badge bolted onto a card.",
+        "Publicly labelling uncertainty INCREASES credibility rather than reducing it. For a security engineer — a field where overclaiming is a cardinal sin — this alignment is unusually strong.",
+        "Honest ageing metadata makes a living site trustworthy even when parts are stale."
+      ],
+      "possible_application_to_het": "Highest-value structural model in the corpus, and unusually well-matched to Het's specific constraints. Note the discipline required: this only works if the labels are enforced honestly.",
+      "copying_risk": "MEDIUM-HIGH on vocabulary. 'Digital garden', 'Notes/Patterns/Garden' and the plant metaphor are strongly associated with Appleton. Het must adopt the STRUCTURE with security-native vocabulary, never the garden language."
+    },
+    {
+      "name": "The Pudding",
+      "url": "https://pudding.cool/",
+      "category": "editorial_research_infodesign",
+      "source": "Web search; Wikipedia reference",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Sticky header with icon navigation; footer with grouped text links.",
+      "hero_strategy": "UNKNOWN",
+      "typography": "Headlines lowercase italic; body sans-serif. Exact faces UNKNOWN.",
+      "color_strategy": "Reported monochrome base with illustrated 'sticker' accents. Exact values UNKNOWN.",
+      "layout_strategy": "Chronological grid; essays numbered sequentially (#224 down to #198).",
+      "interaction_model": "Browse, filter, load more.",
+      "motion_strategy": "UNKNOWN at index level.",
+      "project_presentation": "Month/year, thumbnail, lowercase italic headline, descriptive subtitle.",
+      "content_strategy": "Filters include 'Our Faves', 'Popular', 'Updating', 'Your Input'. Subtitles pose questions rather than describe.",
+      "memorable_element": "Sequential numbering of essays — the count itself becomes a body of work.",
+      "generic_patterns": ["thumbnail grid", "load more"],
+      "interesting_patterns": [
+        "An 'Updating' filter explicitly marks living pieces that change over time — a direct precedent for a site that must evolve.",
+        "Sequential numbering turns individual outputs into a visible, accumulating series.",
+        "Question-form subtitles create curiosity where description would create indifference."
+      ],
+      "extracted_principles": [
+        "Numbering creates the perception of a body of work and makes growth legible. Powerful for someone with few pieces today and many planned.",
+        "An explicit 'this piece is still changing' state is honest AND is a return-visit hook."
+      ],
+      "possible_application_to_het": "The 'Updating' state and sequential numbering both map onto the roadmap's need to show honest progress over time.",
+      "copying_risk": "Low structurally."
+    },
+    {
+      "name": "Distill",
+      "url": "https://distill.pub/",
+      "category": "editorial_research_infodesign",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Reverse-chronological index; articles tagged by review status.",
+      "hero_strategy": "None.",
+      "typography": "Legibility-first, hierarchical; exact faces UNKNOWN.",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Article cards with thumbnail, title, authors, description.",
+      "interaction_model": "Interactive figures embedded within prose, not segregated from it.",
+      "motion_strategy": "Reader-driven parameter manipulation.",
+      "project_presentation": "N/A.",
+      "content_strategy": "Articles labelled 'Peer-reviewed' (with public GitHub review threads), 'Commentary', 'Editorial', or 'Thread'. Mission framed around 'research debt' — the gap between discovery and public understanding.",
+      "memorable_element": "Public, linkable peer review attached to each article.",
+      "generic_patterns": ["card grid index"],
+      "interesting_patterns": [
+        "Transparent review process as a credibility mechanism — the discussion is public and linked.",
+        "Article-type labels set reader expectations before the click.",
+        "'Threads' collect related articles into curated sequences."
+      ],
+      "extracted_principles": [
+        "Making your verification process visible is stronger than asserting rigour. A security portfolio could show HOW a conclusion was reached, not merely state it.",
+        "Typed content labels are, again, the recurring answer to the honesty problem — this is now the third independent site in the corpus converging on it (Appleton, Pudding, Distill)."
+      ],
+      "possible_application_to_het": "Supports a 'how I verified this' convention for research pieces — a differentiator that is genuinely security-native.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Josh W. Comeau",
+      "url": "https://joshwcomeau.com/",
+      "category": "technical_engineering",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Horizontal top menu by topic (CSS, React, Animation, Career, JavaScript, SVG, Next.js, General); sidebar footer with additional paths.",
+      "hero_strategy": "UNKNOWN",
+      "typography": "UNKNOWN",
+      "color_strategy": "Light/dark mode toggle; exact values UNKNOWN.",
+      "layout_strategy": "Featured pieces with summaries; a ranked 'Popular Content' list of ten.",
+      "interaction_model": "Embedded explorable code examples inside articles.",
+      "motion_strategy": "Animation is a subject of the writing as well as a technique used in it.",
+      "project_presentation": "N/A — articles and courses.",
+      "content_strategy": "Casual, warm voice; illustrated avatar in both themes.",
+      "memorable_element": "Consistent personable voice attached to genuinely deep technical content.",
+      "generic_patterns": ["category nav", "popular posts list"],
+      "interesting_patterns": [
+        "Warmth and technical depth are not in tension — the informal voice makes hard material approachable without diluting it.",
+        "Editorial curation ('Popular Content') helps newcomers find the strongest entry points."
+      ],
+      "extracted_principles": [
+        "A distinct authorial voice is a durable identity asset and is essentially impossible to template.",
+        "Curated entry points matter: a visitor who lands on a weak piece may never see the best work. Explicitly surfacing your strongest work is not immodest, it is navigational."
+      ],
+      "possible_application_to_het": "Voice is one of the few differentiators unavailable to a generator. Directly serves the brief's demand for a point of view.",
+      "copying_risk": "Low — voice cannot be borrowed."
+    },
+    {
+      "name": "nan.fyi (Nanda Syahrasyad)",
+      "url": "https://www.nan.fyi/",
+      "category": "technical_engineering",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Chronological grid of article cards; direct article links.",
+      "hero_strategy": "UNKNOWN",
+      "typography": "Large sans-serif headlines, generous whitespace; exact faces UNKNOWN.",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Card grid with thumbnails as entry points.",
+      "interaction_model": "Deeply interactive visual demonstrations inside posts.",
+      "motion_strategy": "Explanatory animation.",
+      "project_presentation": "Posts are the artefacts — 'rebuilding Babel', 'building a debugger', SVG path deep dives.",
+      "content_strategy": "Learning through reconstruction: rebuild the fundamental tool to understand it.",
+      "memorable_element": "The reinvention premise — understanding demonstrated by rebuilding.",
+      "generic_patterns": ["card grid"],
+      "interesting_patterns": [
+        "'I rebuilt X to understand it' is a powerful and honest format for someone still learning — it converts study into publishable artefacts."
+      ],
+      "extracted_principles": [
+        "The reconstruction format lets an early-career engineer produce genuinely valuable content without needing novel research findings. This is a realistic and honest content strategy for Het's actual career stage.",
+        "It also sidesteps the confidentiality problem entirely — rebuilt tools involve no client data."
+      ],
+      "possible_application_to_het": "Practical answer to 'what does Het publish before he has original research?' — e.g. reimplementing a detection rule engine or an entitlement resolver to explain how it works.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Observable",
+      "url": "https://observablehq.com/",
+      "category": "technical_engineering",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Notebook/cell-based; a minimap gives an overview of the reactive dataflow graph.",
+      "hero_strategy": "UNKNOWN",
+      "typography": "Hierarchical headings with formatted code blocks; exact faces UNKNOWN.",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Literate-programming cells interleaving prose, code, and output.",
+      "interaction_model": "Reactive — cells re-run on input change.",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "N/A.",
+      "content_strategy": "Explanation followed immediately by runnable implementation.",
+      "memorable_element": "The minimap of the dataflow graph — an overview device for complex structures.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "A minimap/overview for a complex structure is a strong precedent for any graph-based navigation: always give the visitor a way to see the whole before exploring a part."
+      ],
+      "extracted_principles": [
+        "If Het uses any graph or map navigation, an overview device is mandatory, not optional. Brief §34 already warns the graph must stay understandable; the minimap is the proven mitigation."
+      ],
+      "possible_application_to_het": "Direct mitigation for the main risk in any ecosystem-graph concept.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Linear",
+      "url": "https://linear.app/",
+      "category": "technical_engineering",
+      "source": "Web search",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "UNKNOWN",
+      "hero_strategy": "UNKNOWN",
+      "typography": "UNKNOWN — text_fetch returned structural markup only",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "Capability organised into numbered sequential stages (1.0 Intake, 2.0 Plan, 3.0 Build).",
+      "interaction_model": "UNKNOWN",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "N/A.",
+      "content_strategy": "Progressive disclosure through workflow stages rather than a feature dump.",
+      "memorable_element": "UNKNOWN",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "Numbered workflow staging as a disclosure device for a complex product."
+      ],
+      "extracted_principles": [
+        "Sequencing complexity into stages beats presenting it all at once. Applicable to explaining a multi-track roadmap without overwhelming a first-time visitor."
+      ],
+      "possible_application_to_het": "Relevant to introducing 12 security tracks progressively.",
+      "copying_risk": "Low.",
+      "honesty_note": "This entry is thin. The fetch returned navigation markup rather than design substance, so the widely-discussed Linear visual system could NOT be verified here. Recorded as-is rather than filled in from model memory."
+    },
+    {
+      "name": "GitHub topic: cybersecurity-portfolio",
+      "url": "https://github.com/topics/cybersecurity-portfolio",
+      "category": "cybersecurity",
+      "source": "GitHub topic index",
+      "access_date": "2026-08-14",
+      "method": "listed_only",
+      "listing_note": "20 repositories recorded with owner, description and star count. Treated as a population sample of how early-career security practitioners describe their own portfolio work. The DESCRIPTIONS are the evidence; the sites themselves were not individually inspected.",
+      "sampled_repositories": [
+        { "owner": "CarterPerez-dev", "repo": "Cybersecurity-Projects", "stars": 5000, "description_fragment": "Building 70 Projects ranging from beginner to adv..." },
+        { "owner": "serozr", "repo": "cyber-portfolio", "stars": 72, "description_fragment": "A modern, responsive developer portfolio website" },
+        { "owner": "Emmanuelgessessew", "repo": "Cybersecurity-Analyst-Portfolio", "stars": 12, "description_fragment": "Risk assessments, SIEM analysis, network security" },
+        { "owner": "raylee-hawkins", "repo": "hawkinsops-v1-archive", "stars": 10, "description_fragment": "AI-assisted SOC automation, detection-as-code" },
+        { "owner": "sandeepmothukuri", "repo": "Enterprise-Detection-Engineering-SOC-Lab", "stars": 10, "description_fragment": "12 tools (OpenSearch, Suricata, Zeek, MISP...)" },
+        { "owner": "fxrhan", "repo": "myCyberPortfolio", "stars": 9, "description_fragment": "Modern, responsive portfolio website for a Cyber..." },
+        { "owner": "Ak-cybe", "repo": "splunk-hands-on-project", "stars": 4, "description_fragment": "8 Dashboards with step-by-step lab guides..." },
+        { "owner": "SilentVeil", "repo": "Cloud-Security-SOC-Analyst-Portfolio", "stars": 3, "description_fragment": "AWS labs, SIEM monitoring, threat analysis" },
+        { "owner": "iamx-ariful-islam", "repo": "CyberSec-Portfolio", "stars": 2, "description_fragment": "Glassmorphic terminal UI with matrix backdrop" },
+        { "owner": "gregory-dean", "repo": "WebsiteV1", "stars": 2, "description_fragment": "Central hub for security labs and learning" },
+        { "owner": "Nessidgtl", "repo": "detection-engineering-lab", "stars": 2, "description_fragment": "Behavior-based threat detection, EQL, real-world..." },
+        { "owner": "scott-renny", "repo": "cyber-operations-center-engineering-program", "stars": 2, "description_fragment": "Phased COC program covering SIEM and operations" },
+        { "owner": "ibrahim-mukhtar-saidu", "repo": "cybernova-malware-analysis-sandbox", "stars": 1, "description_fragment": "Python malware analysis with IOC extraction" },
+        { "owner": "jesse12-21", "repo": "nmap-network-recon", "stars": 1, "description_fragment": "Active reconnaissance with NSE scripts" },
+        { "owner": "mrezwanulbari", "repo": "rezwanulbari", "stars": 1, "description_fragment": "Personal website showcasing security contributions" },
+        { "owner": "Jackomau", "repo": "saas-security-assessment-case-study", "stars": 1, "description_fragment": "Threat modeling and security assessment case study" },
+        { "owner": "munazajamil", "repo": "SOC-Splunk-SIEM-Threat-Detection", "stars": 1, "description_fragment": "Real-world SOC environment simulation" },
+        { "owner": "victusIn", "repo": "enterprise-grc-framework-alignment", "stars": 1, "description_fragment": "NIST 800-53, ISO 27001, COBIT implementation" },
+        { "owner": "abhayvermadev", "repo": "wordpress-security-incident-response", "stars": 1, "description_fragment": "Compromised WordPress investigation case study" },
+        { "owner": "zyekhabdul", "repo": "zyekh.cloud", "stars": 1, "description_fragment": "Terminal-themed portfolio with security research" }
+      ],
+      "navigation_model": "UNKNOWN",
+      "hero_strategy": "UNKNOWN",
+      "typography": "UNKNOWN",
+      "color_strategy": "UNKNOWN",
+      "layout_strategy": "UNKNOWN",
+      "interaction_model": "UNKNOWN",
+      "motion_strategy": "UNKNOWN",
+      "project_presentation": "UNKNOWN",
+      "content_strategy": "UNKNOWN",
+      "memorable_element": "UNKNOWN",
+      "generic_patterns": [
+        "Self-description language clusters tightly on 'modern, responsive portfolio website' — appearing verbatim or near-verbatim in at least 2 of 20 descriptions.",
+        "Two repositories explicitly advertise a terminal aesthetic; one explicitly advertises 'Glassmorphic terminal UI with matrix backdrop' — combining three separate items from Het's forbidden list (§26) in a single seven-word self-description.",
+        "SIEM/Splunk/SOC lab projects are the dominant project archetype."
+      ],
+      "interesting_patterns": [
+        "The GRC/compliance corner is comparatively sparse — only 1 of 20 (victusIn, NIST 800-53 / ISO 27001 / COBIT alignment) is compliance-oriented, and it has 1 star.",
+        "Distribution is extremely long-tailed: one outlier at 5,000 stars, then 72, then everything else in single or low double digits."
+      ],
+      "extracted_principles": [
+        "OBSERVED IN THIS SAMPLE, stated cautiously: security-portfolio self-description converges on a narrow vocabulary, and the SOC/SIEM lab is the default project. This is a sample of 20 from one topic tag and is NOT a claim about the whole field.",
+        "MOST IMPORTANT FINDING FOR HET: GRC/audit work is markedly underrepresented in this sample, while SOC/SIEM labs are saturated. Het's CSCRF and IRDAI audit experience sits in the sparse region. His differentiation may lie less in out-designing the SOC-lab crowd than in occupying ground they have left empty."
+      ],
+      "possible_application_to_het": "Strategic positioning input. Also the empirical basis for the genericity analysis.",
+      "copying_risk": "N/A."
+    },
+
+    { "_SESSION_2_ADDITIONS": "Entries below added 2026-08-14 in the Phase 1 continuation session. NOTE: the browser runtime tool was unavailable in this session, so NO new entry carries measured colour or typography values. All new entries are text_fetch or listed_only. Colour/typography fields are UNKNOWN throughout — the same honest asymmetry as the first session." },
+
+    {
+      "name": "Bishop Fox — customers",
+      "url": "https://bishopfox.com/customers",
+      "category": "confidential_work_presentation",
+      "source": "Gap 1 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Customer index leading to individual case studies.",
+      "project_presentation": "Consistent problem → approach → outcome. MIXED disclosure: major brands named explicitly (Google, Amazon, Equifax, Zoom, LastPass, John Deere); other engagements anonymised as 'a global technology provider', 'a Fortune 500 utility'.",
+      "content_strategy": "Service categories named ('penetration testing', 'cloud security testing', 'red team assessment'); actual vulnerabilities never disclosed. Scope described ('AWS-hosted environments', 'external perimeter') rather than exploits.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "hero_strategy": "UNKNOWN", "interaction_model": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "memorable_element": "Named-client logos as the credibility engine.",
+      "generic_patterns": ["problem/approach/outcome case study", "logo wall"],
+      "interesting_patterns": [
+        "Selective disclosure: permission-based naming where available, descriptor labels where not. No explicit confidentiality disclaimers — the anonymisation is silent."
+      ],
+      "extracted_principles": [
+        "The professional-services norm is to anonymise the CLIENT and describe the METHOD in real detail — never to advertise the act of withholding."
+      ],
+      "possible_application_to_het": "Direct template for his CSCRF/IRDAI presentation: descriptor label plus genuine methodology depth.",
+      "copying_risk": "Low — it is an industry convention, not a proprietary design."
+    },
+    {
+      "name": "Doyensec — phishing engineering case study",
+      "url": "https://blog.doyensec.com/2024/09/19/phishing-case-study.html",
+      "category": "confidential_work_presentation",
+      "source": "Gap 1 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Blog post; linear with section headings.",
+      "project_presentation": "Client anonymised as 'a Communication Platform as a Service'. Sections: Introduction/threat model → Attachments Handling → HTML Input Handling → Links Presentation Bugs → Summary.",
+      "content_strategy": "SUBSTANTIAL technical specificity despite anonymity — concrete commands, specific Unicode codepoints (U+202E, U+0430), regex flaws, browser-specific behaviour differences.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "hero_strategy": "None — the article begins.", "interaction_model": "Read.", "motion_strategy": "None.",
+      "memorable_element": "Real technical depth with an unnamed client.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "THE KEY OBSERVATION: confidentiality achieved by STRATEGIC OMISSION, not by disclaimers. No API endpoint names, no internal architecture, no remediation timelines — and no announcement that these were withheld.",
+        "Organised by vulnerability CLASS, echoing Kettle's thematic clustering."
+      ],
+      "extracted_principles": [
+        "Anonymity does not require vagueness. The client is hidden; the engineering is not. This is the opposite of 'I did important secret things'.",
+        "DISCONFIRMS the earlier assumption that advertising withheld evidence is the credible move. The credible move is silent omission plus visible method."
+      ],
+      "possible_application_to_het": "The single best model found for presenting CSCRF/IRDAI work: name the domain and method precisely, omit specifics without comment.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Include Security",
+      "url": "https://includesecurity.com/",
+      "category": "confidential_work_presentation",
+      "source": "Gap 1 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Service-led marketing structure.",
+      "project_presentation": "NO clients named and NO case studies at all. Credibility rests entirely on methodology description, team credentials ('everyone on our team has at least five years of application hacking experience'), and breadth of capability.",
+      "content_strategy": "Sectors mentioned (healthcare, automotive, streaming) without engagement detail.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "hero_strategy": "UNKNOWN", "interaction_model": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "memorable_element": "Total client anonymity treated as normal rather than as a gap.",
+      "generic_patterns": ["service pages", "team credentials"],
+      "interesting_patterns": [
+        "A respected consultancy publishes ZERO case studies. Discretion is not explained or apologised for — it is simply the posture."
+      ],
+      "extracted_principles": [
+        "Confidentiality needs no narrative framing. Firms that handle the most sensitive work often say the least, and the silence itself is legible to the audience that matters.",
+        "Strongly DISCONFIRMS 'confidentiality as demonstration' as a distinctive design idea — it is the default posture of the entire sector."
+      ],
+      "possible_application_to_het": "Cautionary: making a feature of withholding could read as inexperience to anyone who knows the sector norm.",
+      "copying_risk": "N/A."
+    },
+    {
+      "name": "Pentest reporting and anonymised-case-study conventions",
+      "url": "https://www.vulnsy.com/blog/sample-penetration-testing-reports",
+      "category": "confidential_work_presentation",
+      "source": "Gap 1 research — multiple search results synthesised",
+      "access_date": "2026-08-14",
+      "method": "listed_only",
+      "listing_note": "Synthesised from published guidance on pentest reports and anonymised B2B case studies. Recorded as documentation of an INDUSTRY NORM rather than as a single inspected site.",
+      "content_strategy": "Documented norms: redacted previews of real engagements with fictional names and [REDACTED] markers; methodology section treated as the credibility signal (testing type black/grey/white box, access level, test window, standard followed — OWASP WSTG or PTES); per-finding structure of title, CVSS vector, affected asset, business impact, technical description, proof, remediation. Anonymised B2B case studies conventionally use descriptor labels such as 'a global logistics provider' or 'a Series B fintech'.",
+      "navigation_model": "UNKNOWN", "typography": "UNKNOWN", "color_strategy": "UNKNOWN",
+      "layout_strategy": "UNKNOWN", "hero_strategy": "UNKNOWN", "interaction_model": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "memorable_element": "N/A — a convention, not a site.",
+      "generic_patterns": ["descriptor-label anonymisation", "[REDACTED] markers", "methodology section"],
+      "interesting_patterns": [
+        "There are published TEMPLATES and how-to guides for anonymised case studies. This is a mature, codified practice with best-practice literature."
+      ],
+      "extracted_principles": [
+        "DECISIVE for Gap 1: presenting confidential work well is a solved, documented problem. Het adopting it signals professional fluency — but it is not an original contribution and must not be positioned as one.",
+        "'A report with no methodology section is a red flag' — methodology depth is the recognised substitute for disclosed findings."
+      ],
+      "possible_application_to_het": "Adopt the convention properly. Claim fluency, not novelty.",
+      "copying_risk": "None — conventions are meant to be followed."
+    },
+    {
+      "name": "Ranveer Kohli — bugatsec.dev",
+      "url": "https://bugatsec.dev/",
+      "category": "cybersecurity",
+      "source": "GitHub topic: security-portfolio",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Linear: Companies → Findings → Skills → Projects → Contact.",
+      "hero_strategy": "'Security Researcher & Bug Bounty Hunter' + 'Finding critical vulnerabilities in enterprise systems.'",
+      "project_presentation": "Findings with severity labels (CRITICAL/HIGH/MEDIUM), CVSS scores or P-levels, structured as vulnerability type → affected platform → exploitation narrative, with attack-vector tags. Projects carry category badges (OPEN SOURCE, SECURITY TOOL, EDUCATION) plus one-sentence descriptors and GitHub links.",
+      "content_strategy": "Leads with affected COMPANIES — credential establishment before capability. Skills grouped into Web Vulnerabilities / Tools & Environments / Methodology.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "interaction_model": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "memorable_element": "Little. Competent and impersonal.",
+      "generic_patterns": [
+        "severity/CVSS badge system", "company logo wall", "category badges on projects",
+        "'responsible disclosure' as ethical anchor", "no personality markers whatsoever"
+      ],
+      "interesting_patterns": [
+        "CRITICALLY IMPORTANT: NO terminal, matrix, glitch or hacker motifs at all. Clean, corporate-friendly formatting.",
+        "Skills grouped by conceptual category rather than listed flat — a genuine improvement on the archetype."
+      ],
+      "extracted_principles": [
+        "REVISES the earlier saturation finding. The strong cybersecurity portfolios are PROFESSIONALISING, not cyberpunk. Avoiding hacker clichés is table stakes, not differentiation.",
+        "The new genericity threat is corporate sameness — badges, severity labels, framework name-drops, zero voice. This site was characterised as achieving 'intentional genericization through absence of personality markers'."
+      ],
+      "possible_application_to_het": "The most important cautionary reference in the corpus. This is precisely what The Register could become if executed without a personal voice.",
+      "copying_risk": "N/A — cautionary."
+    },
+    {
+      "name": "Nikki Sadvand — Junior SOC Analyst portfolio",
+      "url": "https://nikki-65.github.io/",
+      "category": "cybersecurity",
+      "source": "GitHub topic: security-portfolio",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Resume-to-portfolio flow: headline → roles → skills → projects → education.",
+      "hero_strategy": "'Junior SOC Analyst (SIEM & Telemetry)' + 'Proactive Junior Cybersecurity Analyst'.",
+      "project_presentation": "Projects link directly to PDFs and GitHub repositories. Descriptions are action-led: 'Built an Elastic SIEM pipeline', 'Decoded a Base64 payload', 'Developed SPL queries'.",
+      "content_strategy": "Skills as colour-coded badges grouped by category. MITRE ATT&CK and NIST referenced.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "interaction_model": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "memorable_element": "Linking to actual artefacts rather than describing them.",
+      "generic_patterns": ["badge-style skills", "SIEM/SOC lab projects", "'Proactive' as a self-descriptor", "framework name-dropping"],
+      "interesting_patterns": [
+        "Again NO hacker aesthetic — second independent confirmation that professionalisation is the current direction.",
+        "Direct artefact links (PDFs, repos) are stronger evidence than prose claims. A genuinely good habit."
+      ],
+      "extracted_principles": [
+        "Linking to a real artefact beats describing a capability. Het currently has almost no artefacts to link — which is the gap, not the presentation.",
+        "Confirms the saturation revision: 3 of the 5 cybersecurity personal sites inspected in detail have NO cyberpunk motifs."
+      ],
+      "possible_application_to_het": "Artefact-linking discipline is directly adoptable. The badge/framework-namedrop pattern is not.",
+      "copying_risk": "N/A."
+    },
+    {
+      "name": "GitHub topic: security-portfolio — 20 repositories",
+      "url": "https://github.com/topics/security-portfolio",
+      "category": "cybersecurity",
+      "source": "GitHub topic index",
+      "access_date": "2026-08-14",
+      "method": "listed_only",
+      "listing_note": "Second population sample, complementing the earlier `cybersecurity-portfolio` tag (20 repos). Combined sample is now 40 repositories. IMPORTANT SAMPLING CAVEAT: a single user (`hkevin01`) accounts for 6 of these 20, several unrelated to security portfolios (flood trackers, tornado maps). The effective independent sample is closer to 14.",
+      "sampled_repositories": [
+        { "owner": "Bugatsec", "repo": "bugatsec.dev", "description_fragment": "personal cybersecurity portfolio website design for security researchers" },
+        { "owner": "aarondutton-grc", "repo": "ssl-labs-scanner", "description_fragment": "SSL certificate checking" },
+        { "owner": "Mehsin-Khan", "repo": "microsoft-purview-dlp-policy-lab", "description_fragment": "Synthetic DLP policy lab with governance and KPI dashboard" },
+        { "owner": "yeg003", "repo": "vulnerability-operations-center", "description_fragment": "risk-based vulnerability prioritization, remediation workflows, audit" },
+        { "owner": "MDP-Studio", "repo": "meidie-security-portfolio", "description_fragment": "security portfolio with scheduled evidence freshness, artifact trust" },
+        { "owner": "srkyn", "repo": "IdentityRiskGraph", "description_fragment": "Identity-first detection engineering app for CloudTrail IAM events" },
+        { "owner": "adpickle34", "repo": "splunk-siem-homelab", "description_fragment": "Splunk SIEM home lab - Windows Event Log analysis, brute force detection" },
+        { "owner": "adpickle34", "repo": "ad-homelab", "description_fragment": "Active Directory home lab - IAM, GPO, RBAC" },
+        { "owner": "Lucas-1826", "repo": "security-portfolio", "description_fragment": "hands-on cybersecurity portfolio showcasing log analysis, threat detection" },
+        { "owner": "Richarshli", "repo": "nessus-vulnerability-management", "description_fragment": "vulnerability scanning, risk analysis, reporting, remediation tracking" },
+        { "owner": "Nikki-65", "repo": "Nikki-65.github.io", "description_fragment": "Personal cybersecurity portfolio for Nikki Sadvand" },
+        { "owner": "amnsecurity", "repo": "amnsecurity", "description_fragment": "Professional cybersecurity portfolio and selected security assessment" },
+        { "owner": "pranayesse", "repo": "home", "description_fragment": "Security & automation portfolio + blog" }
+      ],
+      "navigation_model": "UNKNOWN", "typography": "UNKNOWN", "color_strategy": "UNKNOWN",
+      "layout_strategy": "UNKNOWN", "hero_strategy": "UNKNOWN", "interaction_model": "UNKNOWN",
+      "motion_strategy": "UNKNOWN", "project_presentation": "UNKNOWN", "content_strategy": "UNKNOWN",
+      "memorable_element": "UNKNOWN",
+      "generic_patterns": ["SIEM/SOC home labs remain the dominant archetype", "'hands-on' as a recurring self-descriptor"],
+      "interesting_patterns": [
+        "REVISES the earlier GRC-scarcity claim. This tag shows notably more compliance-oriented work: a GRC-named account (aarondutton-grc), a Purview DLP governance lab, a vulnerability-operations centre with audit workflows, and a portfolio built around 'scheduled evidence freshness, artifact trust'.",
+        "`meidie-security-portfolio` — 'scheduled evidence freshness, artifact trust' — is conceptually close to a register/evidence model. Not inspected; worth checking before claiming register-style presentation is unoccupied."
+      ],
+      "extracted_principles": [
+        "GRC/compliance work is UNDER-represented but not nearly absent. The earlier '1 of 20' figure was an artefact of a single tag. Across ~34 effectively independent repositories, roughly 4–5 are compliance-oriented.",
+        "Revised claim: GRC is a minority (~12–15% of this sample) rather than a near-vacant niche. Still a real opportunity, but a weaker one than previously stated."
+      ],
+      "possible_application_to_het": "Positioning remains valid but must be stated more modestly.",
+      "copying_risk": "N/A."
+    },
+    {
+      "name": "Olivier Larose",
+      "url": "https://www.olivierlarose.com/",
+      "category": "creative_developer",
+      "source": "Gap 2 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Minimal top nav (Blog, Contact, LinkedIn); vertical scroll through stacked project entries, 2026 back to 2019.",
+      "hero_strategy": "'Independent Front End ☼Developer☀', 'Based in Montreal', 'Folio©2026⚗✨'. Personality over corporate messaging.",
+      "project_presentation": "Consistent table-like structure: Project / Category / Client / Year, plus descriptive copy, three images, award badges where applicable, and a 'See website' link for verification.",
+      "content_strategy": "Chronological, verifiable, plainly stated.",
+      "typography": "UNKNOWN (decorative symbols used as accents)", "color_strategy": "UNKNOWN",
+      "layout_strategy": "Stacked entries.", "interaction_model": "Scroll.", "motion_strategy": "UNKNOWN",
+      "memorable_element": "The decorative-symbol voice (☼ ⚗ ✨) — small, cheap, and instantly personal.",
+      "generic_patterns": ["chronological project list"],
+      "interesting_patterns": [
+        "Project metadata presented as a consistent structured record — effectively a register, but warm rather than corporate.",
+        "'See website' links on every project: verifiability as a default habit.",
+        "Personality carried by tiny typographic choices, not by layout or effects."
+      ],
+      "extracted_principles": [
+        "IMPORTANT FOR THE REGISTER CONCEPT: structured, tabular project metadata can coexist with a distinctly personal voice. The two are not in tension — this site does both at once.",
+        "Voice can be injected at very low cost through small consistent details rather than through visual spectacle."
+      ],
+      "possible_application_to_het": "The proof that a register-like structure need not read as a compliance document. Directly addresses the main risk identified in the concept re-evaluation.",
+      "copying_risk": "Low on principle; the specific symbol motif is his."
+    },
+    {
+      "name": "Jesper Landberg",
+      "url": "https://jesperlandberg.com/",
+      "category": "creative_developer",
+      "source": "Gap 2 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Project-led, with 'Featured' and 'Full' views of the work.",
+      "hero_strategy": "Leads with accolades — 'Awwwards Independent of the Year in 2022 and 2024'.",
+      "project_presentation": "Discrete portfolio pieces; transparent role descriptions ('lead or sole developer').",
+      "content_strategy": "74 awards across Awwwards, FWA, Webby and Lovie cited as social proof.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "interaction_model": "UNKNOWN", "motion_strategy": "Motion-driven by stated specialism.",
+      "memorable_element": "Award density.",
+      "generic_patterns": ["awards as social proof"],
+      "interesting_patterns": [
+        "Explicit role transparency ('lead or sole developer') — states contribution precisely rather than implying sole authorship."
+      ],
+      "extracted_principles": [
+        "Stating your exact role on shared work is a cheap, high-integrity signal. Directly applicable to Het's audit work, where he was one contributor among a team.",
+        "Award-based credibility is unavailable to Het; role precision is available immediately."
+      ],
+      "possible_application_to_het": "Adopt role transparency as a required field, alongside limitations.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Renaud Rohlinger",
+      "url": "https://renaudrohlinger.com/",
+      "category": "creative_developer",
+      "source": "Gap 2 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "UNKNOWN — content is largely JS-rendered; only the preloader was observable.",
+      "hero_strategy": "Name as focal point behind a loading sequence.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "project_presentation": "NOT VERIFIED — could not be observed by text fetch.",
+      "content_strategy": "UNKNOWN",
+      "interaction_model": "Preloader gates entry.", "motion_strategy": "Central by evident intent.",
+      "memorable_element": "Bilingual framing (English name, Japanese 'please wait a moment') plus an animated cat during loading.",
+      "generic_patterns": ["preloader gate"],
+      "interesting_patterns": [
+        "Humour and cultural specificity in a loading state — personality inserted in the one place most sites treat as dead time."
+      ],
+      "extracted_principles": [
+        "A loading state is an opportunity for voice. Low-cost, and only works if it is genuinely personal.",
+        "CAUTION: a preloader gate delays content and would harm Het's recruiter audience, who abandon fast."
+      ],
+      "possible_application_to_het": "Principle (voice in overlooked moments) yes; mechanism (preloader) no.",
+      "copying_risk": "Low.",
+      "honesty_note": "Thin entry. Most of the site could not be observed without a browser runtime, which was unavailable this session. Marked NOT VERIFIED rather than inferred."
+    },
+    {
+      "name": "R2D3 — A Visual Introduction to Machine Learning",
+      "url": "https://r2d3.us/visual-intro-to-machine-learning-part-1/",
+      "category": "information_visualization",
+      "source": "Gap 3 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Single scroll-driven narrative with explicit pacing cues ('Keep scrolling').",
+      "hero_strategy": "Opens directly into the explanation.",
+      "layout_strategy": "Prose and visualisation interleaved; scatterplots, histograms and trees illustrate the sentence being read.",
+      "typography": "Bold used to anchor key terms ('classification', 'features', 'overfitting'); short declarative sentences.",
+      "color_strategy": "UNKNOWN", "interaction_model": "Scroll-driven reveal.", "motion_strategy": "Scroll-tied.",
+      "project_presentation": "N/A",
+      "content_strategy": "Progressive disclosure — one feature first, then a second dimension, then recursion. Concrete example (San Francisco vs New York homes) rather than abstract maths. A 'Reality check' section addresses why perfect training accuracy is misleading.",
+      "memorable_element": "The scrollytelling build-up from one variable to a full decision tree.",
+      "generic_patterns": ["scrollytelling"],
+      "interesting_patterns": [
+        "Tradeoffs shown VISUALLY — false positives and false negatives rendered, not just named.",
+        "An explicit 'Reality check' section: the piece argues against its own apparent success. Structurally the same instinct as a limitations field."
+      ],
+      "extracted_principles": [
+        "Scroll-driven progressive disclosure teaches relational systems well and needs no manipulable widgets — cheaper than Ciechanowski-style simulation and nearly as effective.",
+        "SUPPORTS O8 from a third independent direction: the most credible explanatory work builds in its own reality check."
+      ],
+      "possible_application_to_het": "A realistic production model for one flagship explanatory piece — scrollytelling instead of full simulation.",
+      "copying_risk": "Low — scrollytelling is a widespread technique."
+    },
+    {
+      "name": "Our World in Data",
+      "url": "https://ourworldindata.org/",
+      "category": "information_visualization",
+      "source": "Gap 3 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Layered entry: 'Popular pages' for casual visitors, plus an 8-category topic taxonomy for researchers. 14,071 charts, 126 topic pages, 29 data explorers.",
+      "layout_strategy": "Topic pages, article pages, and interactive explorers as three distinct surfaces.",
+      "content_strategy": "Every chart labels its source (UN FAO, World Bank, Global Carbon Budget). Articles acknowledge data limitations explicitly — e.g. investigating 'the strengths and shortcomings of the available data on literacy'.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "hero_strategy": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "interaction_model": "Explore charts, drill into related indicators.",
+      "project_presentation": "N/A",
+      "memorable_element": "Enormous scale made navigable without feeling overwhelming.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "Dual entry paths — popular vs systematic — serve casual and expert readers without a mode toggle. Direct precedent for Het's recruiter-vs-practitioner tension.",
+        "Source attribution on every single artefact as an unbreakable convention.",
+        "Stated data limitations as standard editorial practice at scale."
+      ],
+      "extracted_principles": [
+        "Layered entry points resolve mixed-audience problems better than segmentation. Strong support for the layering strategy already chosen in USER_JOURNEYS.",
+        "FOURTH independent instance of limitations/uncertainty disclosure as a credibility mechanism. O8 is now the best-evidenced finding in the project."
+      ],
+      "possible_application_to_het": "Dual entry paths; source/provenance conventions; limitations as standard practice.",
+      "copying_risk": "Low — structural."
+    },
+    {
+      "name": "Setosa — Explained Visually",
+      "url": "https://setosa.io/ev/",
+      "category": "information_visualization",
+      "source": "Gap 3 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "Numbered episode index (EV 1–10), one concept per episode.",
+      "content_strategy": "Each episode isolates a single hard idea (eigenvalues, Markov chains, regression). Playful taglines ('Sine on the line', 'Growing, growing, gone').",
+      "typography": "Clean hierarchy, concise titles.", "color_strategy": "UNKNOWN",
+      "layout_strategy": "Minimal index.", "hero_strategy": "UNKNOWN",
+      "interaction_model": "Explorable explanations, per Bret Victor lineage.", "motion_strategy": "UNKNOWN",
+      "project_presentation": "N/A",
+      "memorable_element": "Numbered episodic series — a body of work that visibly accumulates.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "One concept per episode enforces scope discipline and makes each piece finishable.",
+        "Numbered episodes make a small body of work feel like a series rather than scattered posts."
+      ],
+      "extracted_principles": [
+        "Episodic numbering plus strict one-idea scope is a realistic publishing model for someone with limited time — the opposite of the open-ended blog that stalls.",
+        "REVISES the earlier 'defer numbering until there is a body of work' position: Setosa has 10 episodes and the numbering works precisely because each is small and complete."
+      ],
+      "possible_application_to_het": "A concrete, sustainable format for field notes: numbered, one idea each, finishable.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Data Sketches (Nadieh Bremer & Shirley Wu)",
+      "url": "https://www.datasketch.es/",
+      "category": "information_visualization",
+      "source": "Gap 3 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "12 themes × 2 creators = 24 projects; browsable by creator or by theme.",
+      "project_presentation": "Each project pairs the interactive visualisation with a detailed process write-up — 'very technical process write-ups' alongside the finished artefact.",
+      "content_strategy": "Two creators answer the SAME brief differently, deliberately revealing that 'there is never just one right answer, but many possible answers'.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "Card grid.",
+      "hero_strategy": "UNKNOWN", "interaction_model": "Browse then explore.", "motion_strategy": "UNKNOWN",
+      "memorable_element": "The paired-response structure — comparison as the format.",
+      "generic_patterns": ["card grid"],
+      "interesting_patterns": [
+        "PROCESS is a first-class deliverable, not an appendix. The write-up documents every step from topic idea to final artefact.",
+        "Showing rejected approaches and dead ends alongside the outcome."
+      ],
+      "extracted_principles": [
+        "Documenting the journey — including what did not work — is itself publishable content, and it is content an early-career practitioner can produce honestly without needing impressive results.",
+        "Directly relevant to Het: he can publish HOW he approached something before he has anything impressive to show for it."
+      ],
+      "possible_application_to_het": "Process write-ups as a content type that works at his current stage. Pairs naturally with the limitations field.",
+      "copying_risk": "Low."
+    },
+    {
+      "name": "Lynn Fisher — lynnandtonic.com",
+      "url": "https://lynnandtonic.com/",
+      "category": "exceptional_digital_experience",
+      "source": "Gap 6 research",
+      "access_date": "2026-08-14",
+      "method": "text_fetch",
+      "navigation_model": "About, Work, Thoughts, Archive, RSS, Gifs.",
+      "content_strategy": "The site is versioned — currently 'v. XIX' — with an Archive of previous versions.",
+      "typography": "UNKNOWN", "color_strategy": "UNKNOWN", "layout_strategy": "UNKNOWN",
+      "hero_strategy": "UNKNOWN", "interaction_model": "UNKNOWN", "motion_strategy": "UNKNOWN",
+      "project_presentation": "UNKNOWN",
+      "memorable_element": "The site itself is the evolving artefact; nineteen versions are browsable.",
+      "generic_patterns": [],
+      "interesting_patterns": [
+        "THE STRONGEST RETURN-VISIT MECHANISM FOUND. The site redesigns periodically and keeps every past version, so the archive of the site becomes a portfolio in its own right.",
+        "A 'Gifs' section — a deliberately non-professional element that signals a person rather than a service."
+      ],
+      "extracted_principles": [
+        "A site that visibly evolves and preserves its own history gives people a reason to return that does not depend on publishing cadence. This is qualitatively different from 'add more posts'.",
+        "One deliberately personal, non-strategic section does more for humanity than any amount of tone-of-voice work."
+      ],
+      "possible_application_to_het": "Versioning the site itself, with an archive, is a return mechanism that costs nothing per-month and suits someone whose writing cadence is unproven. Strong candidate.",
+      "copying_risk": "Medium — the versioned archive is closely identified with this site. The principle transfers; the 'v. XIX' presentation should not be copied directly."
+    }
+  ]
+}

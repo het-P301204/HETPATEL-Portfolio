@@ -1,0 +1,991 @@
+/* ============================================================================
+   PROJECTS — THE SECURITY CASE ARCHIVE
+   Four strata, laid asymmetrically. Nothing here is a card: a case is a
+   left-aligned block of type with a figure beside it, indented by a lane index
+   so no two neighbours share a starting edge.
+
+   NAMESPACE — an archive entry is `.dossier`, never `.case`.
+   `.case` already belongs to the CASE / 001 investigation overlay in
+   `case.css`, where it means `position: fixed; inset: 0`. That file is imported
+   after this one, so naming an entry `.case` silently turned all ten of them
+   into full-screen fixed overlays stacked on top of each other — the archive
+   still read correctly in the DOM and produced no horizontal scrollbar, because
+   overflow to the *left* never creates one. Keep the two namespaces apart.
+   ========================================================================== */
+
+.cases {
+  position: relative;
+}
+
+/* ============================================================================
+   SELECTED WORK — the pinned reel
+   The section is N+1 screens tall and its stage is pinned, so scrolling
+   advances the case rather than the page. The type is the animation.
+   ========================================================================== */
+
+.reel {
+  position: relative;
+  margin-top: clamp(2rem, 6vh, 4rem);
+}
+@media (min-width: 768px) {
+  .reel {
+    height: calc(var(--reel-screens, 6) * 100vh);
+  }
+}
+.reel__stage {
+  position: relative;
+  overflow: clip;
+}
+@media (min-width: 768px) {
+  .reel__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+  }
+}
+
+/* --- the figure behind ---------------------------------------------------- */
+.reel__field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.reel__figure {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+/* Anchored to the upper right and allowed to run off both of those edges. A
+   figure centred behind the title competes with it; one that bleeds out of a
+   corner balances the type without ever sitting under it. */
+/* Anchored for the whole range in which the stage is pinned, not just the wide
+   one — between the two breakpoints the figure was still centred and its marks
+   landed directly on the second title line. */
+@media (min-width: 768px) {
+  .reel__figure {
+    inset: -10% -10% auto auto;
+    width: 52%;
+    height: 44%;
+  }
+}
+@media (min-width: 1024px) {
+  .reel__figure {
+    width: 44%;
+    height: 48%;
+  }
+}
+.reel__figure.is-live {
+  opacity: 1;
+}
+/* Cropped to the stage and dropped to a background weight — a figure the title
+   sits on, never one that competes with it. */
+/* Two classes deliberately: the base `.motif` sets `height: auto` and is
+   declared later in this file, so a single-class ambient rule loses to it and
+   the figure renders at its own 400:260 aspect — 851px tall inside a 720px
+   stage, which was the overflow that clipped the reel. */
+.motif.motif--ambient {
+  width: 100%;
+  height: 100%;
+  opacity: 0.18;
+  animation: none;
+}
+/* At stage scale the figure's solid marks are the size of a word and sit right
+   behind the title, which is what made this read as clutter rather than as a
+   backdrop. Ambient keeps the geometry and drops the blocks back. */
+.motif--ambient .mv-fill,
+.motif--ambient .mv-accent-fill {
+  opacity: 0.45;
+}
+/* The figures carry their own captions — ISSUE / SIGN / VERIFY, THE HARD PART.
+   At stage scale those words sit directly behind the title and read as part of
+   it. The geometry is the backdrop; the words belong to the column diagram. */
+.motif--ambient .mv-label {
+  display: none;
+}
+
+.reel__inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(1rem, 3vh, 2rem);
+  /* The stage is pinned to the top of the viewport and the navigation is fixed
+     over it, so the first row has to start below the bar or the section's own
+     header sits underneath it. */
+  padding-block: clamp(3.25rem, 7vh, 4.25rem) clamp(1.25rem, 4vh, 2.5rem);
+}
+@media (min-width: 768px) {
+  .reel__inner {
+    height: 100%;
+  }
+}
+.reel__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.reel__head-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.reel__head-mark i {
+  width: 7px;
+  height: 7px;
+  background: var(--color-signal);
+}
+
+/* The stage is a spread, not a stack. The type is anchored to the lower left
+   and the evidence column to the right of it, so the composition occupies the
+   whole viewport instead of a column down the middle of it. Above the
+   breakpoint that means an explicit two-track grid; below it the same blocks
+   fall into reading order. */
+.reel__center {
+  display: grid;
+  align-content: end;
+  justify-items: start;
+  text-align: left;
+  gap: clamp(0.5rem, 2vh, 1rem);
+  min-height: 0;
+}
+@media (min-width: 1024px) {
+  .reel__center {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.85fr);
+    grid-template-areas:
+      "mark  side"
+      "title side"
+      "under side";
+    column-gap: clamp(2.5rem, 6vw, 6.5rem);
+    row-gap: clamp(0.75rem, 2.2vh, 1.5rem);
+  }
+  .reel__marks {
+    grid-area: mark;
+  }
+  .reel__titles {
+    grid-area: title;
+  }
+  .reel__unfold {
+    grid-area: under;
+  }
+  .reel__side {
+    grid-area: side;
+    align-self: end;
+  }
+}
+
+/* --- the case mark: the one loud element on the stage --------------------- */
+.reel__marks {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  width: 100%;
+}
+.reel__mark {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.5s var(--ease);
+}
+.reel__mark.is-live {
+  opacity: 1;
+  transform: none;
+}
+.reel__mark b {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--color-signal);
+}
+.reel__mark i {
+  font-style: normal;
+  color: var(--color-grey-soft);
+}
+/* Drawn from the mark toward the evidence column: the empty half of the stage
+   is crossed by a line rather than left as a gap. */
+.reel__mark-rule {
+  grid-area: 1 / 2;
+  height: 1px;
+  width: 100%;
+  background: var(--color-rule);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 1s var(--ease) 0.1s;
+}
+.reel__inner[data-phase="1"] .reel__mark-rule,
+.reel__inner[data-phase="2"] .reel__mark-rule,
+.reel__inner[data-phase="3"] .reel__mark-rule {
+  transform: scaleX(1);
+}
+
+/* --- the evidence column -------------------------------------------------- */
+.reel__side {
+  display: grid;
+  gap: clamp(0.9rem, 2.4vh, 1.5rem);
+  width: 100%;
+  border-top: 1px solid var(--color-rule);
+  padding-top: clamp(0.75rem, 2vh, 1.1rem);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.6s var(--ease),
+    transform 0.65s var(--ease);
+}
+.reel__inner[data-phase="1"] .reel__side,
+.reel__inner[data-phase="2"] .reel__side,
+.reel__inner[data-phase="3"] .reel__side {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- the domain line ------------------------------------------------------ */
+.reel__tags {
+  display: grid;
+}
+.reel__tag {
+  grid-area: 1 / 1;
+  display: grid;
+  gap: 0.3rem;
+  color: var(--color-grey);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.5s var(--ease);
+}
+.reel__tag b {
+  font-weight: 400;
+  color: var(--color-ink);
+}
+.reel__tag i {
+  font-style: normal;
+  color: var(--color-grey-soft);
+}
+.reel__inner[data-phase="0"] .reel__tag.is-live,
+.reel__tag.is-live {
+  opacity: 1;
+  transform: none;
+}
+
+/* The method, as a ledger. Hairline rows, mono index, no card. */
+.reel__method {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.reel__method li {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding-block: clamp(0.45rem, 1.2vh, 0.7rem);
+  border-top: 1px solid var(--color-rule-soft);
+  opacity: 0;
+  animation: reel-step 0.6s var(--ease) forwards;
+}
+.reel__method li:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.reel__method li:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.reel__method li:nth-child(3) {
+  animation-delay: 0.19s;
+}
+.reel__method li:nth-child(4) {
+  animation-delay: 0.26s;
+}
+.reel__method li:nth-child(n + 5) {
+  animation-delay: 0.33s;
+}
+@keyframes reel-step {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.reel__method-n {
+  color: var(--color-signal);
+}
+.reel__method-step {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: var(--color-graphite);
+}
+
+/* --- the title: the animation ---------------------------------------------- */
+.reel__titles {
+  display: grid;
+  width: 100%;
+}
+.reel__title {
+  grid-area: 1 / 1;
+  display: grid;
+  justify-items: start;
+  text-align: left;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  /* The display voice, not the accent. The case number carries the accent
+     instead — one loud element per stage, so the title reads as a headline
+     rather than as a warning. */
+  color: var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.35s var(--ease),
+    color 0.4s var(--ease);
+}
+.reel__title.is-live:hover,
+.reel__title.is-live:focus-visible {
+  color: var(--color-signal);
+}
+.reel__title.is-live {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Each line rolls up out of its own mask, so a change of case reads as a
+   mechanism moving rather than a crossfade. */
+.reel__title-mask {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.02em;
+}
+.reel__title-line {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  /* Three limits, whichever is smallest.
+       1. the intended drama
+       2. the width the longest line can occupy inside the gutters — available
+          width over character count, at this face's average uppercase advance
+       3. a share of the viewport HEIGHT
+     The third one is the fix for a laptop: the stage is pinned to 100svh and
+     clips, so a title sized purely from width overran the vertical budget on a
+     720px-high screen and pushed SELECTED WORK off the top of its own stage.
+     The title stays oversized and can no longer evict its own furniture.
+
+     `--track` is the share of the content width the title column actually
+     owns. The title used to span the full stage; it now sits in the left track
+     of a two-track spread, so the width limit has to be taken against that
+     track rather than against the whole viewport.
+
+     `--em` is the longest line's width in em, measured on a canvas by the
+     component. Dividing the track by it gives the exact size at which that
+     line fills the track; 0.97 keeps a little back so sub-pixel rounding can
+     never tip a fitted line into wrapping. */
+  --track: 1;
+  font-size: min(
+    clamp(2rem, 8.2vw, 7.5rem),
+    calc(((100vw - 2 * var(--pad)) * var(--track) * 0.97) / var(--em, 12)),
+    16vh
+  );
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  transform: translateY(110%);
+  transition: transform 0.75s var(--ease);
+}
+@media (min-width: 1024px) {
+  .reel__title-line {
+    /* The measured share of the content box the title track actually occupies
+       once the column gap is taken out — not the raw 1.55-of-2.40 fr ratio,
+       which reads ~8% wider than the track resolves to and wrapped every
+       two-line title onto three. */
+    --track: 0.55;
+  }
+}
+.reel__title.is-live .reel__title-line {
+  transform: none;
+}
+.reel__title-mask:nth-child(2) .reel__title-line {
+  transition-delay: 0.07s;
+}
+.reel__title.is-live:hover .reel__title-line {
+  transform: translateY(-0.04em);
+}
+
+/* --- what unfolds under it ------------------------------------------------- */
+.reel__unfold {
+  display: grid;
+  justify-items: start;
+  gap: 0.6rem;
+  max-width: 52ch;
+}
+.reel__u {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.55s var(--ease);
+}
+.reel__u--tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  color: var(--color-grey);
+}
+.reel__u--problem {
+  color: var(--color-graphite);
+}
+.reel__inner[data-phase="2"] .reel__u--tools,
+.reel__inner[data-phase="3"] .reel__u--tools {
+  opacity: 1;
+  transform: none;
+}
+.reel__inner[data-phase="3"] .reel__u--problem {
+  opacity: 1;
+  transform: none;
+}
+
+.reel__foot {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+.reel__bar {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--color-rule);
+}
+.reel__bar > span {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+.reel__hint {
+  white-space: nowrap;
+}
+
+/* Below the breakpoint the pin is released and the archive underneath carries
+   the same cases as a readable index, so the reel steps aside. */
+@media (max-width: 767px) {
+  .reel__title-line,
+  .reel__u,
+  .reel__tag {
+    transform: none;
+    opacity: 1;
+  }
+  .reel__title:not(.is-live) {
+    display: none;
+  }
+  .reel__field {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel {
+    height: auto;
+  }
+  .reel__stage {
+    position: relative;
+    height: auto;
+  }
+  .reel__title-line,
+  .reel__u,
+  .reel__tag,
+  .reel__figure {
+    transform: none !important;
+    opacity: 1;
+    transition: none;
+  }
+  .reel__title:not(.is-live) {
+    display: none;
+  }
+  .reel__figure:not(.is-live) {
+    display: none;
+  }
+}
+
+/* --- a stratum ------------------------------------------------------------ */
+.stratum {
+  margin-top: clamp(3rem, 9vh, 6rem);
+}
+.stratum__head {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.35rem 1.5rem;
+  padding-top: clamp(0.75rem, 2vh, 1.25rem);
+}
+.stratum__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-ink);
+  transform-origin: 0 50%;
+}
+.stratum__label {
+  font-size: clamp(1.15rem, 2.6vw, 2rem);
+  line-height: 1;
+}
+.stratum__note {
+  grid-column: 1;
+  color: var(--color-grey);
+}
+.stratum__count {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: start;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The professional stratum is the one carrying a confidentiality boundary, so
+   it is the one that gets the accent. */
+.stratum[data-group="professional"] .stratum__rule {
+  background: var(--color-signal);
+}
+
+.stratum__cases {
+  display: grid;
+  gap: clamp(2rem, 6vh, 4rem);
+  margin-top: clamp(1.75rem, 5vh, 3rem);
+}
+
+/* --- a case --------------------------------------------------------------- */
+.dossier {
+  position: relative;
+  display: grid;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .dossier {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+  /* The asymmetry: three lanes, assigned by position within the stratum and
+     offset by the stratum's own index so the rhythm never repeats. */
+  .dossier[data-lane="0"] {
+    margin-left: 0;
+    width: 100%;
+  }
+  .dossier[data-lane="1"] {
+    margin-left: 12%;
+    width: 88%;
+  }
+  .dossier[data-lane="2"] {
+    margin-left: 5%;
+    width: 82%;
+  }
+  .dossier.is-featured {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+.dossier__open {
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0 0 0.85rem;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--color-rule);
+  color: inherit;
+  transition: border-color 0.5s var(--ease);
+}
+.dossier__open:hover,
+.dossier__open:focus-visible {
+  border-bottom-color: var(--color-signal);
+}
+
+.dossier__n {
+  color: var(--color-signal);
+  font-variant-numeric: tabular-nums;
+}
+.dossier__title {
+  font-size: clamp(1.4rem, 3.6vw, 2.9rem);
+  line-height: 0.98;
+  transition: transform 0.55s var(--ease);
+}
+.dossier.is-featured .dossier__title {
+  font-size: clamp(1.7rem, 4.6vw, 3.6rem);
+}
+.dossier__title span {
+  display: block;
+}
+.dossier__open:hover .dossier__title,
+.dossier__open:focus-visible .dossier__title {
+  transform: translateX(0.5rem);
+}
+
+.dossier__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  color: var(--color-grey);
+}
+.dossier__status {
+  color: var(--color-graphite);
+}
+.dossier__problem {
+  max-width: 54ch;
+  margin-top: 0.4rem;
+  color: var(--color-graphite);
+}
+
+.dossier__cta {
+  margin-top: 0.5rem;
+  color: var(--color-grey);
+  transition: color 0.4s var(--ease);
+}
+.dossier__cta i {
+  display: inline-block;
+  font-style: normal;
+  transition: transform 0.45s var(--ease);
+}
+.dossier__open:hover .dossier__cta,
+.dossier__open:focus-visible .dossier__cta {
+  color: var(--color-ink);
+}
+.dossier__open:hover .dossier__cta i,
+.dossier__open:focus-visible .dossier__cta i {
+  transform: translateX(0.35rem);
+}
+
+.dossier__figure {
+  display: block;
+  opacity: 0.55;
+  transition: opacity 0.6s var(--ease);
+}
+.dossier:hover .dossier__figure,
+.dossier:focus-within .dossier__figure {
+  opacity: 1;
+}
+@media (max-width: 899px) {
+  .dossier__figure {
+    max-width: 22rem;
+  }
+}
+
+/* A sealed case says so on its face, not only inside the record. */
+.dossier__seal {
+  position: absolute;
+  top: -0.35rem;
+  right: 0;
+  padding: 0.15rem 0.45rem;
+  color: var(--color-signal);
+  border: 1px solid var(--color-signal);
+  letter-spacing: 0.18em;
+  pointer-events: none;
+}
+@media (max-width: 899px) {
+  .dossier__seal {
+    position: static;
+    justify-self: start;
+  }
+}
+
+/* --- research directions, inside the lab stratum -------------------------- */
+.stratum__directions {
+  margin-top: clamp(2.5rem, 7vh, 4rem);
+  padding-top: clamp(1.25rem, 3vh, 2rem);
+  border-top: 1px solid var(--color-rule);
+}
+.stratum__directions-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.35rem 1.5rem;
+  padding-bottom: 1.25rem;
+}
+.dir {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.5rem 1rem;
+  padding-block: clamp(0.85rem, 2vh, 1.25rem);
+  border-top: 1px solid var(--color-rule-soft);
+  align-items: baseline;
+}
+@media (min-width: 900px) {
+  .dir {
+    grid-template-columns: 3rem minmax(0, 1fr) 16rem;
+  }
+}
+.dir__n {
+  color: var(--color-grey-soft);
+  font-variant-numeric: tabular-nums;
+}
+.dir__body {
+  display: grid;
+  gap: 0.3rem;
+}
+.dir__title {
+  color: var(--color-ink);
+}
+.dir__premise {
+  max-width: 60ch;
+  color: var(--color-grey);
+}
+.dir__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  grid-column: 2;
+}
+@media (min-width: 900px) {
+  .dir__tags {
+    grid-column: 3;
+    flex-direction: column;
+    text-align: right;
+    gap: 0.25rem;
+  }
+}
+.dir__state {
+  color: var(--color-grey-soft);
+}
+.dir__state[data-state="SELECTED"] {
+  color: var(--color-signal);
+}
+
+/* ============================================================================
+   THE RECORD — a case, opened
+   ========================================================================== */
+
+.record {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  background: var(--color-paper);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.75s var(--ease);
+}
+.record.is-open {
+  clip-path: inset(0 0 0 0);
+}
+.record__inner {
+  min-height: 100%;
+  display: grid;
+  align-content: start;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+  padding-block: clamp(1.5rem, 4vh, 2.5rem) clamp(3rem, 8vh, 5rem);
+}
+.record__inner:focus {
+  outline: none;
+}
+.record__head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.75rem;
+  background: var(--color-paper);
+  border-bottom: 1px solid var(--color-rule);
+}
+.record__close {
+  background: none;
+  border: 0;
+  color: var(--color-ink);
+  padding: 0.35rem 0;
+}
+.record__title-row {
+  display: grid;
+  gap: 0.5rem 1.5rem;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .record__title-row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+.record__n {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 0.82;
+  color: var(--color-signal);
+}
+.record__title {
+  font-size: clamp(1.75rem, 5.4vw, 4.25rem);
+  line-height: 0.94;
+}
+.record__title span {
+  display: block;
+}
+
+/* The confidentiality boundary, stated before any of the content. */
+.record__seal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.85rem;
+  color: var(--color-signal);
+  border: 1px solid var(--color-signal);
+  letter-spacing: 0.14em;
+}
+.record__seal i {
+  width: 7px;
+  height: 7px;
+  background: var(--color-signal);
+  flex: none;
+}
+
+.record__grid {
+  display: grid;
+  gap: clamp(1.75rem, 5vh, 3rem);
+}
+@media (min-width: 900px) {
+  .record__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+}
+.record__label {
+  display: block;
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+}
+.record__para {
+  margin-top: 0.5rem;
+  max-width: 58ch;
+}
+.record__approach {
+  margin-top: 0.7rem;
+  display: grid;
+  gap: 0.55rem;
+}
+.record__approach li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.record__motif {
+  margin-bottom: 1.25rem;
+}
+.record__meta > div {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.45rem;
+  border-top: 1px solid var(--color-rule-soft);
+}
+.record__meta dd {
+  color: var(--color-graphite);
+}
+.record__unavailable {
+  color: var(--color-grey-soft);
+}
+.record__limits {
+  margin-top: 1.5rem;
+  padding: clamp(0.85rem, 2vw, 1.15rem);
+  border: 1px solid var(--color-rule);
+}
+.record__limits .record__para {
+  margin-top: 0.4rem;
+}
+.record__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-rule);
+}
+.record__nav button {
+  background: none;
+  border: 0;
+  color: var(--color-grey);
+  padding: 0.4rem 0;
+  transition: color 0.3s var(--ease);
+}
+.record__nav button:hover {
+  color: var(--color-ink);
+}
+
+/* ============================================================================
+   MOTIFS — the site draws its own figures
+   ========================================================================== */
+
+.motif {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-ink);
+  animation: motif-in 0.9s var(--ease) both;
+}
+@keyframes motif-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.35;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+.motif .mv-stroke {
+  stroke: currentColor;
+  stroke-width: 1;
+  fill: none;
+}
+.motif .mv-hair {
+  stroke: var(--color-rule);
+  stroke-width: 1;
+  fill: none;
+}
+.motif .mv-dash {
+  stroke: currentColor;
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 3 4;
+}
+.motif .mv-accent {
+  stroke: var(--color-signal);
+  stroke-width: 1;
+  fill: none;
+}
+.motif .mv-accent-fill {
+  fill: var(--color-signal);
+  stroke: none;
+}
+.motif .mv-fill {
+  fill: currentColor;
+  stroke: none;
+}
+.motif .mv-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  fill: var(--color-grey);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motif {
+    animation: none;
+  }
+  .record {
+    transition: none;
+  }
+  .dossier,
+  .stratum__rule {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

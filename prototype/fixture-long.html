@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why my detection kept firing four hours late — Het Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<p class="proto">Phase 5D TEST FIXTURE — LONG content (~2,000 words). Hypothetical, self-initiated, written only to test reading fatigue, hierarchy and movement transitions at length. Not professional work and not production content.</p>
+
+<header class="site-header">
+  <a class="site-name" href="index.html">Het Patel</a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="investigations.html" aria-current="page">Investigations</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<main id="main">
+<article class="investigation">
+
+  <a class="backlink" href="investigations.html">&larr; Investigations</a>
+
+  <h1>Why my detection kept firing four hours late</h1>
+
+  <dl class="apparatus">
+    <dt>Status</dt><dd>closed</dd>
+    <dt>Origin</dt><dd>self-initiated</dd>
+    <dt>Started</dt><dd>2026-04-02</dd>
+    <dt>Published</dt><dd>2026-04-19</dd>
+  </dl>
+
+  <p class="question">I wrote a small brute-force detection against authentication logs in a lab I
+  had built, and it worked — but every alert arrived roughly four hours after the activity it
+  described. Not occasionally. Every time, and by almost exactly the same amount. A detection
+  that is consistently wrong by a fixed offset is more interesting than one that is erratic,
+  because a constant means something is being converted rather than something being dropped.</p>
+
+  <p class="movement">The obvious explanation was that my pipeline was slow, so I measured that
+  first and got it out of the way. From the moment a log line was written to the moment the rule
+  evaluated it, the pipeline took under two seconds at every stage. There was no backlog, no
+  retry queue, nothing waiting. Whatever the four hours were, they were not elapsed time.</p>
+
+  <p>That left the timestamps themselves. If the delay was not in the movement of the data, it
+  had to be in what the data claimed about itself. So I stopped looking at the system and started
+  looking at a single event as it appeared at three different points: as written by the source,
+  as stored after ingestion, and as read by the rule.</p>
+
+  <p>Picking one event and following it end to end is slower than querying for a pattern, and I
+  resisted it for about an hour before doing it. It was the right call and I should have made it
+  sooner. Aggregate queries tell you that something is wrong across a population. A single
+  traced event tells you where.</p>
+
+  <p class="inset">Worth writing down: I have now twice reached for a broad query when a single
+  traced example would have been faster. It feels more thorough. It usually is not.</p>
+
+  <p>At the source, the event carried a local timestamp with no zone information — just a date
+  and a time. After ingestion it carried a UTC timestamp. The two differed by the offset of the
+  zone the source host was configured for. Nothing had been lost, and nothing had been delayed.
+  The value had been reinterpreted.</p>
+
+  <p class="movement">The ingestion step was treating a zone-less timestamp as though it were
+  already UTC, which is a defensible default and also the wrong one for this source. The source
+  was writing local time. So an event that happened at 09:00 local was being stored as 09:00 UTC,
+  which is a different instant, and every downstream comparison inherited that error.</p>
+
+  <h2>Why it looked like lateness rather than wrongness</h2>
+
+  <p>This is the part I found genuinely interesting, because the symptom pointed away from the
+  cause. My rule used a sliding window over recent events. When the stored timestamps were
+  shifted into the future relative to true time, events did not enter the window when they
+  occurred — they entered it when the wall clock finally caught up to the value that had been
+  written down. The detection was not running late. It was running exactly on time against
+  timestamps that described a moment that had not happened yet.</p>
+
+  <p>That distinction matters for the fix. A late pipeline is a capacity problem and you solve it
+  with more throughput. A mislabelled instant is a semantics problem and throughput makes it
+  worse, because you process the wrong values faster. Had I trusted the symptom, I would have
+  spent the afternoon tuning something that was already fast enough.</p>
+
+  <p>It also explains something I had noticed and set aside. Alerts for activity late in the
+  evening sometimes never fired at all. Shifted forward, those events landed beyond the end of
+  the retention window my lab was configured for, and were aged out before the wall clock reached
+  them. I had assumed I was miscounting. I was not — those detections were genuinely being lost,
+  and by the same mechanism.</p>
+
+  <p class="movement">Correcting the ingestion step to attach the source's actual zone before
+  conversion removed the offset, and the detection began firing within seconds of the activity.
+  I re-ran the same synthetic authentication traffic I had used to build the rule and compared
+  alert times against the times the traffic generator recorded. They agreed to within the
+  pipeline latency I had measured at the start.</p>
+
+  <h2>What the fix did not cover</h2>
+
+  <p>Attaching a zone at ingestion works because I know what zone this source is in. I configured
+  the host. In anything larger than a lab that assumption fails in at least two ways I can
+  describe and probably more that I cannot.</p>
+
+  <p>The first is that a host's zone can change — a rebuild, a migration, a policy applied across
+  a fleet — and nothing in the log line announces it. The pipeline would keep applying the old
+  offset and the error would return silently, without a symptom as legible as a constant four
+  hours. It would look like a small number of events with implausible ordering, which is much
+  harder to notice.</p>
+
+  <p>The second is daylight saving. My lab sits in a zone that does not observe it, so I never
+  saw the problem. A source in a zone that does would produce an hour that occurs twice and an
+  hour that never occurs at all, and a fixed offset attached at ingestion cannot represent
+  either. The correct handling is for the source to emit an unambiguous instant in the first
+  place, which is not something the collector can fix downstream.</p>
+
+  <p>I looked at whether I could detect the mismatch automatically rather than configure it —
+  comparing the timestamp in the event against the time of arrival, and flagging sources whose
+  difference is stable and non-zero. It works on the traffic I generated. I am not confident it
+  generalises, because a source that is genuinely batching its output would produce the same
+  stable difference for an entirely legitimate reason, and I could not think of a way to
+  distinguish the two from the log line alone.</p>
+
+  <h2>Checking that the fix was actually the fix</h2>
+
+  <p>Having found an explanation that accounted for the symptom, I was aware that I had found
+  <em>an</em> explanation rather than necessarily <em>the</em> explanation. The offset matched
+  the zone difference, which is strong, but a matching number is not the same as a demonstrated
+  mechanism. Two things could have been true at once: the timestamps could have been misread and
+  something else could also have been delaying evaluation.</p>
+
+  <p>So I tried to break it deliberately. I set the source host to a different zone, one with an
+  offset I had not seen before, and re-ran the same traffic without changing anything else. If my
+  explanation was right, the lateness should change to match the new offset exactly. It did. I
+  then set the source to emit UTC explicitly, which should remove the lateness entirely, and it
+  did that too.</p>
+
+  <p>Two confirmations from opposite directions is the standard I have started holding myself to
+  when the evidence is a coincidence of numbers. Predicting a new value and getting it is worth
+  considerably more than explaining a value I had already seen, because the second is available
+  to any explanation that happens to fit.</p>
+
+  <p>The one thing I could not construct was a negative case that behaved differently for a
+  different reason. I wanted to introduce a genuine processing delay and confirm that it looked
+  distinguishable from the timestamp problem, so that I would recognise the difference next time.
+  I could add a delay, but everything I tried produced a variable lag rather than a constant one,
+  which is exactly the distinction I already had. Useful, but it confirmed what I believed rather
+  than testing it.</p>
+
+  <h2>What I would keep from this</h2>
+
+  <p>The most transferable part is not about timestamps. It is that the units in which a symptom
+  is described tend to suggest the category of the cause, and that suggestion is not evidence. A
+  problem described in hours invites a search for something slow. A problem described in counts
+  invites a search for something dropping. Neither description constrains the cause at all, and I
+  spent an hour inside the first of those before checking whether the magnitude was even
+  plausible.</p>
+
+  <p>The second is about defaults. The collector did nothing wrong by its own lights, and the
+  source did nothing wrong by its own lights, and the failure lived entirely in the space between
+  two reasonable assumptions that nobody had written down. That space does not show up in either
+  component's documentation because neither component owns it. I do not have a general method for
+  finding those gaps, and I would like one.</p>
+
+  <p class="movement">What I could not determine is whether the ingestion default was a
+  deliberate choice or an unexamined one. Assuming UTC for a zone-less timestamp is a reasonable
+  policy: it is at least consistent, it is what several well-known collectors do, and the
+  alternative — guessing the zone from the host — is wrong in a different and quieter way. If
+  that was the reasoning, then the defect is not in the default but in my having pointed a source
+  at it that does not satisfy the default's assumption.</p>
+
+  <p>I could not settle this because the environment was one I had assembled myself from stock
+  configuration, so there was no change history to read and nobody to ask. The two possibilities
+  call for different responses. If the default is deliberate, the correct fix is at the source —
+  make it emit a zone — and my ingestion-side patch is a workaround that will mislead whoever
+  finds it later. If it is an artefact, the collector should refuse a zone-less timestamp rather
+  than silently assign one, because a rejected event is a visible failure and a reinterpreted
+  event is an invisible one.</p>
+
+  <p>I have applied the ingestion-side fix and left a comment saying it is a workaround, which is
+  the least satisfying of the available outcomes and the honest one. I would want to see how the
+  collector behaves with a source that emits a zone correctly before arguing that its default is
+  wrong, and I have not built that yet.</p>
+
+  <p>One further thing I want to record because it changed how I would approach this again. I
+  spent the first hour on throughput because the symptom was described in units of time, and
+  units of time suggest performance. The symptom's units were misleading. A four-hour constant
+  was never plausible as latency in a pipeline I could observe end to end in two seconds — the
+  magnitude alone should have ruled it out immediately, and I did not stop to check whether the
+  explanation I was pursuing was even the right order of magnitude before pursuing it.</p>
+
+  <section class="artifacts" aria-labelledby="artifacts-label">
+    <p class="region-label" id="artifacts-label">Artifacts</p>
+    <ul>
+      <li><a href="#">Synthetic authentication traffic generator</a>
+        <span class="note">— hypothetical; fixture placeholder</span></li>
+      <li><a href="#">Single-event trace notes</a>
+        <span class="note">— hypothetical; fixture placeholder</span></li>
+    </ul>
+  </section>
+
+  <section class="revisions" aria-labelledby="revisions-label">
+    <p class="region-label" id="revisions-label">Revisions</p>
+    <dl>
+      <dt>2026-04-19</dt>
+      <dd>Published.</dd>
+
+      <dt>2026-06-02</dt>
+      <dd>I had written that the events were being dropped. They were not — they were being aged
+      out of the retention window after being shifted forward, which is a different failure with
+      a different fix. Corrected that paragraph.</dd>
+
+      <dt>2026-07-30</dt>
+      <dd>Softened the claim that the collector's default is wrong. Having read how two other
+      collectors handle zone-less input, assuming UTC is the common choice and my source was the
+      thing violating the assumption. The conclusion now says which of the two I could not
+      establish rather than asserting one.</dd>
+    </dl>
+  </section>
+
+</article>
+</main>
+
+<footer class="site-footer">
+  <p class="foot-id"><strong>Het Patel</strong> — security testing and regulated assurance.</p>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="index.html">Home</a>
+    <a href="investigations.html">Investigations</a>
+    <a href="about.html">About</a>
+  </nav>
+  <p class="foot-contact"><a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a>
+  · <a href="https://github.com/het-P301204">GitHub</a>
+  · <a href="https://www.linkedin.com/in/het-patel-913017345">LinkedIn</a></p>
+</footer>
+
+</body>
+</html>

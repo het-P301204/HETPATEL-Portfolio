@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Investigations (20-item fixture) &mdash; Het Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<p class="proto">[HYPOTHETICAL VALIDATION CONTENT] Phase 5F scale fixture &mdash; 20 items. Every entry below is invented solely to test how the index behaves at volume. None of it is Het’s work and none of it may be published.</p>
+<header class="site-header">
+  <a class="site-name" href="index.html">Het Patel</a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="investigations.html" aria-current="page">Investigations</a>
+    <a href="#">Notes</a>
+    <a href="#">About</a>
+  </nav>
+</header>
+<main id="main">
+<div class="home">
+  <section class="identity" aria-labelledby="idx-h">
+    <h1 id="idx-h">Investigations</h1>
+    <p class="lede">Questions I worked through, written up with what I found and what I could not determine. Some are closed. Some are not.</p>
+  </section>
+  <section class="block" aria-labelledby="rec-h">
+    <h2 class="region-label" id="rec-h">The record</h2>
+    <ol class="index">
+      <li>
+        <a href="fixture-long.html">Why my detection kept firing four hours late</a>
+        <p class="ix-framing">Every alert arrived roughly four hours after the activity it described, by almost exactly the same amount — and a constant offset means something is being converted rather than dropped.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2026 &middot; code</p>
+      </li>
+      <li>
+        <a href="short-no-revisions.html">Two enumeration tools disagree on the same host</a>
+        <p class="ix-framing">Two tools returned genuinely different open-port sets against one host. Three explanations fit the evidence equally well and I could not separate them.</p>
+        <p class="ix-record">self-initiated &middot; unresolved &middot; 2026–</p>
+      </li>
+      <li>
+        <a href="investigation.html">Why an allow-list kept failing open</a>
+        <p class="ix-framing">The rule read correctly, so I wanted to know where the gap between the declared rule and the observed behaviour was coming from.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2026 &middot; code</p>
+      </li>
+      <li>
+        <a href="#">When evidence satisfies one framework and fails another</a>
+        <p class="ix-framing">Two frameworks defined the same control boundary differently, so the same document was sufficient under one and incomplete under the other.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2026</p>
+      </li>
+      <li>
+        <a href="#">What a control owner actually needs to be told</a>
+        <p class="ix-framing">A finding that is technically correct and unreadable does not get fixed. I wanted to know what the remediation note has to contain.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2026</p>
+      </li>
+      <li>
+        <a href="#">A redirect that looked like an access-control boundary</a>
+        <p class="ix-framing">I had recorded it as a boundary. Re-reading the request sequence showed it was presentation logic and nothing was being enforced.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2026</p>
+      </li>
+      <li>
+        <a href="#">Whether a scanner severity means anything on its own</a>
+        <p class="ix-framing">The same weakness came back at two different severities from two tools, and I could not find a principled way to reconcile them.</p>
+        <p class="ix-record">self-initiated &middot; unresolved &middot; 2026–</p>
+      </li>
+      <li>
+        <a href="#">Mapping one control to evidence an auditor would accept</a>
+        <p class="ix-framing">The control was clear and the evidence was not. Working out what would actually satisfy it took longer than reading the standard.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2025–2026</p>
+      </li>
+      <li>
+        <a href="#">Why my lab DNS resolved differently from the host</a>
+        <p class="ix-framing">Two resolvers on the same network disagreed, which turned out to be a search-domain rule I had written and forgotten.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2025</p>
+      </li>
+      <li>
+        <a href="#">Reading a firewall ruleset nobody could explain</a>
+        <p class="ix-framing">Nobody could say which rules still mattered. I wanted to know whether that was answerable from the ruleset alone.</p>
+        <p class="ix-record">self-initiated &middot; unresolved &middot; 2025–</p>
+      </li>
+      <li>
+        <a href="#">What changes when a finding becomes an obligation</a>
+        <p class="ix-framing">The same weakness is described differently by a tester and by an auditor, and I wanted to understand which parts survive the translation.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2026</p>
+      </li>
+      <li>
+        <a href="#">A misconfiguration that only appeared under load</a>
+        <p class="ix-framing">It reproduced at concurrency and not otherwise, which made me doubt every earlier negative result.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2025 &middot; code</p>
+      </li>
+      <li>
+        <a href="#">Why two TLS scanners disagreed about the same host</a>
+        <p class="ix-framing">Both were right. They were testing different things and reporting them under the same name.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2025</p>
+      </li>
+      <li>
+        <a href="#">Whether a stale open port is worth reporting</a>
+        <p class="ix-framing">It was reachable and did nothing. I could not decide whether that is a finding or noise, and I still cannot.</p>
+        <p class="ix-record">self-initiated &middot; unresolved &middot; 2025–</p>
+      </li>
+      <li>
+        <a href="#">What an intern can actually verify in an audit</a>
+        <p class="ix-framing">I wanted to know which parts of the work I could check myself and which I was taking on trust.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2026</p>
+      </li>
+      <li>
+        <a href="#">Rebuilding a request smuggler to understand it</a>
+        <p class="ix-framing">I had read the technique and could not have explained it. Building a small one was the only way I found to fix that.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2025 &middot; code</p>
+      </li>
+      <li>
+        <a href="#">Why a WAF rule fired on traffic it should have ignored</a>
+        <p class="ix-framing">A pattern matched a substring nobody had considered, which made me wonder how many rules have that property.</p>
+        <p class="ix-record">self-initiated &middot; closed &middot; 2025</p>
+      </li>
+      <li>
+        <a href="#">Reconciling two asset inventories that disagreed</a>
+        <p class="ix-framing">Neither was wrong. They had different definitions of what counts as an asset, and nothing recorded either definition.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2025–2026</p>
+      </li>
+      <li>
+        <a href="#">Whether I can detect a batching source from logs alone</a>
+        <p class="ix-framing">A batching source and a mis-timestamped source produce the same signature, and I could not think of a way to tell them apart.</p>
+        <p class="ix-record">self-initiated &middot; unresolved &middot; 2026–</p>
+      </li>
+      <li>
+        <a href="#">What a penetration test report is actually for</a>
+        <p class="ix-framing">I had assumed the reader was technical. Watching what happened to a report afterwards suggested otherwise.</p>
+        <p class="ix-record">professional &middot; closed &middot; 2026</p>
+      </li>
+    </ol>
+  </section>
+</div>
+</main>
+<footer class="site-footer">
+  <p>Het Patel &mdash; <a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a></p>
+</footer>
+</body>
+</html>

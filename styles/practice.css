@@ -1,0 +1,149 @@
+/* ============================================================================
+   SECURITY PRACTICE — six domains, activated by the scroll.
+   The list is sticky; the page moves through it. Outline becomes solid.
+   ========================================================================== */
+
+.practice {
+  position: relative;
+  background: var(--color-paper);
+}
+.practice__stage {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(1.5rem, 4vh, 3rem);
+  padding-block: clamp(4.5rem, 11vh, 7.5rem) clamp(2rem, 6vh, 4rem);
+}
+@media (min-width: 768px) {
+  .practice {
+    height: 420svh;
+  }
+  .practice__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: clip;
+  }
+}
+
+.practice__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+}
+.practice__head-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.practice__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.6rem;
+  background: var(--color-signal);
+}
+
+.practice__body {
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+  align-content: center;
+}
+@media (min-width: 1024px) {
+  .practice__body {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+}
+
+.practice__list {
+  display: grid;
+  gap: clamp(0.05rem, 0.5vh, 0.35rem);
+}
+.practice__btn {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  color: inherit;
+  padding: 0.1rem 0;
+}
+.practice__name {
+  display: inline-block;
+  font-size: clamp(1.35rem, 3.6vw, 3.1rem);
+  line-height: 1.04;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-ink);
+  transition:
+    color 0.5s var(--ease),
+    transform 0.6s var(--ease),
+    opacity 0.5s var(--ease);
+  opacity: 0.55;
+}
+.practice__btn.is-active .practice__name {
+  color: var(--color-ink);
+  transform: translateX(0.5rem);
+  opacity: 1;
+}
+.practice__n {
+  color: var(--color-grey-soft);
+  transition: color 0.4s var(--ease);
+}
+.practice__btn.is-active .practice__n {
+  color: var(--color-signal);
+}
+
+.practice__panel {
+  border-top: 1px solid var(--color-rule);
+  padding-top: 1rem;
+}
+.practice__basis {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+.practice__caps li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+  padding-block: 0.5rem;
+  border-top: 1px solid var(--color-rule-soft);
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  animation: cap-in 0.55s var(--ease) forwards;
+}
+@keyframes cap-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.practice__cap {
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  letter-spacing: -0.012em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .practice {
+    height: auto;
+  }
+  .practice__stage {
+    position: relative;
+    height: auto;
+  }
+  .practice__caps li {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>5G viewport harness</title>
+<style>
+  html,body{margin:0;padding:0;background:#3a3a3a;width:100%;height:100%;overflow:hidden;}
+  #clip{position:fixed;inset:0;overflow:hidden;}
+  #wrap{position:absolute;top:0;left:0;transform-origin:0 0;}
+  iframe{border:0;display:block;background:#FBFAF7;}
+  #label{position:fixed;right:4px;top:4px;z-index:5;font:11px/1.3 monospace;color:#fff;background:#000;padding:2px 5px;opacity:.85}
+</style>
+</head>
+<body>
+<div id="clip"><div id="wrap"><iframe id="f"></iframe></div></div>
+<div id="label"></div>
+<script>
+  var q = new URLSearchParams(location.search);
+  var src = q.get('src') || 'index.html';
+  var w = parseInt(q.get('w') || '1280', 10);
+  var h = parseInt(q.get('h') || '800', 10);
+  var fit = parseInt(q.get('fit') || '0', 10);   // 1 = scale to fit pane width
+  var full = parseInt(q.get('full') || '0', 10); // 1 = iframe height = full doc height
+
+  var f = document.getElementById('f');
+  var wrap = document.getElementById('wrap');
+
+  var tx = parseFloat(q.get('tx') || '0');   // pan the scaled surface (CSS px of the target)
+  var ty = parseFloat(q.get('ty') || '0');
+  var fixedS = q.get('s') ? parseFloat(q.get('s')) : null;
+
+  function apply(scale) {
+    wrap.style.transform = 'translate(' + (-tx * scale) + 'px,' + (-ty * scale) + 'px) scale(' + scale + ')';
+    document.getElementById('label').textContent = w + '×' + h + ' @' + Math.round(scale * 100) + '%';
+  }
+
+  f.style.width = w + 'px';
+  f.style.height = h + 'px';
+  f.src = src;
+
+  window.__ready = false;
+  f.addEventListener('load', function () {
+    var d = f.contentDocument;
+    if (full) {
+      h = d.documentElement.scrollHeight;
+      f.style.height = h + 'px';
+    }
+    // Scale so the target viewport fills the pane. Scaling UP is allowed: the
+    // iframe's CSS viewport (and therefore every media query) stays exactly `w`,
+    // only the drawn size changes, which is what makes the capture legible.
+    var s = 1;
+    if (fixedS !== null) s = fixedS;
+    else if (fit) s = full ? Math.min(innerWidth / w, innerHeight / h) : (innerWidth / w);
+    apply(s);
+    window.__scale = s;
+    window.__ready = true;
+  });
+
+  // The preview pane changes size after load; re-fit so the capture always
+  // shows the target viewport at the largest legible scale.
+  window.__refit = function () {
+    if (fixedS !== null) return apply(fixedS);
+    var s2 = full ? Math.min(innerWidth / w, innerHeight / h) : (innerWidth / w);
+    window.__scale = s2;
+    apply(s2);
+    return s2;
+  };
+  addEventListener('resize', function () { if (fit) window.__refit(); });
+
+  // measurement bridge: run the harness inside the iframe
+  window.__IM = function (opts) {
+    var d = f.contentDocument, win = f.contentWindow;
+    if (!win.__M) {
+      var s = d.createElement('script');
+      s.textContent = document.getElementById('mjs').textContent;
+      d.head.appendChild(s);
+    }
+    return win.__M(opts);
+  };
+</script>
+<script id="mjs" type="text/plain"></script>
+<script>
+  // inline the measurement source so it can be injected into the iframe
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/__measure.js', false);
+  xhr.send();
+  document.getElementById('mjs').textContent = xhr.responseText;
+</script>
+</body>
+</html>

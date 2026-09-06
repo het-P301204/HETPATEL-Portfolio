@@ -1,0 +1,359 @@
+/* ============================================================================
+   CASE / 001 — the forensic environment.
+   The desktop is objects and windows. This is evidence and time: no wallpaper,
+   no furniture, one column of sources and one column of what they add up to.
+
+   NAMESPACE — `.case*` belongs to this overlay alone. It is a fixed, full-bleed
+   surface, so anything else that borrows the name inherits `position: fixed`
+   and leaves the document. The projects archive uses `.dossier*` for exactly
+   this reason; see `cases.css`.
+   ========================================================================== */
+
+.case {
+  position: fixed;
+  inset: 0;
+  z-index: 92;
+  background: var(--color-paper);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: case-in 0.6s var(--ease) both;
+}
+@keyframes case-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0.4;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.case__top {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.9rem;
+  background: var(--color-paper);
+  border-bottom: 1px solid var(--color-ink);
+}
+.case__dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.6rem;
+  background: var(--color-signal);
+}
+.case__warn {
+  color: var(--color-signal);
+  text-align: center;
+}
+.case__close {
+  background: none;
+  border: 0;
+  color: var(--color-ink);
+  padding: 0.25rem 0;
+}
+
+/* --- brief ---------------------------------------------------------------- */
+.case__brief,
+.case__resolved {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding-block: clamp(2rem, 8vh, 5rem);
+  max-width: 78rem;
+}
+.case__title {
+  font-size: clamp(1.9rem, 6vw, 5rem);
+  line-height: 0.92;
+}
+.case__summary {
+  max-width: 58ch;
+}
+.case__brief-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+@media (min-width: 800px) {
+  .case__brief-grid {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+  }
+}
+.case__scope {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  color: var(--color-grey);
+}
+.case__cta {
+  justify-self: start;
+  margin-top: 1rem;
+  padding: 0.7rem 1.1rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.case__cta:disabled {
+  opacity: 0.35;
+}
+.case__back {
+  background: none;
+  border: 0;
+  color: var(--color-grey);
+  padding: 0.5rem 0;
+}
+
+/* --- work ----------------------------------------------------------------- */
+.case__work {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(1.5rem, 5vh, 3rem);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .case__work {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  }
+  .case__aside {
+    position: sticky;
+    top: 5rem;
+  }
+}
+.case__instruction {
+  display: grid;
+  gap: 0.4rem;
+  padding-bottom: 1rem;
+}
+.case__instruction .t-body {
+  max-width: 62ch;
+}
+
+.case__table {
+  margin-bottom: 1.5rem;
+}
+.case__table-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--color-ink);
+}
+.case__table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.case__table th {
+  text-align: left;
+  padding: 0.45rem 0.5rem 0.45rem 0;
+  font-weight: 400;
+}
+.case__table td {
+  padding: 0.4rem 0.5rem 0.4rem 0;
+  border-top: 1px solid var(--color-rule-soft);
+  color: var(--color-graphite);
+  vertical-align: top;
+}
+.case__table tr.is-picked td {
+  color: var(--color-ink);
+  background: var(--color-signal-soft);
+}
+.case__time {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+/* The input keeps its real size and sits on top of the mark: hiding a control
+   at zero size makes it unhittable for anything that is not a mouse. */
+.case__check {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.case__check input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.case__check span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--color-grey-soft);
+}
+.case__check input:checked + span {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+}
+.case__check input:focus-visible + span {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+.case__hypotheses {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-ink);
+}
+.case__hyp {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid var(--color-rule);
+  cursor: pointer;
+}
+.case__hyp.is-chosen {
+  border-color: var(--color-signal);
+}
+.case__hyp input {
+  margin-top: 0.3em;
+  accent-color: var(--color-signal);
+}
+
+/* --- aside ---------------------------------------------------------------- */
+.case__aside {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+.case__panel {
+  padding: 0.9rem;
+  border: 1px solid var(--color-rule);
+  display: grid;
+  gap: 0.4rem;
+}
+.case__count {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.case__timeline-panel {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.case__empty {
+  padding: 0.5rem 0;
+}
+.case__timeline {
+  display: grid;
+  gap: 0.55rem;
+  padding-left: 1rem;
+  position: relative;
+}
+.case__timeline::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0.4em;
+  bottom: 0.4em;
+  width: 1px;
+  background: var(--color-rule);
+}
+.case__timeline li {
+  position: relative;
+  display: grid;
+  gap: 0.1rem;
+}
+.case__tl-node {
+  position: absolute;
+  left: -1rem;
+  top: 0.35em;
+  width: 7px;
+  height: 7px;
+  background: var(--color-signal);
+}
+.case__tl-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+
+.case__verdict {
+  padding: 0.9rem;
+  border: 1px solid var(--color-signal);
+}
+.case__verdict.is-ok {
+  border-color: var(--color-ink);
+}
+.case__verdict .t-mono {
+  color: var(--color-signal);
+  margin-bottom: 0.3rem;
+}
+.case__verdict.is-ok .t-mono {
+  color: var(--color-ink);
+}
+.case__actions {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+
+/* --- resolved ------------------------------------------------------------- */
+.case__ok {
+  color: var(--color-signal);
+}
+.case__steps {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.case__steps li {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 0.5rem;
+  border-top: 1px solid var(--color-rule);
+}
+.case__limit-label {
+  margin-top: 1.5rem;
+}
+.case__limit {
+  max-width: 62ch;
+}
+.case__method {
+  margin-top: clamp(2rem, 6vh, 3.5rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-ink);
+}
+.case__method ol {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+@media (min-width: 800px) {
+  .case__method ol {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+.case__method li {
+  display: grid;
+  gap: 0.25rem;
+  align-content: start;
+}
+.case__method-word {
+  font-size: clamp(1.2rem, 2.6vw, 2rem);
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case {
+    animation: none;
+  }
+}

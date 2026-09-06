@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why an allow-list kept failing open — Het Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<p class="proto">Phase 5D REVISION WRITING TEST — SAME design, WEAK entries. Tests whether the register survives poor writing. Hypothetical. Not professional work.</p>
+
+<header class="site-header">
+  <a class="site-name" href="#">Het Patel</a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="#" aria-current="page">Investigations</a>
+    <a href="#">Notes</a>
+    <a href="#">About</a>
+  </nav>
+</header>
+
+<main id="main">
+<article class="investigation">
+
+  <a class="backlink" href="#">&larr; Investigations</a>
+
+  <h1>Why an allow-list kept failing open</h1>
+
+  <dl class="apparatus">
+    <dt>Status</dt><dd>closed</dd>
+    <dt>Started</dt><dd>2026-02-19</dd>
+    <dt>Domain</dt><dd>application security</dd>
+    <dt>Origin</dt><dd>self-initiated</dd>
+  </dl>
+
+  <p class="question">A test environment I had built for something else kept accepting requests
+  that its allow-list should have rejected. The rule read correctly. I wanted to know where the
+  gap between the declared rule and the observed behaviour was coming from, because a rule that
+  is right on paper and wrong in practice is a more interesting failure than a rule that is
+  simply wrong.</p>
+
+  <p class="movement">My first instinct was to read the configuration, and I deliberately did not.
+  Reading the rule first tends to make you see what you expect to see — you confirm that the
+  pattern is correct, conclude the problem is elsewhere, and lose an hour. So I started from the
+  other end: I captured what actually reached the service and worked backwards toward the rule.</p>
+
+  <p>That meant logging the request as the application received it, not as the client sent it.
+  The two differed. By the time a request arrived at the handler, its path had been rewritten —
+  a trailing segment normalised, a duplicated separator collapsed. Small changes, none of them
+  wrong on their own.</p>
+
+  <p>Once I could see both forms side by side, I compared them against the rule directly rather
+  than through the application. The matcher was being handed the pre-normalisation path.</p>
+
+  <p class="inset">I had assumed normalisation ran first because that is the order I would have
+  written it in. Worth remembering that the order I would choose is not evidence of the order
+  that exists.</p>
+
+  <p class="movement">The rule was correct. The ordering was not. Normalisation ran
+  <em>after</em> the match, so a request could match nothing, be rewritten into a form that
+  would have matched, and then be handled anyway. The allow-list was being consulted about a
+  string that no longer existed by the time the request was served.</p>
+
+  <p>This also explained why it looked intermittent. Requests whose paths survived normalisation
+  unchanged behaved exactly as expected, which is most ordinary traffic. Only the requests that
+  were rewritten fell through, and those were the ones nobody was sending deliberately.</p>
+
+  <p class="movement">What I could not determine was whether the ordering was deliberate.
+  There is a plausible performance argument for normalising once, late, rather than on every
+  candidate comparison — and if that was the reasoning, the failure is a consequence of a
+  defensible decision rather than an oversight. Establishing which it was would need the change
+  history, and this was a environment I had assembled myself from defaults, so there was no
+  history to read. I have left it open rather than guessing, because "someone made a reasonable
+  trade-off and did not notice the consequence" and "someone got the order wrong" call for
+  different fixes.</p>
+
+  <section class="artifacts" aria-labelledby="artifacts-label">
+    <p class="region-label" id="artifacts-label">Artifacts</p>
+    <ul>
+      <li><a href="#">Request capture and comparison script</a>
+        <span class="note">— hypothetical; prototype placeholder</span></li>
+    </ul>
+  </section>
+
+  <section class="revisions" aria-labelledby="revisions-label">
+    <p class="region-label" id="revisions-label">Revisions</p>
+    <dl>
+      <dt>2026-03-04</dt>
+      <dd>Published.</dd>
+
+      <dt>2026-05-21</dt>
+      <dd>Updated some details.</dd>
+
+      <dt>2026-07-09</dt>
+      <dd>Minor edits and clarifications.</dd>
+    </dl>
+  </section>
+
+  <section class="related" aria-labelledby="related-label">
+    <p class="region-label" id="related-label">Related</p>
+    <ul>
+      <li><a href="#">Two scanners disagree on the same TLS configuration</a>
+        <span class="meta">— note, 2026-04</span></li>
+    </ul>
+  </section>
+
+</article>
+</main>
+
+<footer class="site-footer">
+  <p>Het Patel — <a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a> ·
+  <a href="https://github.com/het-P301204">GitHub</a></p>
+</footer>
+
+</body>
+</html>

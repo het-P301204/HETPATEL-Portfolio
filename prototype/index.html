@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het Patel — security testing and regulated assurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<p class="proto">Phase 5E homepage prototype. Verified facts are real. Investigations are the
+hypothetical 5D test cases. Items marked CONTENT PLACEHOLDER require Het and are shown rather than
+invented.</p>
+
+<!-- The name is the h1 on this page, so the header carries navigation only.
+     Printing "Het Patel" twice in the first 100px reads as a mistake, and the
+     name-as-home-link has nowhere to go from home. See E-1. -->
+<header class="site-header">
+  <nav class="site-nav" aria-label="Primary">
+    <a href="investigations.html">Investigations</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<main id="main">
+<div class="home">
+
+  <!-- ============ 1. IDENTITY ============ -->
+  <section class="identity" aria-labelledby="identity-h">
+    <h1 id="identity-h">Het Patel</h1>
+    <p class="lede">I am an early-career security practitioner working between technical
+    testing and regulated assurance. I test web applications for vulnerabilities, and I have
+    participated in CSCRF and IRDAI audit engagements in the financial sector &mdash; which means I
+    have seen both how a finding is produced and what has to happen to it afterwards.</p>
+  </section>
+
+  <!-- ============ 2. THE WORK ============ -->
+  <section class="block" aria-labelledby="work-h">
+    <p class="region-label" id="work-h">The work</p>
+
+    <p>Since January 2026 I have been a cybersecurity intern at
+    <strong>Info eShield Cyber Solutions</strong>, working across VAPT and risk and compliance. The
+    testing side is web application work &mdash; enumeration, then Burp Suite by hand, looking for
+    injection, cross-site scripting and misconfiguration. The part that took longest to learn was
+    not finding things. It was writing a finding so that the person who has to fix it understands
+    what is actually wrong.</p>
+
+    <p>Through that role I have participated in <strong>CSCRF and IRDAI audit engagements</strong>
+    in the financial sector, and worked on control mapping against <strong>ISO 27001</strong>. I
+    assisted on this work rather than scoping or leading it. What it gave me is the thing a lab
+    cannot: seeing how a technical finding becomes a regulatory obligation, and how an obligation
+    becomes evidence that somebody else has to accept.</p>
+
+    <p>Most of that reduces to one question asked repeatedly &mdash; whether a piece of evidence
+    actually demonstrates the control it is filed under, or only appears to.</p>
+
+    <p class="inset">My ISO 27001 knowledge is a working understanding of controls and risk
+    management, not a specialism. My Splunk experience is lab work rather than production.</p>
+  </section>
+
+  <!-- ============ 3. SELECTED INVESTIGATIONS ============ -->
+  <section class="block" aria-labelledby="sel-h">
+    <p class="region-label" id="sel-h">Selected investigations</p>
+
+    <ul class="worklist">
+      <li>
+        <a href="investigation.html">Why an allow-list kept failing open</a>
+        <span class="wline">A rule that was correct on paper and wrong in practice, because
+        normalisation ran after the match instead of before it.</span>
+        <span class="wmeta">self-initiated &middot; closed</span>
+      </li>
+      <li>
+        <a href="short-no-revisions.html">Two enumeration tools disagree on the same host</a>
+        <span class="wline">Three explanations fit the evidence equally well and I could not
+        separate them without instrumenting the network itself.</span>
+        <span class="wmeta">self-initiated &middot; unresolved</span>
+      </li>
+      <li>
+        <a href="fixture-long.html">Why my detection kept firing four hours late</a>
+        <span class="wline">A constant offset that looked like latency and was actually a
+        timestamp being reinterpreted at ingestion.</span>
+        <span class="wmeta">self-initiated &middot; closed</span>
+      </li>
+    </ul>
+
+    <p class="placeholder">[CONTENT PLACEHOLDER &mdash; REQUIRES HET] These three are the 5D
+    hypothetical test cases. Real investigations, and which of them may carry
+    <span class="nowrap">origin: professional</span>, are Het's to supply.</p>
+
+    <p class="more"><a href="investigations.html">All investigations</a></p>
+  </section>
+
+  <!-- ============ 4. ONE IN FULL ============ -->
+  <section class="block featured" aria-labelledby="feat-h">
+    <p class="region-label" id="feat-h">One of them, in full</p>
+
+    <h2><a href="investigation.html">Why an allow-list kept failing open</a></h2>
+
+    <dl class="apparatus">
+      <dt>Status</dt><dd>closed</dd>
+      <dt>Origin</dt><dd>self-initiated</dd>
+    </dl>
+
+    <p>A test environment I had built for something else kept accepting requests that its
+    allow-list should have rejected. The rule read correctly. I wanted to know where the gap
+    between the declared rule and the observed behaviour was coming from, because a rule that is
+    right on paper and wrong in practice is a more interesting failure than a rule that is simply
+    wrong.</p>
+
+    <p>My first instinct was to read the configuration, and I deliberately did not. Reading the
+    rule first tends to make you see what you expect to see. So I started from the other end: I
+    captured what actually reached the service and worked backwards toward the rule. The matcher
+    was being handed the pre-normalisation path.</p>
+
+    <p>What I could not determine was whether the ordering was deliberate. There is a plausible
+    performance argument for normalising once, late, rather than on every candidate comparison
+    &mdash; and if that was the reasoning, the failure is a consequence of a defensible decision
+    rather than an oversight. I have left it open rather than guessing, because the two call for
+    different fixes.</p>
+
+    <p class="more"><a href="investigation.html">Continue reading &mdash; including what changed
+    when I revisited it</a></p>
+  </section>
+
+  <!-- ============ 5. NOW ============ -->
+  <section class="block" aria-labelledby="now-h">
+    <p class="region-label" id="now-h">Working on now &mdash; August 2026</p>
+    <p>Preparing for CompTIA Security+ (SY0-701).</p>
+    <p class="placeholder">[CONTENT PLACEHOLDER &mdash; REQUIRES HET] A certification in progress
+    is thin on its own. If there is nothing else genuinely current, <strong>this whole section is
+    removed rather than padded</strong> &mdash; an almost-empty "now" reads worse than no "now" at
+    all. It is rendered here so the decision is visible.</p>
+  </section>
+
+  <!-- ============ 6. CONTACT ============ -->
+  <section class="block" aria-labelledby="contact-h">
+    <p class="region-label" id="contact-h">Contact</p>
+    <p class="contact"><a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a><br>
+    <a href="https://www.linkedin.com/in/het-patel-913017345">LinkedIn</a><br>
+    <a href="https://github.com/het-P301204">GitHub</a></p>
+  </section>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <p class="foot-id"><strong>Het Patel</strong> &mdash; security testing and regulated assurance.</p>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="index.html">Home</a>
+    <a href="investigations.html">Investigations</a>
+    <a href="about.html">About</a>
+  </nav>
+  <p class="foot-contact"><a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a>
+  &middot; <a href="https://github.com/het-P301204">GitHub</a>
+  &middot; <a href="https://www.linkedin.com/in/het-patel-913017345">LinkedIn</a></p>
+</footer>
+
+</body>
+</html>

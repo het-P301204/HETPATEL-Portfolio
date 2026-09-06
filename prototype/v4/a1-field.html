@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- A1 — STATE FIELD.
+     Not a document. One composed screen with states.
+     The homepage does not scroll: identity and the work co-exist in a single
+     field, and moving between investigations transforms the whole composition.
+     Investigation titles/framings are self-initiated prototype content pending
+     Het's real work. Employment, framework and credential facts are real. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het Patel — cybersecurity, VAPT and regulated assurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400;12..96,75..100,600;12..96,75..100,800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bone:#E9E5DB; --ink:#15140F; --ink2:#56534A; --ink3:#8A867A;
+  --disp:"Bricolage Grotesque",system-ui,sans-serif;
+  --read:"Inter",system-ui,sans-serif;
+  --pad:clamp(1.1rem,3.2vw,2.75rem);
+  --dur:.72s; --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+body,h1,h2,h3,p,ul,ol,li,dl,dd,dt{margin:0;padding:0}
+ul,ol{list-style:none}
+html,body{height:100%}
+body{
+  background:var(--bone);color:var(--ink);font-family:var(--read);
+  -webkit-font-smoothing:antialiased;overflow:hidden;   /* the home does not scroll */
+  transition:background var(--dur) var(--ease),color var(--dur) var(--ease);
+}
+/* THE ACCENT IS INVERSION. no colour is spent on it. */
+body.on{background:var(--ink);color:var(--bone)}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--ink);color:var(--bone)}
+body.on ::selection{background:var(--bone);color:var(--ink)}
+
+.stage{height:100%;display:grid;grid-template-rows:auto 1fr auto;padding:var(--pad)}
+
+/* ---------- identity: persistent, never scrolls away ---------- */
+.id{display:flex;align-items:baseline;gap:1.25rem}
+.id .nm{
+  font-family:var(--disp);font-weight:800;font-size:clamp(1.05rem,1.9vw,1.5rem);
+  letter-spacing:-.03em;
+}
+.id nav{margin-left:auto;display:flex;gap:1.15rem}
+.id nav a{font-size:.875rem;color:var(--ink2);padding:.4rem 0;transition:color .3s}
+body.on .id nav a{color:var(--ink3)}
+.id nav a:hover,.id nav a[aria-current]{color:inherit}
+
+/* ---------- the field: the work IS the page ---------- */
+.field{
+  align-self:center;display:grid;gap:clamp(.1rem,.6vw,.4rem);
+  margin:clamp(1rem,3vh,2.5rem) 0;
+}
+.item{position:relative}
+.item a{
+  display:block;padding:clamp(.1rem,.5vw,.35rem) 0;
+  transition:transform var(--dur) var(--ease),opacity .45s var(--ease);
+  transform-origin:0 50%;
+}
+.t{
+  font-family:var(--disp);font-weight:800;
+  font-size:clamp(1.9rem,7.4vw,6.4rem);line-height:.92;letter-spacing:-.045em;
+  transition:font-variation-settings var(--dur) var(--ease),opacity .45s;
+  font-variation-settings:"wdth" 88;
+}
+/* the transformation: the focused item widens and the others recede.
+   this is the state change, and it is the whole idea. */
+.field.act .item a{opacity:.26;transform:scale(.94)}
+.field.act .item.is a{opacity:1;transform:scale(1)}
+.field.act .item.is .t{font-variation-settings:"wdth" 100}
+
+/* the detail slot — one fixed place, so the eye never hunts */
+.slot{
+  min-height:clamp(3.6rem,7vh,5.5rem);
+  display:grid;align-content:end;gap:.4rem;
+  border-top:1px solid currentColor;padding-top:.85rem;
+  opacity:.999;
+}
+.slot .fr{
+  font-size:clamp(.9rem,1.15vw,1.0625rem);line-height:1.5;max-width:60ch;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .4s var(--ease),transform .4s var(--ease);
+}
+.slot .rc{
+  font-size:.8125rem;color:var(--ink2);display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .4s var(--ease) .05s,transform .4s var(--ease) .05s;
+}
+body.on .slot .rc{color:var(--ink3)}
+.slot.show .fr,.slot.show .rc{opacity:1;transform:none}
+/* the resting state of the slot: who he is. it is never empty. */
+.slot .rest{
+  font-size:clamp(.9rem,1.15vw,1.0625rem);line-height:1.5;max-width:64ch;
+  transition:opacity .35s var(--ease);
+}
+.slot .rest b{font-weight:500}
+.slot.show .rest{opacity:0;position:absolute;pointer-events:none}
+
+/* ---------- the standing line: credibility, always visible, never a panel ---------- */
+.base{
+  display:flex;flex-wrap:wrap;gap:.35rem 1.4rem;align-items:baseline;
+  font-size:.8125rem;color:var(--ink2);padding-top:.9rem;
+  border-top:1px solid currentColor;
+}
+body.on .base{color:var(--ink3)}
+.base .k{font-weight:500;color:inherit}
+.base .sp{margin-left:auto}
+
+/* ---------- entrance: the name, then the work, then the standing line ---------- */
+@keyframes up{from{transform:translateY(115%)}to{transform:translateY(0)}}
+@keyframes soft{from{opacity:0}to{opacity:1}}
+.clip{display:block;overflow:hidden}
+.clip>span{display:block;animation:up .8s var(--ease) both}
+.soft{animation:soft .6s ease both}
+
+a:focus-visible{outline:2px solid currentColor;outline-offset:5px}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:var(--pad);top:.5rem;z-index:30;background:var(--ink);color:var(--bone);padding:.6rem .9rem}
+
+/* ---------- mobile: the field scrolls, the identity stays ---------- */
+@media (max-width:760px){
+  body{overflow:auto}
+  .stage{min-height:100%;height:auto}
+  .t{font-size:clamp(1.75rem,9.5vw,2.75rem);font-variation-settings:"wdth" 100}
+  .field{gap:.45rem;margin:1.75rem 0}
+  .field.act .item a{opacity:1;transform:none}     /* no hover on touch */
+  .slot{min-height:0}
+  .base .sp{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .clip>span{transform:none}
+  .field.act .item a{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#field">Skip to the work</a>
+
+<div class="stage">
+  <header class="id soft">
+    <span class="nm clip"><span>Het Patel</span></span>
+    <nav aria-label="Primary">
+      <a href="#" aria-current="page">Work</a>
+      <a href="#">About</a>
+      <a href="mailto:patel.het7996@gmail.com">Contact</a>
+    </nav>
+  </header>
+
+  <ol class="field" id="field">
+    <li class="item">
+      <a href="#" data-fr="The rule was correct. The ordering was not — normalisation ran after the match, so a rewritten path never reached the matcher at all."
+         data-rc="Closed, after two revisions · 2026-02 → 2026-03">
+        <span class="t clip"><span style="animation-delay:.16s">Why an allow-list kept failing open</span></span>
+      </a>
+    </li>
+    <li class="item">
+      <a href="#" data-fr="Evidence that satisfies one framework often fails another, because the two define the control boundary in different places. I have not settled it."
+         data-rc="Still open · since 2026-06">
+        <span class="t clip"><span style="animation-delay:.24s">Whether a control can be evidenced by its absence</span></span>
+      </a>
+    </li>
+    <li class="item">
+      <a href="#" data-fr="A difference in how each tool builds its default probe set, which made every result that week a measurement of the tool rather than of the host."
+         data-rc="Settled · 2026-06">
+        <span class="t clip"><span style="animation-delay:.32s">Two enumeration tools disagree on one host</span></span>
+      </a>
+    </li>
+  </ol>
+
+  <div>
+    <div class="slot soft" id="slot" style="animation-delay:.5s">
+      <p class="rest">I test web applications for vulnerabilities, and I work on the compliance side of
+        the same problem. <b>A finding and a control are not the same object</b> — the translation
+        between them is where I have learned the most.</p>
+      <p class="fr"></p>
+      <p class="rc"></p>
+    </div>
+
+    <p class="base soft" style="animation-delay:.62s">
+      <span><span class="k">Cybersecurity Intern</span>, Info eShield Cyber Solutions — since Jan 2026</span>
+      <span>VAPT · Risk &amp; Compliance</span>
+      <span>Assisted on <span class="k">CSCRF</span> and <span class="k">IRDAI</span> engagements</span>
+      <span>ISO 27001</span>
+      <span class="sp">patel.het7996@gmail.com</span>
+    </p>
+  </div>
+</div>
+
+<script>
+/* ~30 lines. The state machine is the design; it does not decorate it. */
+(function(){
+  var field=document.getElementById('field'),slot=document.getElementById('slot');
+  var fr=slot.querySelector('.fr'),rc=slot.querySelector('.rc');
+  var items=[].slice.call(field.querySelectorAll('.item'));
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touch=matchMedia('(hover: none)').matches;
+
+  function enter(li){
+    if(touch)return;
+    field.classList.add('act');
+    items.forEach(function(x){x.classList.toggle('is',x===li)});
+    var a=li.querySelector('a');
+    fr.textContent=a.dataset.fr; rc.textContent=a.dataset.rc;
+    slot.classList.add('show');
+    document.body.classList.add('on');       /* the field inverts */
+  }
+  function leave(){
+    field.classList.remove('act');
+    items.forEach(function(x){x.classList.remove('is')});
+    slot.classList.remove('show');
+    document.body.classList.remove('on');
+  }
+  items.forEach(function(li){
+    li.addEventListener('mouseenter',function(){enter(li)});
+    li.addEventListener('focusin',function(){enter(li)});
+  });
+  field.addEventListener('mouseleave',leave);
+  field.addEventListener('focusout',function(e){
+    if(!field.contains(e.relatedTarget))leave();
+  });
+})();
+</script>
+</body>
+</html>

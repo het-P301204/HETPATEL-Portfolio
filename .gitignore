@@ -1,0 +1,30 @@
+node_modules/
+.next/
+out/
+build/
+.DS_Store
+*.pem
+npm-debug.log*
+.env*.local
+.vercel
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# --- excluded from the public repo ---
+# Résumé carries a phone number, postal details and a location. The site
+# deliberately publishes none of those (see the note in data/profile.ts), so
+# shipping the PDF in a public repo would undo that decision.
+docs/Resume.pdf
+
+# Same reason, verified by scanning the tree rather than assumed: the strategy
+# deck repeats the phone number across 96 pages, and SOURCE_OF_TRUTH.md carries
+# it on an explicit "Phone:" line.
+docs/Cybersecurity-Portfolio-Project-Strategy.pdf
+docs/SOURCE_OF_TRUTH.md
+
+# Third-party design references (Airbnb, Apple, Airtable et al) vendored for
+# local reading. Not this project's content and not this project's to relicense.
+awesome-design-md-main/
+
+# Local machine paths and per-user tool permissions.
+.claude/settings.local.json

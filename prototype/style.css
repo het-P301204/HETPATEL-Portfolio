@@ -1,0 +1,690 @@
+/* ============================================================
+   PHASE 5D PROTOTYPE — Investigation page
+   Implements the Phase 5A/5B/5C specification for validation.
+   NOT production code. No build step, no framework, no JS.
+   ============================================================ */
+
+/* ---------- Roles: light (canonical) ---------- */
+:root {
+  --ground:          #FBFAF7;
+  --text-primary:    #1A1917;
+  --text-secondary:  #56524A;
+  --text-muted:      #6E6A60;
+  --accent:          #2F4A6D;
+  --accent-hover:    #1F3452;
+  --rule:            #E4E0D8;
+  --code-ground:     #F4F2EC;
+  --selection:       #DCE4EE;
+
+  /* Times before Georgia. With `display: swap` the fallback is what the reader
+     actually sees first, so the fallback's metrics decide how far the page
+     jumps when Newsreader arrives. MEASURED at 1280px: Georgia shifts the page
+     135px and wraps the h1 onto a second line; Times New Roman shifts it 0px
+     and keeps the h1 on one line. Newsreader's proportions are close to Times
+     and not to Georgia. Liberation Serif, the usual Linux `serif`, is
+     metric-compatible with Times, so the whole chain now agrees. V-9. */
+  --serif: "Newsreader", "Times New Roman", Times, serif;
+  --sans:  "Public Sans", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* Spacing base = body line-height = 19px * 1.65 ≈ 31.35px ≈ 1.96rem */
+  --base:   1.96rem;
+  --tight:  calc(var(--base) * 0.4);   /* ~12.5px */
+  --normal: calc(var(--base) * 0.85);  /* ~26.7px */
+  --open:   calc(var(--base) * 2.2);   /* ~69px   */
+  --major:  calc(var(--base) * 4);     /* ~125px  */
+
+  /* MEASURE — see PHASE5D_FINDINGS F1 and PHASE5D_VALIDATION V-1.
+     5C said "max-width 38rem". With border-box + 1.25rem padding either side,
+     that yields a 35.5rem TEXT COLUMN, not 38rem. Resolved in 5D by naming the
+     text column explicitly and putting padding outside it.
+
+     37rem was a guess pending a real character count. MEASURED 2026-08-15 in
+     Chrome with Newsreader actually loaded: 37rem/19px produced a MEDIAN OF 74
+     CHARACTERS per line, and the 18px tablet step made it worse (80). Both are
+     far outside the 62-66 target.
+
+     The unit was the deeper error. A measure in `rem` is pinned to the root
+     font size, so every body-size step silently changes the character count.
+     Expressing it in `em` of the reading font holds the count constant:
+     MEASURED 27em -> median 64 / p90 67 at every viewport from 768px to 1920px,
+     across two body sizes, with no per-breakpoint override. Below 768px the
+     column is viewport-bound and the count falls to 36-52, which is correct.
+     Character count is now a property of the system rather than an accident of
+     each breakpoint.
+
+     The outer box is restated per breakpoint in rem rather than written as
+     `calc(27em + ...)` once, because `em` inside a custom
+     property resolves at whatever element consumes it, not where it is
+     declared. A 13.5px footer read `27em` as 365px while a 19px header read it
+     as 513px — MEASURED, three different left edges on one page. Structural
+     widths must be font-size independent, so --box is in rem and is updated
+     alongside each body-size step. --measure is retained for the text column
+     only, where the font size is known to be the body size. */
+  --measure: 27em;         /* the TEXT COLUMN — 513px at 19px, median 64 chars */
+  --gutter:  1.25rem;
+  --box:     34.5625rem;   /* 27em @19px (513px) + two gutters — desktop */
+}
+
+/* LIGHT ONLY — dark mode withdrawn for v1, Het's decision 2026-08-15.
+   It failed no test. MEASURED, every role passed AA in dark; OBSERVED,
+   readability and hierarchy held. But a dark ground cannot read as paper, so
+   the warm identity — the site's single strongest visual signal — disappeared
+   with nothing meaningful in its place. For a site whose distinctiveness is
+   deliberately not visual, a second complete colour system that carries none of
+   the brand is a poor trade, and it was the only part of the system with a real
+   maintenance cost: it had already shipped two marginal-contrast defects.
+   Not "professional sites have dark mode". Revisit when there is a reason.
+   The withdrawn values are preserved in docs/color/DARK_MODE.md. See P5DV-010. */
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+body, h1, h2, p, dl, dd, dt, ul, ol, li, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+
+::selection { background: var(--selection); }
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--ground);
+  color: var(--text-primary);
+  font-family: var(--serif);
+  font-size: 1.1875rem;
+  line-height: 1.65;
+  font-variant-numeric: oldstyle-nums;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Skip link ---------- */
+.skip {
+  position: absolute; left: -9999px;
+  background: var(--ground); color: var(--text-primary);
+  padding: .5rem .75rem; z-index: 10;
+}
+.skip:focus { left: 1rem; top: 1rem; }
+
+/* ---------- Header ---------- */
+.site-header {
+  max-width: var(--box);
+  margin: 0 auto;
+  padding: var(--normal) 1.25rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.75rem;
+  align-items: baseline;
+  font-family: var(--sans);
+}
+.site-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.site-nav { display: flex; gap: 1.25rem; font-size: .9375rem; }
+.site-nav a { color: var(--text-secondary); text-decoration: none; }
+.site-nav a:hover { color: var(--text-primary); text-decoration: underline; }
+.site-nav a[aria-current="page"] {
+  color: var(--text-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+
+/* ---------- Article shell ---------- */
+main { display: block; }
+
+/* Text column named explicitly; padding sits OUTSIDE the measure. */
+.investigation {
+  max-width: var(--box);
+  margin: 0 auto;
+  /* No bottom padding. The footer already carries a MAJOR top margin; having
+     both produced 250px of dead space before the rule — MEASURED. It read as
+     breathing room on the long page and as "something is missing here" on the
+     150-word page, which is exactly where the system is most fragile. V-4. */
+  padding: 0 var(--gutter);
+}
+
+.backlink {
+  display: inline-block;
+  margin-top: var(--open);
+  margin-bottom: var(--tight);
+  font-family: var(--sans);
+  font-size: .9375rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.backlink:hover { color: var(--accent); text-decoration: underline; }
+
+/* ---------- Title ---------- */
+h1 {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 36;
+  font-size: 2.125rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  margin-bottom: var(--tight);
+  text-wrap: balance;
+}
+
+/* ---------- Head apparatus ---------- */
+.apparatus {
+  font-family: var(--sans);
+  font-size: .9375rem;
+  line-height: 1.45;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .25rem 1.25rem;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.apparatus dt {
+  font-size: .84375rem;
+  letter-spacing: .01em;
+  color: var(--text-muted);
+}
+.apparatus dd { color: var(--text-secondary); }
+
+/* ---------- Prose ---------- */
+.investigation p {
+  margin-top: var(--normal);
+  hyphens: none;
+}
+.investigation p:first-of-type { margin-top: 0; }
+
+/* movement boundary — the load-bearing structural signal */
+.movement { margin-top: var(--open) !important; }
+
+.question { margin-top: var(--open) !important; }
+
+/* An L2 heading lives INSIDE a movement, so it must read as subordinate to one.
+   At --open it took the same gap as a movement boundary and then added type
+   contrast on top, so on the 1,750-word fixture the headings became the
+   strongest structural signal on the page and the four movements stopped being
+   the spine. OBSERVED. Movement (2.2x) > heading (1.5x) > paragraph (0.85x). V-6. */
+h2 {
+  font-family: var(--serif);
+  font-variation-settings: "opsz" 24;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin-top: calc(var(--base) * 1.5);
+  margin-bottom: var(--tight);
+}
+h2 + p { margin-top: 0; }
+
+em { font-style: italic; }
+strong { font-weight: 600; }
+
+/* ---------- Inline inset (apparatus in flow) ---------- */
+.inset {
+  font-family: var(--sans);
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: var(--normal) !important;
+  margin-bottom: var(--tight);
+}
+
+/* ---------- Links ---------- */
+/* Note prose was missing from this list. MEASURED 2026-08-15: the supersession
+   link on the Notes page rendered at rgb(0,0,238) — the browser default blue —
+   because no rule claimed a link inside note body text. It passed contrast
+   (9:1) and broke the colour system, which is why only a render caught it.
+   `:not(.nt-date)` keeps the permalink on its own muted treatment. G-6. */
+.investigation p a,
+.artifacts a,
+.related a,
+.notes li > p:not(.nt-date) a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: .18em;
+  text-decoration-thickness: .055em;
+}
+.investigation p a:hover,
+.artifacts a:hover,
+.related a:hover,
+.notes li > p:not(.nt-date) a:hover { color: var(--accent-hover); }
+
+/* STANDALONE LINKS — every link that is not inside a sentence.
+   WCAG 2.2 SC 2.5.8 requires a 24x24 CSS px target and exempts only links set
+   inline in a block of text. Navigation, work titles, contact details, artifact
+   and related links, back links and "more" links are all standalone, so none of
+   them qualifies for the exemption.
+
+   V-8 fixed the artifact and related lists at 5D. The 5E homepage then MEASURED
+   5-9 of 12 links under 24px — including the PRIMARY NAVIGATION at 18px, which
+   V-8 had never covered because the investigation page was not nav-heavy.
+   Fixed here for every page at once. Inline padding grows the hit area without
+   changing the line box, so nothing moves. E-3. */
+.site-nav a,
+.site-name,
+.backlink,
+.worklist > li > a,
+.index > li > a,
+.home h2 a,
+.contact a,
+.more a,
+.artifacts li a,
+.related li a { padding: .35em 0; }
+
+a:focus-visible,
+.skip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ---------- Technical values ---------- */
+code {
+  font-family: var(--mono);
+  font-size: .9em;
+  background: var(--code-ground);
+  padding: .08em .28em;
+  border-radius: 2px;
+}
+pre {
+  font-family: var(--mono);
+  font-size: .9375rem;
+  line-height: 1.55;
+  background: var(--code-ground);
+  padding: 1rem 1.15rem;
+  margin-top: var(--normal);
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+
+/* ---------- Regions after prose ---------- */
+.artifacts, .revisions, .related { margin-top: var(--major); }
+
+.region-label {
+  font-family: var(--sans);
+  font-size: .84375rem;
+  letter-spacing: .01em;
+  color: var(--text-muted);
+  margin-bottom: var(--tight);
+}
+
+.artifacts li { margin-top: .35rem; font-family: var(--sans); font-size: .9375rem; }
+.artifacts .note { color: var(--text-muted); font-size: .84375rem; }
+
+/* ---------- Revision register ---------- */
+.revisions dl {
+  font-family: var(--sans);
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .55rem 1.25rem;
+}
+.revisions dt {
+  font-size: .84375rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .01em;
+  padding-top: .15em;
+}
+.revisions dd {
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* ---------- Related ---------- */
+.related li { margin-top: .5rem; font-family: var(--sans); font-size: .9375rem; }
+.related .meta { color: var(--text-muted); font-size: .84375rem; }
+
+/* ============================================================
+   HOMEPAGE — Phase 5E, direction E "The Standing Record".
+   Same type, colour, spacing and measure as the investigation page.
+   ONE design system, TWO information hierarchies. Nothing below
+   introduces a new colour, a new face, or a new spacing value.
+   ============================================================ */
+
+.home {
+  max-width: var(--box);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* 1 — IDENTITY.
+   The homepage h1 is Het's NAME, so the site-header on this page carries
+   navigation only. Printing "Het Patel" twice in the first 100px is clumsy,
+   and the name-as-home-link has nothing to link to from home. */
+.identity { margin-top: var(--open); }
+
+.identity h1 { margin-bottom: var(--tight); }
+
+/* The homepage's region labels do structural work that the investigation page's
+   do not: they are how a scanning reader finds the sections. At the apparatus
+   treatment (13.5px muted) they MEASURED as captions and the page read as
+   continuous prose. Raised to body-adjacent size and the secondary role — still
+   sans, still lowercase, still no rule and no uppercase. E-2. */
+.home .region-label {
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: var(--tight);
+}
+
+/* The lede carries the LANE, which the research identifies as the single
+   highest-value sentence on the site. Raised slightly above body size so it
+   reads as an identity statement rather than as the first paragraph of an
+   article — the distinction T9 turns on. Larger type in the same column means
+   fewer characters per line, which is correct for a lede. */
+.lede {
+  font-size: 1.3rem;
+  line-height: 1.55;
+  margin-top: var(--normal);
+}
+
+/* 2-6 — the remaining positions. Region label + content, MAJOR between. */
+.block { margin-top: var(--major); }
+.home .block > p { margin-top: var(--normal); }
+.home .block > p:first-of-type { margin-top: 0; }
+.home .region-label + p,
+.home .region-label + * { margin-top: 0; }
+
+.home h2 {
+  margin-top: 0;
+  margin-bottom: var(--tight);
+}
+.home h2 a { color: var(--text-primary); text-decoration: none; }
+.home h2 a:hover { text-decoration: underline; text-underline-offset: .12em; }
+
+.home .apparatus { margin-bottom: var(--normal); }
+
+/* 3 — SELECTED INVESTIGATIONS.
+   A record, not a card and not a blog index. Three stacked lines per item.
+   Status and origin lead; the date does not appear at all — date-first lists
+   are the form of a publication (P5EV-005). No border, no background, no
+   container: the spacing is the only grouping mechanism. */
+.worklist li { margin-top: var(--normal); }
+.worklist li:first-child { margin-top: 0; }
+
+.worklist > li > a {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: .16em;
+  text-decoration-thickness: .05em;
+}
+.worklist > li > a:hover { color: var(--accent-hover); }
+
+.wmeta {
+  display: block;
+  font-family: var(--sans);
+  font-size: .84375rem;
+  color: var(--text-muted);
+  margin-top: .2rem;
+}
+.wline {
+  display: block;
+  color: var(--text-secondary);
+  margin-top: .3rem;
+}
+
+/* 4 — ONE IN FULL. No container and no tint; it is distinguished by its
+   label and by being the only block carrying an apparatus. */
+
+.more {
+  font-family: var(--sans);
+  font-size: .9375rem;
+  margin-top: var(--normal) !important;
+}
+.more a { color: var(--accent); text-underline-offset: .18em; }
+
+/* ============================================================
+   WORK / INVESTIGATION INDEX — Phase 5F, direction B "Working Record".
+   A uniform structured record: title / framing / record, every item,
+   no exceptions. The uniformity IS the portfolio signal — the reader
+   learns the shape once and then scans. Same type, colour, spacing and
+   measure as everywhere else.
+   ============================================================ */
+
+/* Density is deliberate (5B): a spacious index of three items looks like a
+   placeholder for thirty; a tight one looks like a complete record. Rows sit at
+   NORMAL, the paragraph gap — not OPEN, which would read as sections. */
+.index { counter-reset: none; }
+.index li { margin-top: var(--normal); }
+.index li:first-child { margin-top: 0; }
+
+/* The title must clearly dominate its row. At 1.1rem against a body-size
+   framing line, the two were near-equal in weight and the 30-item fixture
+   OBSERVED as a uniform grey field with no scannable anchor — the titles were
+   lost inside the prose. 1.25rem against 1rem gives a legible 20/16/13.5
+   descent through the three lines. I-1. */
+.index > li > a {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: .16em;
+  text-decoration-thickness: .045em;
+  display: inline-block;
+}
+.index > li > a:hover { color: var(--accent-hover); }
+
+/* The framing sentence is the index's entire utility (5B). It is written for
+   the index, never an excerpt — so it never truncates and never ends in an
+   ellipsis. Serif, because it is prose; subordinate, because the title is what
+   a reader scans. Smaller also means fewer wrapped lines, which is what keeps
+   30 items navigable. */
+.ix-framing {
+  margin-top: .3rem !important;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* The record. Origin FIRST — it is the field that separates regulated-assurance
+   work from lab work, which is Het's scarcest distinction and the recruiter's
+   first question. Status second, as a colourless word. The span LAST and muted:
+   a span describes the work, a point date describes a post, and a date that
+   leads a row is the strongest archive signal there is. 5F research. */
+.ix-record {
+  margin-top: .3rem !important;
+  font-family: var(--sans);
+  font-size: .84375rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ix-note { color: var(--text-secondary); }
+
+/* Grouping — dormant until ~8-10 items. Present so that switching it on is a
+   data change rather than a redesign (concept E, deferred). */
+.ix-group {
+  font-family: var(--sans);
+  font-size: .9375rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: var(--open);
+  margin-bottom: var(--normal);
+}
+.ix-group:first-of-type { margin-top: 0; }
+
+/* ============================================================
+   NOTES — Phase 5G. A note is ONE OBSERVATION that did not need
+   working out. The apparatus scales all the way down to a date:
+   no status (notes have no lifecycle), no origin (it would be
+   constant and therefore noise), no head block, no revision
+   register. That asymmetry against the investigation page is the
+   point — applying the full apparatus to two sentences would be
+   the decorative-metadata failure.
+
+   Notes render INLINE in their index. Requiring a click to read
+   forty words is friction with no payoff, so the index IS the
+   content and the date carries the permalink.
+   ============================================================ */
+
+/* OPEN between notes — larger than a paragraph gap, so distinct
+   observations do not run together into one piece of prose. This is
+   the one list on the site that uses OPEN rather than NORMAL, because
+   each item is a separate thought rather than a row in a record. */
+.notes li { margin-top: var(--open); }
+.notes li:first-child { margin-top: 0; }
+
+.nt-date {
+  font-family: var(--sans);
+  font-size: .84375rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: var(--tight);
+}
+.nt-date a {
+  color: inherit;
+  text-decoration: none;
+  padding: .35em 0;
+  display: inline-block;
+}
+.nt-date a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Supersession. A note that turns out to be wrong is not deleted — it
+   gains a dated line. Same treatment as an inline aside: no strike-through,
+   no warning colour, no "correction" label. The date does the work.
+   This is the visible-corrections discipline in its cheapest form. */
+.nt-super {
+  font-family: var(--sans);
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: var(--normal) !important;
+}
+
+/* ---------- About: compact reference facts ---------- */
+/* Education and certifications are reference material. The trust model
+   ranks them low, so they get TIGHT spacing and the apparatus register —
+   deliberately less room than the prose above them. No logos, no badges,
+   no grid, no counting as a headline. */
+.facts {
+  font-family: var(--sans);
+  font-size: .9375rem;
+  line-height: 1.5;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .5rem 1.25rem;
+}
+.facts dt { font-size: .84375rem; color: var(--text-muted); padding-top: .1em; }
+.facts dd { color: var(--text-secondary); }
+.facts a { color: var(--accent); }
+
+.contact { font-family: var(--sans); line-height: 2; }
+.contact a { color: var(--accent); text-underline-offset: .18em; }
+
+.nowrap { white-space: nowrap; }
+
+/* PROTOTYPE SCAFFOLDING — not production, and deliberately styled so it can
+   never be mistaken for design. Marks content that requires Het rather than
+   filling the space with plausible fiction. */
+.placeholder {
+  font-family: var(--sans);
+  font-size: .84375rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: var(--code-ground);
+  padding: .7rem .85rem;
+  margin-top: var(--normal) !important;
+}
+
+/* ---------- Footer ---------- */
+/* font-size stays OFF the container so --box's em resolves at the body size
+   and the footer keeps the same left edge as the prose. See V-3. */
+.site-footer {
+  max-width: var(--box);
+  margin: var(--major) auto 0;
+  padding: var(--normal) var(--gutter) var(--open);
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+.site-footer p { font-size: .84375rem; margin-top: var(--tight); }
+.site-footer a { color: var(--text-secondary); }
+
+/* GLOBAL FOOTER — Phase 5G.
+   Designed as part of the identity rather than as a legal strip. Three
+   lines, each earning its place: who this is and what he does · where
+   else to go · how to make contact.
+
+   Deliberately absent: copyright (asserts nothing anyone needs on a
+   personal portfolio), "privacy" and "terms" (there is no data
+   collection to describe), social icon rows, a newsletter, and a
+   "built with" line. A footer that repeats the positioning is doing
+   more for a reader who has scrolled to the bottom than a © notice. */
+.foot-id { color: var(--text-secondary); margin-top: 0 !important; }
+.foot-id strong { color: var(--text-primary); font-weight: 500; }
+
+.foot-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.25rem;
+  font-size: .84375rem;
+  margin-top: var(--tight);
+}
+.foot-nav a { text-decoration: none; padding: .35em 0; }
+.foot-nav a:hover { color: var(--text-primary); text-decoration: underline; }
+
+.foot-contact a { padding: .35em 0; display: inline-block; }
+
+/* ---------- Prototype banner (not production) ---------- */
+.proto {
+  max-width: var(--box);
+  margin: 0 auto;
+  padding: .6rem var(--gutter);
+  font-family: var(--sans);
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--rule);
+}
+.proto { font-size: .8125rem; }
+
+/* ---------- Responsive ---------- */
+/* Breakpoints are in `em`, so they track the reader's font size rather than the
+   device. Both breakpoints are content-driven (5B): the apparatus wrap and the
+   measure. Both are properties of the type, so a reader at 200% should reach
+   them at half the device width. At a 16px root these are 601px and 1024px,
+   identical to the previous px values.
+
+   The two queries share an identical boundary value on purpose. Writing them as
+   600px/601px left a gap: at dpr 1.25 an integer CSS width evaluates to 600.8
+   or 1023.2, matched neither query, and silently fell through to the desktop
+   size — MEASURED at 601px and 1023px. With the same value on both, the later
+   rule simply wins at the boundary and no width is unhandled. V-2. */
+@media (max-width: 37.5625em) {
+  body { font-size: 1.0625rem; }
+  :root { --base: 1.754rem; --box: 31.1875rem; } /* 17*1.65≈28px; 27em@17px+gutters */
+  h1 { font-size: 1.6875rem; }
+  h2 { font-size: 1.3125rem; }
+  /* Apparatus keeps its two columns on mobile. Stacking label above value cost
+     202px — the single largest block above the fold, pushing the first sentence
+     of the investigation off the first screen on a 375x812 phone. MEASURED.
+     The four labels are short enough to sit beside their values at 375px. V-5. */
+  .apparatus { gap: .3rem .9rem; }
+  .revisions dl { grid-template-columns: 1fr; gap: .15rem 0; }
+  .revisions dt { margin-top: .8rem; }
+  /* .facts needs the same treatment and was shipped without it. MEASURED at
+     320px: `max-content 1fr` held the label column at 84px and left the value
+     column 176px, so the certifications entry ran 14 lines at a MEDIAN OF 20
+     CHARACTERS beside 14 lines of empty label column. OBSERVED as a squeezed
+     résumé table — the exact reading ABOUT_LAYOUT.md forbids. Stacking matches
+     what .revisions has done since 5D for the same reason. G-5. */
+  .facts { grid-template-columns: 1fr; gap: .15rem 0; }
+  .facts dt { margin-top: .8rem; }
+  .facts dt:first-of-type { margin-top: 0; }
+  .apparatus, .inset, .artifacts li, .related li, .revisions dd { font-size: .90625rem; }
+  .lede { font-size: 1.15rem; }
+  .worklist > li > a { font-size: 1.05rem; }
+}
+
+@media (min-width: 37.5625em) and (max-width: 64em) {
+  body { font-size: 1.125rem; }
+  :root { --base: 1.856rem; --box: 32.875rem; } /* 27em@18px + gutters */
+  h1 { font-size: 1.9375rem; }
+  h2 { font-size: 1.4375rem; }
+}

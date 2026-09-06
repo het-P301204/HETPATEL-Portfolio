@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two enumeration tools disagree on the same host — Het Patel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<p class="proto">Phase 5D test case — SHORT content (~150 words) + ZERO revisions. Hypothetical, self-initiated. Tests whether a short page reads as complete or as a fragment, and whether an absent foot register renders as nothing.</p>
+
+<header class="site-header">
+  <a class="site-name" href="index.html">Het Patel</a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="investigations.html" aria-current="page">Investigations</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<main id="main">
+<article class="investigation">
+
+  <a class="backlink" href="investigations.html">&larr; Investigations</a>
+
+  <h1>Two enumeration tools disagree on the same host</h1>
+
+  <dl class="apparatus">
+    <dt>Status</dt><dd>unresolved</dd>
+    <dt>Origin</dt><dd>self-initiated</dd>
+    <dt>Started</dt><dd>2026-06-11</dd>
+    <dt>Published</dt><dd>2026-06-14</dd>
+  </dl>
+
+  <p class="question">Running two enumeration tools against the same host in my own lab returned
+  different open-port sets. Not a superset and a subset — genuinely different, each finding
+  something the other missed.</p>
+
+  <p class="movement">I re-ran both with timing options equalised, then serialised them so they
+  were never scanning concurrently. The disagreement persisted, but the specific ports that
+  differed changed between runs, which rules out a stable difference in either tool's default
+  probe set.</p>
+
+  <p class="movement">What I could not determine is whether this is rate limiting on the host,
+  packet loss in the virtual network I built, or a genuine difference in retry behaviour. All
+  three would produce this pattern, and I do not currently have a way to distinguish them
+  without instrumenting the network layer itself. Leaving it open.</p>
+
+</article>
+</main>
+
+<footer class="site-footer">
+  <p class="foot-id"><strong>Het Patel</strong> — security testing and regulated assurance.</p>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="index.html">Home</a>
+    <a href="investigations.html">Investigations</a>
+    <a href="about.html">About</a>
+  </nav>
+  <p class="foot-contact"><a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a>
+  · <a href="https://github.com/het-P301204">GitHub</a>
+  · <a href="https://www.linkedin.com/in/het-patel-913017345">LinkedIn</a></p>
+</footer>
+
+</body>
+</html>

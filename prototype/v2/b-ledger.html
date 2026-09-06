@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!-- ART DIRECTION B — "LEDGER". Editorial-technical, light, dense, left-rail.
+     Investigation titles are placeholders pending Het's real work; employment,
+     frameworks and credentials are real. No dev text in the UI. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het Patel — security testing and regulated assurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@300..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F5F0; --ink:#16150F; --ink-2:#4A4740; --ink-3:#7C786E;
+  --hair:#DCD8CE; --tint:#EDEAE2; --accent:#8A2B1E;
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"Inter",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --rail:clamp(0px,14vw,232px);
+  --pad:clamp(1.25rem,3vw,2.75rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+body,h1,h2,h3,p,ul,ol,li,dl,dd,dt{margin:0;padding:0}
+ul,ol{list-style:none}
+body{
+  background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:1rem;line-height:1.55;font-weight:400;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+::selection{background:var(--accent);color:var(--paper)}
+a{color:inherit;text-decoration:none}
+
+@keyframes rise{from{transform:translateY(102%)}to{transform:translateY(0)}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.mask{display:block;overflow:hidden}
+.mask>*{display:block;animation:rise 1s cubic-bezier(.16,1,.3,1) both}
+.fade{animation:fade .75s cubic-bezier(.16,1,.3,1) both}
+
+/* ---------- persistent left rail: identity lives here on every page ---------- */
+.rail{
+  position:fixed;left:0;top:0;bottom:0;width:var(--rail);
+  border-right:1px solid var(--hair);
+  padding:var(--pad) 0 var(--pad) var(--pad);
+  display:flex;flex-direction:column;gap:2rem;z-index:20;background:var(--paper);
+}
+.rail .name{font-family:var(--serif);font-size:1.5rem;line-height:1;letter-spacing:-.01em}
+.rail .name span{display:block;color:var(--ink-3)}
+.rail nav{display:flex;flex-direction:column;gap:.15rem;margin-top:auto}
+.rail nav a{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;color:var(--ink-2);
+  padding:.35rem 0;display:flex;align-items:center;gap:.5rem;transition:color .25s ease;
+}
+.rail nav a::before{
+  content:"";width:0;height:1px;background:var(--accent);transition:width .35s cubic-bezier(.16,1,.3,1);
+}
+.rail nav a:hover,.rail nav a[aria-current]{color:var(--ink)}
+.rail nav a:hover::before,.rail nav a[aria-current]::before{width:14px}
+.rail .sig{font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+
+main{margin-left:var(--rail);border-left:0}
+
+/* ---------- hero: scale contrast, not whitespace ---------- */
+.hero{padding:clamp(2.5rem,6vw,5rem) var(--pad) clamp(2rem,4vw,3rem)}
+.kicker{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;margin-bottom:clamp(1.5rem,3vw,2.25rem);
+}
+.kicker b{color:var(--ink);font-weight:500}
+h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2.75rem,7.6vw,6.25rem);line-height:.96;letter-spacing:-.018em;
+  max-width:15ch;
+}
+h1 i{font-style:italic;color:var(--accent)}
+
+.under{
+  margin-top:clamp(1.75rem,3.5vw,2.75rem);
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:clamp(1.5rem,4vw,3.5rem);align-items:start;
+  padding-top:clamp(1.5rem,3vw,2rem);border-top:1px solid var(--hair);
+}
+.under p{font-size:clamp(1rem,1.15vw,1.125rem);line-height:1.6;color:var(--ink-2);max-width:52ch}
+.under p b{color:var(--ink);font-weight:500}
+.facts{display:grid;gap:.65rem}
+.facts div{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:.75rem;align-items:baseline}
+.facts dt{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.facts dd{font-size:.875rem;color:var(--ink-2)}
+.facts dd b{color:var(--ink);font-weight:500}
+
+/* ---------- work: editorial index with rules ---------- */
+.section{padding:clamp(3rem,7vw,6rem) var(--pad) 0}
+.sh{
+  display:flex;align-items:baseline;gap:.75rem;
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);padding-bottom:.85rem;border-bottom:1px solid var(--ink);
+}
+.sh .c{margin-left:auto}
+.work li{border-bottom:1px solid var(--hair)}
+.work a{
+  display:grid;grid-template-columns:2.5rem minmax(0,1fr) 9rem;
+  gap:clamp(.75rem,2vw,2rem);align-items:baseline;padding:clamp(1.1rem,2.2vw,1.6rem) 0;
+  transition:background .3s ease;position:relative;
+}
+.work a::after{
+  content:"";position:absolute;left:-100vw;right:-100vw;top:0;bottom:0;
+  background:var(--tint);opacity:0;transition:opacity .3s ease;z-index:-1;
+}
+.work a:hover::after{opacity:1}
+.work .n{font-family:var(--mono);font-size:.6875rem;color:var(--ink-3)}
+.work h3{
+  font-family:var(--serif);font-size:clamp(1.375rem,2.6vw,2.125rem);
+  font-weight:400;line-height:1.1;letter-spacing:-.01em;
+}
+.work .fr{
+  grid-column:2;font-size:.9375rem;color:var(--ink-2);max-width:60ch;margin-top:.35rem;
+  max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .45s cubic-bezier(.16,1,.3,1),opacity .35s ease,margin .45s ease;
+}
+.work a:hover .fr{max-height:5rem;opacity:1}
+.work .rec{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;color:var(--ink-3);
+  text-align:right;white-space:nowrap;
+}
+.work .rec b{color:var(--ink-2);font-weight:400}
+
+/* ---------- experience: given real weight ---------- */
+.exp{margin-top:clamp(3rem,6vw,5rem);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,3rem)}
+.exp .big{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.25rem);line-height:1.15;letter-spacing:-.01em}
+.exp .big span{color:var(--ink-3)}
+.exp p{font-size:.9375rem;color:var(--ink-2);line-height:1.6;max-width:46ch}
+.exp p+p{margin-top:.9rem}
+.exp .caveat{border-left:2px solid var(--accent);padding-left:1rem;color:var(--ink-2);font-size:.875rem}
+
+footer{
+  margin-left:var(--rail);margin-top:clamp(4rem,8vw,7rem);
+  padding:clamp(2rem,4vw,3rem) var(--pad);border-top:1px solid var(--ink);
+  display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:baseline;
+}
+footer .fn{font-family:var(--serif);font-size:1.375rem}
+footer .fl{margin-left:auto;display:flex;flex-wrap:wrap;gap:1.25rem}
+footer a{font-family:var(--mono);font-size:.75rem;color:var(--ink-2);padding:.3rem 0;transition:color .25s}
+footer a:hover{color:var(--accent)}
+
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media (max-width:900px){
+  :root{--rail:0px}
+  .rail{
+    position:sticky;flex-direction:row;align-items:center;width:auto;bottom:auto;
+    border-right:0;border-bottom:1px solid var(--hair);padding:.85rem var(--pad);gap:1rem;
+  }
+  .rail .name{font-size:1.125rem;display:flex;gap:.4rem}
+  .rail .name span{display:inline;color:var(--ink-3)}
+  .rail .sig{display:none}
+  .rail nav{flex-direction:row;margin-top:0;margin-left:auto;gap:1rem}
+  .rail nav a::before{display:none}
+  main,footer{margin-left:0}
+  .under{grid-template-columns:1fr;gap:1.5rem}
+  .work a{grid-template-columns:1.75rem minmax(0,1fr);row-gap:.4rem}
+  .work .rec{grid-column:2;text-align:left}
+  .work .fr{max-height:none;opacity:1;margin-top:.4rem}
+  .exp{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .mask>*{transform:none}
+  .work .fr{max-height:none;opacity:1}
+}
+</style>
+</head>
+<body>
+
+<aside class="rail">
+  <a class="name" href="#">Het<span>Patel</span></a>
+  <p class="sig">Security testing<br>&amp; regulated<br>assurance</p>
+  <nav aria-label="Primary">
+    <a href="#work" aria-current="page">Investigations</a>
+    <a href="#">About</a>
+  </nav>
+</aside>
+
+<main>
+  <section class="hero">
+    <p class="kicker fade" style="animation-delay:.1s">
+      <span>Cybersecurity Intern</span><b>Info eShield Cyber Solutions</b><span>Since Jan 2026</span>
+    </p>
+    <h1>
+      <span class="mask"><span style="animation-delay:.18s">A finding and a</span></span>
+      <span class="mask"><span style="animation-delay:.26s">control are not</span></span>
+      <span class="mask"><span style="animation-delay:.34s">the <i>same object</i>.</span></span>
+    </h1>
+
+    <div class="under">
+      <p class="fade" style="animation-delay:.55s">I test web applications for vulnerabilities, and I work on the compliance side of the
+        same problem. A tester asks whether something is exploitable. An audit asks whether the
+        organisation can <b>demonstrate that it manages the risk</b>. Those are different questions,
+        satisfied by different evidence — and the translation between them is where I have learned the most.</p>
+      <dl class="facts fade" style="animation-delay:.65s">
+        <div><dt>Testing</dt><dd>Enumeration, <b>Burp Suite by hand</b>, injection, XSS, misconfiguration</dd></div>
+        <div><dt>Assurance</dt><dd><b>ISO 27001</b> control mapping, risk assessment, audit documentation</dd></div>
+        <div><dt>Regulated</dt><dd><b>CSCRF</b> and <b>IRDAI</b> engagements — assisted, financial sector</dd></div>
+        <div><dt>In progress</dt><dd>CompTIA Security+ (SY0-701)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="work">
+    <div class="sh"><span>Investigations</span><span class="c">Three</span></div>
+    <ol class="work">
+      <li><a href="#">
+        <span class="n">01</span>
+        <div><h3>Why an allow-list kept failing open</h3></div>
+        <span class="rec">Closed · <b>2026</b></span>
+        <p class="fr">The rule was correct. The ordering was not — normalisation ran after the match. I could not establish whether that ordering was deliberate.</p>
+      </a></li>
+      <li><a href="#">
+        <span class="n">02</span>
+        <div><h3>Whether a control can be evidenced by its own absence</h3></div>
+        <span class="rec">Open · <b>2026</b></span>
+        <p class="fr">Evidence that satisfies one framework often fails another, because the two define the control boundary in different places.</p>
+      </a></li>
+      <li><a href="#">
+        <span class="n">03</span>
+        <div><h3>Two enumeration tools disagree on the same host</h3></div>
+        <span class="rec">Closed · <b>2026</b></span>
+        <p class="fr">Not a scanner problem — a subtle difference in how each builds its default probe set.</p>
+      </a></li>
+    </ol>
+
+    <div class="exp">
+      <p class="big">Info eShield<br>Cyber Solutions<br><span>Cybersecurity Intern — VAPT, Risk &amp; Compliance</span></p>
+      <div>
+        <p>Web application penetration testing; identifying injection, cross-site scripting and
+          misconfiguration, and documenting remediation. On the compliance side: risk assessment,
+          control mapping against ISO 27001, and the documentation that supports an audit.</p>
+        <p>Through this role I have participated in CSCRF and IRDAI audit engagements in the
+          financial sector — seeing how a technical finding becomes a regulatory obligation.</p>
+        <p class="caveat">I assisted on that work. I did not scope it, own it or lead it, and I am
+          not an auditor. Seven months is exposure, not expertise.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="fn">Het Patel</span>
+  <div class="fl">
+    <a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a>
+    <a href="https://github.com/het-P301204">GitHub</a>
+    <a href="https://www.linkedin.com/in/het-patel-913017345">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

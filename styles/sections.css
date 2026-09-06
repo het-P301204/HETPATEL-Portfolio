@@ -1,0 +1,2084 @@
+/* ============================================================================
+   TARGET SIZE
+   The type in the chrome runs at 10�11px, which makes several discrete
+   controls smaller than a fingertip � the theme toggle collapses to a 7px dot
+   once its label is hidden. Rather than inflate the type, each of these keeps
+   its drawn size and gets a centred 24�24 hit area it does not have to fill.
+   Inline links inside prose are exempt and are left alone.
+   ========================================================================== */
+
+/* Each control grows its own box. An absolutely-positioned overlay pad is the
+   tempting version and the wrong one: a percentage width on it resolves
+   against the containing block, not the control, so a 7px toggle acquired a
+   320px hit area and quietly ate every click in the bar. Real box sizing
+   cannot drift like that, and it cannot overlap a neighbour either. */
+.theme-toggle,
+.nav__mark,
+.nav__index-btn,
+.nav__link,
+.index-overlay__change,
+.copy-email,
+.hero__scroll,
+.footer__links a,
+.cert__cred--live {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+/* The toggle collapses to a single dot once its label is hidden, so it is the
+   one control that also needs a floor on the other axis. */
+.theme-toggle {
+  justify-content: center;
+  min-width: 24px;
+}
+
+/* ============================================================================
+   STANDALONE DOCUMENTS � the accessibility statement and anything like it.
+   Plain reading pages. No sequence, no instrument, no cursor tricks.
+   ========================================================================== */
+
+.doc {
+  max-width: 62rem;
+  padding-block: clamp(3rem, 12vh, 8rem);
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+}
+.doc__title {
+  font-size: clamp(2rem, 7vw, 5rem);
+  line-height: 0.94;
+}
+/* The stepped second line — but not the word masks an AnimatedText title puts
+   inside the same heading, which would inherit the indent and offset the whole
+   title. */
+.doc__title > span:not(.at) {
+  display: block;
+  padding-left: clamp(1rem, 6vw, 6rem);
+}
+.doc__section {
+  padding-top: clamp(1.25rem, 3vh, 2rem);
+  border-top: 1px solid var(--color-rule);
+}
+.doc__h2 {
+  color: var(--color-signal);
+}
+.doc__list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  max-width: 64ch;
+}
+.doc__list li {
+  padding-left: 1.15rem;
+  position: relative;
+}
+.doc__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 1px;
+  background: var(--color-grey);
+}
+.doc__para {
+  margin-top: 1rem;
+  max-width: 64ch;
+}
+.doc code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--color-signal);
+}
+.doc__back {
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  border-top: 1px solid var(--color-rule);
+}
+.doc__kicker {
+  letter-spacing: 0.22em;
+}
+
+/* --- /security: the disclosure document ----------------------------------- */
+.sec {
+  display: grid;
+  gap: clamp(1.25rem, 3.5vh, 2rem);
+}
+.sec__title {
+  font-size: clamp(2.5rem, 11vw, 8rem);
+  line-height: 0.9;
+}
+.sec__lede {
+  max-width: 56ch;
+}
+
+.sec__record {
+  position: relative;
+  padding-top: clamp(1rem, 3vh, 1.5rem);
+}
+/* The rule draws once, as the document opens. */
+.sec__record-rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.7s var(--ease);
+}
+.sec.is-ready .sec__record-rule {
+  transform: scaleX(1);
+}
+.sec__row {
+  display: grid;
+  gap: 0.2rem 1.5rem;
+  padding-block: clamp(0.6rem, 1.6vh, 0.9rem);
+  border-bottom: 1px solid var(--color-rule-soft);
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.45s var(--ease);
+  transition-delay: calc(0.2s + var(--i) * 0.06s);
+}
+.sec.is-ready .sec__row {
+  opacity: 1;
+  transform: none;
+}
+@media (min-width: 700px) {
+  .sec__row {
+    grid-template-columns: 13rem minmax(0, 1fr) 14rem;
+    align-items: baseline;
+  }
+}
+.sec__row dt {
+  color: var(--color-grey-soft);
+}
+.sec__row-note {
+  color: var(--color-grey);
+}
+@media (min-width: 700px) {
+  .sec__row-note {
+    text-align: right;
+  }
+}
+
+.sec__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: clamp(0.5rem, 2vh, 1rem);
+}
+.sec__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--color-rule);
+  background: none;
+  color: var(--color-ink);
+  transition:
+    border-color 0.3s var(--ease),
+    background-color 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+.sec__cta i {
+  font-style: normal;
+  transition: transform 0.35s var(--ease);
+}
+.sec__cta:hover {
+  border-color: var(--color-ink);
+}
+.sec__cta:hover i {
+  transform: translateX(0.25rem);
+}
+.sec__cta--primary {
+  border-color: var(--color-signal);
+  color: var(--color-signal);
+}
+.sec__cta--primary:hover {
+  background: var(--color-signal);
+  color: var(--color-paper);
+}
+.sec__cta.is-done {
+  border-color: var(--color-signal);
+  color: var(--color-signal);
+}
+.sec__foot {
+  max-width: 68ch;
+  color: var(--color-grey);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec__record-rule,
+  .sec__row {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ============================================================================
+   SECTION MARKS
+   The sections used to be numbered 01�09. Each now carries a symbol instead,
+   drawn on the same 12-unit grid as everything else. The symbol fills when its
+   section owns the viewport, so a header reports position rather than order.
+   ========================================================================== */
+
+.sec-head__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  padding-top: 0.75rem;
+}
+.sec-head__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sec-mark {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  color: var(--color-grey-soft);
+  transition: color 0.5s var(--ease);
+}
+.sec-mark__outline {
+  opacity: 0.85;
+}
+/* The fill is the state: absent at rest, present when the section is live. */
+.sec-mark__fill {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.4);
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.5s var(--ease);
+}
+.section[data-active="true"] .sec-head__title .sec-mark,
+.nav__link.is-active .sec-mark,
+.index-overlay a.is-active .sec-mark {
+  color: var(--color-signal);
+}
+.section[data-active="true"] .sec-head__title .sec-mark__fill,
+.nav__link.is-active .sec-mark__fill,
+.index-overlay a.is-active .sec-mark__fill {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-mark,
+  .sec-mark__fill {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   NAVIGATION
+   A wordmark, five words, a hairline that reports position. Labels roll; the
+   active word is marked by the accent and its own filled symbol.
+   ========================================================================== */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Above the index overlay: whatever opened it has to stay reachable. */
+  z-index: 90;
+  padding-block: clamp(0.9rem, 2.2vh, 1.5rem) 0;
+  opacity: 0;
+  transform: translate3d(0, -10px, 0);
+  transition:
+    opacity 0.8s var(--ease) 0.15s,
+    transform 0.8s var(--ease) 0.15s,
+    padding 0.5s var(--ease),
+    background-color 0.4s var(--ease);
+}
+.nav.is-ready {
+  opacity: 1;
+  transform: none;
+}
+.nav.is-compact {
+  padding-block: 0.65rem 0;
+  background: color-mix(in srgb, var(--color-paper) 84%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+/* Over an inverted section the bar inverts with it — it is fixed, so it cannot
+   inherit the swap and has to name the inverse tokens itself. */
+.nav.is-inverted {
+  color: var(--c-inv-ink);
+}
+.nav.is-inverted.is-compact {
+  background: color-mix(in srgb, var(--c-inv-paper) 82%, transparent);
+}
+.nav.is-inverted .nav__mark,
+.nav.is-inverted .nav__link.is-active,
+.nav.is-inverted .nav__index-btn:hover,
+.nav.is-inverted .theme-toggle {
+  color: var(--c-inv-ink);
+}
+.nav.is-inverted .nav__link,
+.nav.is-inverted .nav__index-btn {
+  color: var(--c-inv-grey);
+}
+.nav.is-inverted .nav__link::before {
+  background: var(--c-inv-signal);
+}
+.nav.is-inverted.is-compact .nav__progress {
+  background: var(--c-inv-rule);
+}
+.nav.is-inverted .nav__progress > span {
+  background: var(--c-inv-ink);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.nav__mark {
+  color: var(--color-ink);
+}
+
+.nav__links {
+  display: none;
+  gap: clamp(1.1rem, 2.8vw, 2.75rem);
+  margin-left: auto;
+  transition: opacity 0.35s var(--ease);
+}
+/* With the full index open, the four shortcuts are noise. */
+.nav[data-open="true"] .nav__links {
+  opacity: 0;
+  pointer-events: none;
+}
+@media (min-width: 768px) {
+  .nav__links {
+    display: flex;
+  }
+}
+
+.nav__link {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  transition: color 0.35s var(--ease);
+}
+.nav__link.is-active {
+  color: var(--color-ink);
+}
+/* The mark replaces the old numbering: outlined at rest, filled when active. */
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.nav__glyph {
+  width: 10px;
+  height: 10px;
+  opacity: 0.5;
+  transition:
+    opacity 0.4s var(--ease),
+    color 0.4s var(--ease);
+}
+.nav__link:hover .nav__glyph,
+.nav__link.is-active .nav__glyph {
+  opacity: 1;
+}
+
+.nav__roll {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 1em;
+  line-height: 1;
+}
+.nav__roll > span {
+  display: block;
+  transition: transform 0.55s var(--ease);
+}
+.nav__roll > span:nth-child(2) {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.nav__link:hover .nav__roll > span,
+.nav__link:focus-visible .nav__roll > span {
+  transform: translateY(-100%);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-left: clamp(1rem, 3vw, 2.25rem);
+  padding: 0.25rem 0;
+  background: none;
+  border: 0;
+  color: var(--color-grey);
+  transition: color 0.3s var(--ease);
+}
+.theme-toggle:hover {
+  color: var(--color-ink);
+}
+.theme-toggle__dot {
+  width: 7px;
+  height: 7px;
+  background: var(--color-signal);
+  transition:
+    background-color 0.4s var(--ease),
+    transform 0.5s var(--ease);
+}
+.theme-toggle:hover .theme-toggle__dot {
+  transform: rotate(45deg);
+}
+.theme-toggle__label {
+  display: none;
+}
+@media (min-width: 560px) {
+  .theme-toggle__label {
+    display: block;
+  }
+}
+
+.nav__index-btn {
+  margin-left: clamp(1rem, 3vw, 2.5rem);
+  color: var(--color-grey);
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  transition: color 0.3s var(--ease);
+}
+.nav__index-btn:hover {
+  color: var(--color-ink);
+}
+
+.nav__progress {
+  display: block;
+  margin-top: clamp(0.75rem, 2vh, 1.15rem);
+  height: 1px;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.nav.is-compact .nav__progress {
+  opacity: 1;
+  background: var(--color-rule-soft);
+}
+.nav__progress > span {
+  display: block;
+  height: 1px;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+/* ============================================================================
+   WORK — selected professional work
+   A brief, not a list and not a timeline: an index on the left, one open area
+   on the right. Deliberately unlike both of its neighbours so it cannot be
+   mistaken for either at a glance.
+   ========================================================================== */
+
+.work__grid {
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+  margin-top: clamp(2rem, 6vh, 3.5rem);
+}
+@media (min-width: 900px) {
+  .work__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .work__index {
+    position: sticky;
+    top: clamp(6rem, 14vh, 9rem);
+  }
+}
+.work__index-label {
+  padding-bottom: 0.6rem;
+}
+.work__index ul {
+  border-top: 1px solid var(--color-rule);
+}
+.work__tab {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.75rem;
+  width: 100%;
+  padding: clamp(0.7rem, 1.8vh, 1rem) 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--color-rule);
+  color: inherit;
+}
+.work__tab-rule {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: var(--color-signal);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.5s var(--ease);
+}
+.work__tab:hover .work__tab-rule,
+.work__tab.is-active .work__tab-rule {
+  transform: scaleX(1);
+}
+.work__tab-n {
+  color: var(--color-grey-soft);
+  font-variant-numeric: tabular-nums;
+}
+.work__tab.is-active .work__tab-n {
+  color: var(--color-signal);
+}
+.work__tab-label {
+  font-size: clamp(0.95rem, 1.8vw, 1.5rem);
+  line-height: 1.06;
+  color: var(--color-grey);
+  transition:
+    color 0.3s var(--ease),
+    transform 0.45s var(--ease);
+}
+.work__tab:hover .work__tab-label {
+  color: var(--color-ink);
+  transform: translateX(0.3rem);
+}
+.work__tab.is-active .work__tab-label {
+  color: var(--color-ink);
+}
+
+.work__panel {
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  animation: work-panel 0.45s var(--ease) both;
+}
+@keyframes work-panel {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.work__panel-summary {
+  max-width: 54ch;
+}
+.work__panel-label {
+  margin-top: clamp(1rem, 2.5vh, 1.5rem);
+}
+.work__method {
+  display: grid;
+  gap: 0.55rem;
+}
+.work__method li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: baseline;
+  max-width: 62ch;
+}
+.work__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  color: var(--color-grey);
+}
+.work__outcome {
+  max-width: 60ch;
+  color: var(--color-graphite);
+}
+.work__note {
+  display: flex;
+  gap: 0.55rem;
+  max-width: 62ch;
+  margin-top: clamp(1rem, 2.5vh, 1.5rem);
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-signal);
+  color: var(--color-signal);
+}
+.work__note i {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 0.45em;
+  background: var(--color-signal);
+}
+.work__foot {
+  margin-top: clamp(2rem, 5vh, 3rem);
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-rule-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work__panel {
+    animation: none;
+  }
+}
+
+/* --- position readout: a system status module ------------------------------
+   Corner marks, the section's own symbol, the position, and a bar filled to
+   the fraction of the document the section represents. Small and in the
+   corner — a status indicator, not a HUD. */
+.pix {
+  position: fixed;
+  left: var(--pad);
+  /* Clear of the section furniture that already sits on the bottom line. */
+  bottom: clamp(2.6rem, 6vh, 4rem);
+  z-index: 70;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 0.3rem 0.55rem;
+  padding: 0.45rem 0.7rem;
+  color: var(--color-grey);
+  background: color-mix(in srgb, var(--color-paper) 72%, transparent);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.45s var(--ease);
+  pointer-events: none;
+}
+.pix.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+/* the technical corners */
+.pix__corners {
+  position: absolute;
+  inset: 0;
+}
+.pix__corners i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--color-signal);
+}
+.pix__corners i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.pix__corners i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+.pix__corners i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+.pix__corners i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+.pix__sym {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-signal);
+}
+.pix__sym .sec-mark {
+  width: 14px;
+  height: 14px;
+  color: inherit;
+}
+/* In the module the symbol is always live — it is reporting, not linking. */
+.pix__sym .sec-mark__fill {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pix__pos {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.22rem;
+  font-variant-numeric: tabular-nums;
+}
+.pix__pos b {
+  font-weight: 400;
+  color: var(--color-signal);
+  /* one quiet pulse as the section changes */
+  animation: pix-tick 0.5s var(--ease);
+}
+@keyframes pix-tick {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.pix__pos s {
+  text-decoration: none;
+  opacity: 0.45;
+}
+.pix__pos em {
+  font-style: normal;
+  opacity: 0.6;
+}
+
+.pix__label {
+  grid-column: 2;
+  letter-spacing: 0.16em;
+  color: var(--color-ink);
+}
+.pix__bar {
+  grid-column: 1 / -1;
+  display: block;
+  height: 1px;
+  background: var(--color-rule);
+}
+.pix__bar i {
+  display: block;
+  height: 1px;
+  background: var(--color-signal);
+  transform-origin: 0 50%;
+  transition: transform 0.5s var(--ease);
+}
+
+.pix.is-inverted {
+  color: var(--c-inv-grey);
+  background: color-mix(in srgb, var(--c-inv-paper) 70%, transparent);
+}
+.pix.is-inverted .pix__label {
+  color: var(--c-inv-ink);
+}
+.pix.is-inverted .pix__pos b,
+.pix.is-inverted .pix__sym,
+.pix.is-inverted .pix__bar i,
+.pix.is-inverted .pix__corners i {
+  color: var(--c-inv-signal);
+  border-color: var(--c-inv-signal);
+  background-color: var(--c-inv-signal);
+}
+.pix.is-inverted .pix__pos b,
+.pix.is-inverted .pix__sym {
+  background-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pix,
+  .pix__bar i {
+    transition: none;
+  }
+  .pix__pos b {
+    animation: none;
+  }
+}
+
+/* --- full index overlay --------------------------------------------------- */
+/* ============================================================================
+   INDEX � the system map
+   Three columns: what the site holds, where you can go, and what you are about
+   to open. It arrives in stages � frame, structure, labels, marker � because a
+   map that assembles reads as a system coming up rather than a menu appearing.
+   ========================================================================== */
+
+.index-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  display: grid;
+  background: var(--color-paper);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s var(--ease);
+}
+.index-overlay[hidden] {
+  display: none;
+}
+.index-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.index-overlay__inner {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  display: grid;
+  gap: clamp(1.25rem, 3vh, 2rem) clamp(1.5rem, 4vw, 3.5rem);
+  padding-block: clamp(4.5rem, 11vh, 6.5rem);
+  grid-template-areas:
+    "meta"
+    "list"
+    "context"
+    "foot";
+}
+@media (min-width: 900px) {
+  .index-overlay__inner {
+    grid-template-columns: 12rem minmax(0, 1fr) 17rem;
+    grid-template-areas:
+      "meta list context"
+      "foot foot foot";
+    align-items: start;
+  }
+}
+
+/* --- stage 1: the frame --------------------------------------------------- */
+.ix__frame {
+  position: absolute;
+  inset: clamp(2.5rem, 7vh, 4rem) 0;
+  pointer-events: none;
+}
+.ix__frame i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--color-signal);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.ix__frame i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.ix__frame i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+.ix__frame i:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+.ix__frame i:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+.index-overlay.is-open .ix__frame i {
+  opacity: 1;
+}
+
+/* --- stage 2: the metadata column ----------------------------------------- */
+.ix__meta {
+  grid-area: meta;
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+  color: var(--color-grey);
+  opacity: 0;
+  transform: translate3d(-8px, 0, 0);
+  transition:
+    opacity 0.3s var(--ease) 0.08s,
+    transform 0.4s var(--ease) 0.08s;
+}
+.index-overlay.is-open .ix__meta {
+  opacity: 1;
+  transform: none;
+}
+.ix__meta-title {
+  color: var(--color-ink);
+  letter-spacing: 0.22em;
+}
+.ix__meta dl {
+  display: grid;
+  gap: 0.5rem;
+}
+.ix__meta dl > div {
+  display: grid;
+  gap: 0.1rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--color-rule-soft);
+}
+.ix__meta dt {
+  color: var(--color-grey-soft);
+}
+.ix__meta dd {
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+.ix__meta-sel {
+  color: var(--color-signal) !important;
+}
+
+/* --- stage 3: the destinations -------------------------------------------- */
+.ix__list {
+  grid-area: list;
+  display: grid;
+}
+.ix__list li {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity 0.34s var(--ease),
+    transform 0.42s var(--ease);
+  /* Structure first, then labels: each row follows the one before it by 30ms,
+     so the whole field is in under 500ms. */
+  transition-delay: calc(0.14s + var(--i) * 0.03s);
+}
+.index-overlay.is-open .ix__list li {
+  opacity: 1;
+  transform: none;
+}
+
+.ix__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.75rem 1.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: clamp(0.3rem, 0.9vh, 0.55rem) 0;
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+.ix__row-n {
+  color: var(--color-grey-soft);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s var(--ease);
+}
+.ix__row.is-previewing .ix__row-n,
+.ix__row.is-active .ix__row-n {
+  color: var(--color-signal);
+}
+/* the rule that draws toward the item */
+.ix__row-rule {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 100%;
+  background: var(--color-signal);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.45s var(--ease);
+}
+.ix__row.is-previewing .ix__row-rule {
+  transform: scaleX(1);
+}
+/* selection: the rule completes, then the overlay leaves */
+.ix__row.is-committing .ix__row-rule {
+  transform: scaleX(1);
+  height: 2px;
+  transition: transform 0.22s var(--ease);
+}
+
+.ix__row-mark {
+  width: 14px;
+  height: 14px;
+  opacity: 0.5;
+  transition: opacity 0.3s var(--ease);
+}
+.ix__row.is-previewing .ix__row-mark,
+.ix__row.is-active .ix__row-mark {
+  opacity: 1;
+}
+.ix__row-label {
+  display: inline-block;
+  font-size: clamp(1.15rem, 3.6vw, 2.6rem);
+  line-height: 1.02;
+  transition:
+    transform 0.45s var(--ease),
+    color 0.3s var(--ease);
+}
+.ix__row.is-previewing .ix__row-label {
+  transform: translateX(0.55rem);
+}
+.ix__row.is-committing .ix__row-label {
+  color: var(--color-signal);
+}
+.ix__row-stat {
+  color: var(--color-grey-soft);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.ix__row.is-previewing .ix__row-stat,
+.ix__row.is-active .ix__row-stat {
+  opacity: 1;
+}
+
+/* --- stage 4: the context panel ------------------------------------------- */
+.ix__context {
+  grid-area: context;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: clamp(0.75rem, 2vh, 1.1rem);
+  border: 1px solid var(--color-rule);
+  opacity: 0;
+  transform: translate3d(8px, 0, 0);
+  transition:
+    opacity 0.3s var(--ease) 0.3s,
+    transform 0.42s var(--ease) 0.3s;
+}
+.index-overlay.is-open .ix__context {
+  opacity: 1;
+  transform: none;
+}
+.ix__context-mark {
+  width: 18px;
+  height: 18px;
+  color: var(--color-signal);
+}
+.ix__context-label {
+  color: var(--color-ink);
+}
+.ix__context-brief {
+  color: var(--color-grey);
+  font-size: 0.95rem;
+}
+.ix__context-stat {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-rule-soft);
+  color: var(--color-signal);
+  font-variant-numeric: tabular-nums;
+}
+
+.ix__foot {
+  grid-area: foot;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: clamp(0.75rem, 2vh, 1.25rem);
+  border-top: 1px solid var(--color-rule-soft);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease) 0.36s;
+}
+.index-overlay.is-open .ix__foot {
+  opacity: 1;
+}
+.index-overlay__change {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--color-signal);
+}
+
+/* On a touch screen there is no hover, so the context panel follows the
+   section the reader is already in and every row is reachable by tap. */
+@media (hover: none) {
+  .ix__row-label {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .index-overlay,
+  .ix__meta,
+  .ix__list li,
+  .ix__context,
+  .ix__foot,
+  .ix__row-label,
+  .ix__row-rule {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   03 — FIELD EXPERIENCE
+   A record. The metadata stays put while the responsibilities pass it.
+   ========================================================================== */
+
+.exp__role {
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2.5rem);
+  margin-top: clamp(2rem, 6vh, 4rem);
+}
+@media (min-width: 900px) {
+  .exp__role {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .exp__aside {
+    position: sticky;
+    top: clamp(6rem, 14vh, 9rem);
+  }
+}
+.exp__aside {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+.exp__status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.exp__dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-signal);
+}
+.exp__meta > div {
+  display: grid;
+  gap: 0.15rem;
+  padding-block: 0.55rem;
+  border-top: 1px solid var(--color-rule-soft);
+}
+.exp__org {
+  font-size: clamp(1.4rem, 3.2vw, 2.9rem);
+  line-height: 1.01;
+}
+.exp__title {
+  margin-top: 0.8rem;
+  color: var(--color-grey);
+}
+.exp__summary {
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+  max-width: 54ch;
+}
+
+/* --- the surrounding context ---------------------------------------------- */
+/* Four short label/value pairs. They were shipped without a rule of their own,
+   so they inherited the default block `dl` — no gap between rows and no space
+   above the group, which set every label hard against the value under it and
+   ran the whole group into the summary paragraph. Laid out as a two-up ledger
+   on the wide breakpoint: the values are four or five words each, and a single
+   column of them wasted the half of the track sitting empty beside it. */
+.exp__context {
+  display: grid;
+  gap: 0;
+  margin-top: clamp(1.75rem, 4vh, 2.75rem);
+  border-top: 1px solid var(--color-rule);
+}
+@media (min-width: 640px) {
+  .exp__context {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+}
+.exp__context > div {
+  display: grid;
+  gap: 0.3rem;
+  padding-block: clamp(0.7rem, 1.8vh, 1rem);
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+.exp__context dd {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+/* --- the hand-off to WORK ------------------------------------------------- */
+/* Also shipped unstyled, which left it `display: inline` — the count ran
+   straight into the label as "05AREAS OF WORK". */
+.exp__handoff {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-top: clamp(1.75rem, 4vh, 2.5rem);
+  color: var(--color-ink);
+  transition: color 0.35s var(--ease);
+}
+.exp__handoff-count {
+  color: var(--color-signal);
+}
+.exp__handoff i {
+  font-style: normal;
+  display: inline-block;
+  transition: transform 0.4s var(--ease);
+}
+.exp__handoff:hover,
+.exp__handoff:focus-visible {
+  color: var(--color-signal);
+}
+.exp__handoff:hover i,
+.exp__handoff:focus-visible i {
+  transform: translateX(5px);
+}
+
+/* --- tracks: the role, opened one area of work at a time ------------------ */
+.exp__tracks-hint {
+  margin-top: clamp(1.5rem, 4vh, 2.25rem);
+}
+.exp__tracks {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--color-rule);
+}
+.exp__track {
+  border-bottom: 1px solid var(--color-rule);
+}
+.exp__track-btn {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.3rem 0.85rem;
+  width: 100%;
+  padding-block: clamp(0.9rem, 2.2vh, 1.3rem);
+  text-align: left;
+  background: none;
+  border: 0;
+  color: inherit;
+}
+/* A plus that becomes a minus. Two rules, one rotation — no icon font, no
+   glyph that has to be translated. */
+.exp__track-sign {
+  position: relative;
+  grid-row: 1 / span 2;
+  width: 11px;
+  height: 11px;
+  margin-top: 0.45em;
+}
+.exp__track-sign i {
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1px;
+  background: var(--color-ink);
+  transition: transform 0.45s var(--ease);
+}
+.exp__track-sign i:last-child {
+  transform: rotate(90deg);
+}
+.exp__track-btn.is-open .exp__track-sign i {
+  background: var(--color-signal);
+}
+.exp__track-btn.is-open .exp__track-sign i:last-child {
+  transform: rotate(0deg);
+}
+.exp__track-label {
+  transition: color 0.35s var(--ease);
+}
+.exp__track-btn:hover .exp__track-label,
+.exp__track-btn.is-open .exp__track-label {
+  color: var(--color-signal);
+}
+.exp__track-summary {
+  grid-column: 2;
+  max-width: 62ch;
+  color: var(--color-grey);
+}
+
+.exp__track-body[hidden] {
+  display: none;
+}
+.exp__track-inner {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0 0 clamp(1.1rem, 3vh, 1.75rem) 2.35rem;
+  animation: track-open 0.5s var(--ease) both;
+}
+@keyframes track-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.exp__track-para {
+  max-width: 62ch;
+}
+.exp__track-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  color: var(--color-grey);
+}
+/* The boundary a reader should not have to infer. */
+.exp__track-note {
+  max-width: 62ch;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--color-signal);
+  color: var(--color-signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp__track-inner {
+    animation: none;
+  }
+}
+
+/* ============================================================================
+   ACADEMIC JOURNEY
+   Five years on one track, advanced by scroll and selectable by hand. The two
+   years the source cannot date are drawn open and say so.
+   ========================================================================== */
+
+.acad__institution {
+  margin-top: clamp(1.75rem, 5vh, 3rem);
+}
+.acad__name {
+  margin-top: 0.5rem;
+  font-size: clamp(1.3rem, 3vw, 2.6rem);
+  line-height: 1.03;
+  max-width: 24ch;
+}
+
+.acad__track {
+  position: relative;
+  margin-top: clamp(2.5rem, 8vh, 4.5rem);
+  padding-top: 1.75rem;
+}
+.acad__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-rule);
+}
+.acad__line-fill {
+  display: block;
+  height: 1px;
+  background: var(--color-signal);
+  transform: scaleX(var(--p, 0));
+  transform-origin: 0 50%;
+  transition: transform 0.25s linear;
+}
+
+.acad__years {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.35rem, 1.5vw, 1.25rem);
+}
+.acad__year-btn {
+  position: relative;
+  display: grid;
+  gap: 0.3rem;
+  justify-items: start;
+  width: 100%;
+  padding: 0.85rem 0 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  color: inherit;
+}
+/* The marker on the track: filled where the record has something, open where
+   it does not. */
+.acad__node {
+  position: absolute;
+  top: -1.75rem;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-grey-soft);
+  transition:
+    background-color 0.4s var(--ease),
+    border-color 0.4s var(--ease),
+    transform 0.4s var(--ease);
+}
+.acad__year-btn[data-state="DONE"] .acad__node {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+}
+.acad__year-btn[data-state="IN PROGRESS"] .acad__node {
+  background: var(--color-paper);
+  border-color: var(--color-signal);
+}
+.acad__year-btn.is-active .acad__node {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+  transform: scale(1.5);
+}
+
+.acad__year {
+  font-size: clamp(1.35rem, 4.4vw, 3.6rem);
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-grey-soft);
+  transition:
+    color 0.5s var(--ease),
+    -webkit-text-stroke-color 0.5s var(--ease);
+}
+.acad__year-btn.is-past .acad__year {
+  -webkit-text-stroke-color: var(--color-grey);
+}
+.acad__year-btn.is-active .acad__year {
+  color: var(--color-ink);
+  -webkit-text-stroke-color: var(--color-ink);
+}
+.acad__year-state {
+  color: var(--color-grey-soft);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.acad__year-btn.is-active .acad__year-state {
+  opacity: 1;
+}
+.acad__year-btn[data-state="UNDATED"].is-active .acad__year-state {
+  color: var(--color-grey);
+}
+
+/* --- the year being read -------------------------------------------------- */
+.acad__readout {
+  display: grid;
+  gap: 0.75rem 2rem;
+  margin-top: clamp(2rem, 5vh, 3rem);
+  padding-top: clamp(1.25rem, 3vh, 1.75rem);
+  border-top: 1px solid var(--color-rule);
+  min-height: 13rem;
+}
+@media (min-width: 768px) {
+  .acad__readout {
+    grid-template-columns: 6rem minmax(0, 1fr);
+  }
+}
+.acad__readout-year {
+  color: var(--color-signal);
+  font-variant-numeric: tabular-nums;
+}
+.acad__readout-label {
+  font-size: clamp(1.2rem, 2.6vw, 2rem);
+  line-height: 1.05;
+}
+.acad__readout-detail {
+  margin-top: 0.6rem;
+  max-width: 58ch;
+}
+.acad__events {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.acad__events li {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.25rem 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-rule-soft);
+  align-items: baseline;
+}
+.acad__event-when {
+  color: var(--color-signal);
+}
+.acad__no-record {
+  margin-top: 1rem;
+  max-width: 52ch;
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--color-rule);
+  color: var(--color-grey);
+}
+
+.acad__course {
+  margin-top: clamp(2rem, 6vh, 3.5rem);
+}
+.acad__course ul {
+  margin-top: 1rem;
+  border-top: 1px solid var(--color-rule);
+}
+.acad__course li {
+  display: grid;
+  gap: 0.35rem 0.75rem;
+  padding-block: clamp(0.7rem, 1.8vh, 1rem);
+  border-bottom: 1px solid var(--color-rule-soft);
+  align-items: baseline;
+}
+@media (min-width: 768px) {
+  .acad__course li {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+.acad__course-name {
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+.acad__course-note {
+  color: var(--color-grey);
+}
+
+/* ============================================================================
+   CERTIFICATION ARCHIVE — a ledger, not a card grid
+
+   This was nine bordered, shadowed, rounded panels in a staggered two-column
+   grid that lifted on hover: the most generic pattern on the site, and the one
+   thing here that read as a SaaS dashboard rather than a record. It is now what
+   it always should have been — an indexed register. Full-bleed rows, one
+   hairline between each, the issuer mark in the margin, and the verification
+   state stated at the end of the row where a reader looks for it.
+
+   No box, no shadow, no lift. The only boundary is the rule between entries.
+   ========================================================================== */
+
+.cert__archive {
+  position: relative;
+  margin-top: clamp(2rem, 6vh, 3.5rem);
+}
+/* The register's spine, drawn down the margin as the section is read. */
+.cert__spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-rule);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+}
+
+.cert__sheets {
+  border-top: 1px solid var(--color-rule);
+}
+
+.cert__sheet {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0.15rem 1.1rem;
+  padding: clamp(0.9rem, 2.4vh, 1.4rem) 0 clamp(0.9rem, 2.4vh, 1.4rem)
+    clamp(0.75rem, 2vw, 1.5rem);
+  border-bottom: 1px solid var(--color-rule);
+}
+@media (min-width: 900px) {
+  .cert__sheet {
+    grid-template-columns: 2.25rem minmax(0, 1.5fr) minmax(0, 1fr) 15rem;
+    align-items: baseline;
+    gap: 0.35rem 1.5rem;
+  }
+}
+/* Approach marks the row in the margin rather than lifting it off the page. */
+.cert__sheet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  bottom: -1px;
+  width: 2px;
+  background: var(--color-signal);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 0.4s var(--ease);
+}
+.cert__sheet:hover::before,
+.cert__sheet:focus-within::before {
+  transform: scaleY(1);
+}
+
+/* The issuer mark sits in the margin, unboxed. */
+.cert__stamp {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  color: var(--color-grey);
+  transition: color 0.35s var(--ease);
+}
+.cert__mark {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.cert__sheet:hover .cert__stamp,
+.cert__sheet:focus-within .cert__stamp {
+  color: var(--color-signal);
+}
+
+.cert__ref {
+  grid-column: 2;
+  color: var(--color-grey-soft);
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 900px) {
+  .cert__ref {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+.cert__name {
+  grid-column: 2;
+  display: grid;
+}
+.cert__line {
+  display: block;
+  font-size: clamp(1.05rem, 1.9vw, 1.55rem);
+  line-height: 1.04;
+  transition: transform 0.45s var(--ease);
+}
+.cert__sheet:hover .cert__line {
+  transform: translateX(0.3rem);
+}
+.cert__provider {
+  grid-column: 2;
+  color: var(--color-grey);
+}
+@media (min-width: 900px) {
+  .cert__provider {
+    grid-column: 3;
+    grid-row: 2;
+    align-self: baseline;
+  }
+}
+
+.cert__facts {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.1rem;
+  margin-top: 0.35rem;
+}
+@media (min-width: 900px) {
+  .cert__facts {
+    grid-column: 3;
+    grid-row: 1;
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+}
+.cert__facts > div {
+  display: flex;
+  gap: 0.35rem;
+  align-items: baseline;
+}
+.cert__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.cert__status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-ink);
+}
+.cert__sheet.is-pending .cert__status-dot {
+  background: transparent;
+  border: 1px solid var(--color-signal);
+}
+.cert__sheet.is-pending .cert__status {
+  color: var(--color-signal);
+}
+
+.cert__note {
+  grid-column: 2;
+  color: var(--color-grey);
+}
+@media (min-width: 900px) {
+  .cert__note {
+    grid-column: 2 / span 2;
+    grid-row: 3;
+  }
+}
+.cert__sheet.is-pending .cert__note {
+  color: var(--color-signal);
+}
+
+/* Verification is the point of the section, so it ends the row rather than
+   hiding behind a hover. */
+.cert__cred {
+  grid-column: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+}
+@media (min-width: 900px) {
+  .cert__cred {
+    grid-column: 4;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    margin-top: 0;
+  }
+}
+.cert__cred--live {
+  color: var(--color-signal);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  justify-self: start;
+}
+@media (min-width: 900px) {
+  .cert__cred--live {
+    justify-self: end;
+  }
+}
+.cert__cred--live i {
+  font-style: normal;
+  transition: transform 0.4s var(--ease);
+}
+.cert__cred--live:hover i {
+  transform: translate(0.15rem, -0.15rem);
+}
+.cert__cred--none {
+  color: var(--color-grey-soft);
+}
+.cert__cred-slash {
+  width: 10px;
+  height: 1px;
+  background: currentColor;
+  flex: none;
+}
+
+.cert__archive-note {
+  max-width: 62ch;
+  margin-top: clamp(2.5rem, 6vh, 4rem);
+  padding-left: 0.85rem;
+  border-left: 2px solid var(--color-rule);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cert__sheet,
+  .cert__spine {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .cert__sheet::before,
+  .cert__line {
+    transition: none;
+  }
+}
+
+
+/* ============================================================================
+   08 — ABOUT / THE TRACE
+   ========================================================================== */
+
+.about__stage {
+  position: relative;
+  margin-top: clamp(2rem, 6vh, 4rem);
+  min-height: clamp(22rem, 58vh, 36rem);
+  display: grid;
+  align-items: end;
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.field__canvas {
+  position: absolute;
+  inset: 0;
+}
+.field__node {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  will-change: transform;
+}
+.field__node[data-node="4"] {
+  flex-direction: row-reverse;
+}
+.field__mark {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--color-grey-soft);
+  transition:
+    background-color 0.45s var(--ease),
+    border-color 0.45s var(--ease),
+    transform 0.5s var(--ease);
+}
+.field__node.is-latched .field__mark {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+  transform: scale(1.15);
+}
+.field__label {
+  white-space: nowrap;
+  color: var(--color-grey-soft);
+  transition: color 0.45s var(--ease);
+}
+.field__node.is-latched .field__label {
+  color: var(--color-ink);
+}
+/* Once the figure is whole it steps back and lets the name have the room. */
+.field[data-complete="true"] .field__label {
+  color: var(--color-grey-soft);
+}
+
+.about__word-wrap {
+  position: relative;
+  z-index: 1;
+  justify-self: start;
+  pointer-events: none;
+}
+.about__word-label {
+  margin-bottom: 0.5rem;
+}
+.about__word span {
+  display: block;
+  font-size: clamp(2.6rem, 11.5vw, 10.5rem);
+  line-height: 0.86;
+  animation: word-in 0.75s var(--ease) both;
+}
+@keyframes word-in {
+  from {
+    transform: translate3d(0, 104%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.about__body {
+  margin-top: clamp(3rem, 9vh, 6rem);
+  display: grid;
+  gap: clamp(2rem, 5vh, 3rem);
+}
+@media (min-width: 900px) {
+  .about__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+}
+.about__statement-line {
+  font-size: clamp(1.2rem, 2.3vw, 2rem);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+.about__prose {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+.about__prose .t-body {
+  max-width: 58ch;
+}
+.about__facts {
+  margin-top: 1.25rem;
+}
+.about__facts > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 0.6rem;
+  border-top: 1px solid var(--color-rule-soft);
+}
+.about__facts dd {
+  color: var(--color-graphite);
+}
+
+/* ============================================================================
+   09 — CONTACT
+   ========================================================================== */
+
+.contact__title {
+  margin-top: clamp(2rem, 6vh, 4rem);
+  display: grid;
+}
+.contact__line {
+  display: block;
+  font-size: clamp(2.9rem, 14vw, 12rem);
+  line-height: 0.86;
+}
+.contact__line--offset {
+  padding-left: clamp(0px, 9vw, 11rem);
+}
+/* --- channels ------------------------------------------------------------- */
+.contact__channels {
+  margin-top: clamp(2.5rem, 7vh, 4.5rem);
+  display: grid;
+}
+
+.channel {
+  position: relative;
+  display: grid;
+  gap: 0.35rem;
+  padding-block: clamp(1.1rem, 2.6vh, 1.6rem);
+  transition: padding-left 0.55s var(--ease);
+}
+@media (min-width: 768px) {
+  .channel {
+    /* The label rail matches the width the metadata rails run at elsewhere on
+       the page, so the contact rows sit on the same underlying grid as the
+       experience and case ledgers rather than on one of their own. */
+    grid-template-columns: clamp(6rem, 9vw, 9.5rem) minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: clamp(1rem, 2.5vw, 2rem);
+  }
+  /* Pointing at a channel opens it out from its rule. */
+  .channel.is-live {
+    padding-left: clamp(0.5rem, 1.5vw, 1.25rem);
+  }
+}
+
+/* The rule is the channel. A pulse runs it while the channel is live � the one
+   piece of ambient motion on the page, and it stops the moment you look away. */
+.channel__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--color-rule);
+  overflow: hidden;
+}
+.channel__pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 22%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-signal),
+    transparent
+  );
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.contact__channels[data-signal="on"] .channel.is-live .channel__pulse {
+  opacity: 1;
+  animation: channel-signal 1.5s linear infinite;
+}
+@keyframes channel-signal {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(560%);
+  }
+}
+
+.channel__label {
+  transition: color 0.4s var(--ease);
+}
+.channel.is-live .channel__label {
+  color: var(--color-signal);
+}
+
+/* The address is the content of this section, not a caption under it. At
+   1.25rem the rows read as a footer link list; at display scale the contact
+   block becomes the arrival the page has been building toward. Kept in the sans
+   rather than the display face because two of the three values are lowercase
+   and `.t-display` is uppercase-only. */
+.channel__value {
+  font-size: clamp(1.25rem, 2.9vw, 2.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.028em;
+}
+.channel__value i {
+  font-style: normal;
+}
+/* Present, and plainly not available � rather than quietly missing. */
+.channel__value--none {
+  color: var(--color-grey-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-rule);
+}
+.channel__note {
+  grid-column: 2 / -1;
+  max-width: 52ch;
+  margin-top: 0.3rem;
+  color: var(--color-grey);
+}
+
+.copy-email {
+  justify-self: start;
+  margin-top: 0.35rem;
+  padding: 0.2rem 0.45rem;
+  background: none;
+  border: 1px solid var(--color-rule);
+  color: var(--color-grey);
+  transition:
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    background-color 0.3s var(--ease);
+}
+.copy-email:hover {
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+.copy-email.is-done {
+  color: var(--color-signal);
+  border-color: var(--color-signal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .channel {
+    transition: none;
+  }
+  .channel__pulse {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
+/* ============================================================================
+   FOOTER
+   ========================================================================== */
+
+.footer {
+  padding-block: clamp(2rem, 6vh, 4rem);
+  border-top: 1px solid var(--color-rule);
+}
+.footer__top {
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .footer__top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+}
+.footer__mark {
+  font-size: clamp(1.9rem, 6.5vw, 4.75rem);
+  line-height: 0.86;
+}
+.footer__disciplines {
+  display: grid;
+  gap: 0.15rem;
+  color: var(--color-grey);
+  justify-items: start;
+}
+@media (min-width: 768px) {
+  .footer__disciplines {
+    justify-items: end;
+    text-align: right;
+  }
+}
+.footer__base {
+  margin-top: clamp(2rem, 5vh, 3rem);
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-rule-soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  flex-wrap: wrap;
+}
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(1rem, 2.5vw, 1.75rem);
+}
+/* GitHub keeps its place in the row when there is no URL: struck through and
+   plainly unavailable, rather than silently missing. */
+.footer__disabled {
+  color: var(--color-grey-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-rule);
+  cursor: default;
+}
+/* The last line closes the session rather than repeating the address. */
+.footer__session {
+  color: var(--color-signal);
+}

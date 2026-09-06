@@ -1,0 +1,146 @@
+/* ============================================================================
+   MANIFESTO — the statement, assembled.
+   Two stanzas in one sticky frame, over a field of drifting technical debris.
+   ========================================================================== */
+
+.manifesto {
+  position: relative;
+  background: var(--color-paper);
+}
+.manifesto__frame {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(1.5rem, 4vh, 3rem);
+  padding-block: clamp(4.5rem, 12vh, 8rem);
+  overflow: clip;
+}
+@media (min-width: 768px) {
+  .manifesto {
+    height: 230svh;
+  }
+  .manifesto__frame {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+}
+
+.manifesto__debris {
+  position: absolute;
+  inset: -10% 0;
+  pointer-events: none;
+}
+/* Texture, not text. These carry no information — they are the vocabulary of
+   the work rendered as a background, marked aria-hidden and kept deliberately
+   below reading weight (WCAG 1.4.3 treats pure decoration as exempt). */
+.manifesto__fragment {
+  position: absolute;
+  white-space: nowrap;
+  color: var(--color-grey-soft);
+  opacity: 0.26;
+  will-change: transform;
+  user-select: none;
+}
+.manifesto__fragment[data-depth="1"] {
+  opacity: 0.16;
+  font-size: 0.5625rem;
+}
+.manifesto__fragment[data-depth="3"] {
+  opacity: 0.36;
+  font-size: 0.6875rem;
+}
+
+.manifesto__label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--color-grey);
+}
+.manifesto__dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-signal);
+}
+
+.manifesto__stack {
+  position: relative;
+  align-self: center;
+  display: grid;
+}
+.manifesto__stanza {
+  grid-area: 1 / 1;
+  display: grid;
+  justify-items: start;
+}
+.manifesto__line {
+  display: block;
+  font-size: clamp(2.1rem, 8.4vw, 8rem);
+  line-height: 0.92;
+}
+/* The staircase: each line is indented one step further than the last. */
+.manifesto__stanza .mask:nth-child(2) {
+  padding-left: clamp(0.75rem, 4vw, 5rem);
+}
+.manifesto__stanza .mask:nth-child(3) {
+  padding-left: clamp(1.5rem, 8vw, 10rem);
+}
+.manifesto__stanza .mask:nth-child(4) {
+  padding-left: clamp(2.25rem, 12vw, 15rem);
+}
+.manifesto__fail {
+  display: inline-block;
+  transform-origin: 0 50%;
+}
+.manifesto__stanza--2 .manifesto__line {
+  font-size: clamp(1.6rem, 6vw, 5.5rem);
+}
+
+.manifesto__foot {
+  position: relative;
+  display: grid;
+  gap: 0.9rem;
+}
+.manifesto__rule {
+  display: block;
+  height: 2px;
+  width: min(30vw, 22rem);
+  background: var(--color-signal);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+/* On a phone the field thins out rather than running off the edge. */
+@media (max-width: 640px) {
+  .manifesto__fragment {
+    font-size: 0.5rem;
+  }
+  .manifesto__fragment:nth-child(2n) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manifesto {
+    height: auto;
+  }
+  .manifesto__frame {
+    position: relative;
+    height: auto;
+    min-height: 0;
+  }
+  .manifesto__stack {
+    gap: clamp(1.5rem, 5vh, 3rem);
+  }
+  .manifesto__stanza {
+    grid-area: auto;
+  }
+  .manifesto__rule {
+    transform: none;
+  }
+  .manifesto__fail {
+    color: var(--color-signal);
+  }
+}

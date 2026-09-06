@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes — genericity test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Newsreader:ital,opsz,wght@1,6..72,400&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<p class="proto">[GENERICITY TEST] Identical stylesheet, identical structure, generic early-career content for a fictional Alex Sharma. Tests whether the Notes format carries meaning on its own or only when the writing does the work.</p>
+
+<header class="site-header">
+  <a class="site-name" href="index.html">Alex Sharma</a>
+  <nav class="site-nav" aria-label="Primary">
+    <a href="investigations.html">Investigations</a>
+    <a href="notes.html" aria-current="page">Notes</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<main id="main">
+<div class="home">
+
+  <section class="identity" aria-labelledby="notes-h">
+    <h1 id="notes-h">Notes</h1>
+    <p class="lede">Short posts about what I am learning as I work through labs, courses and certifications.</p>
+  </section>
+
+  <section class="block" aria-labelledby="reg-h">
+    <h2 class="region-label" id="reg-h">The notes</h2>
+
+    <ol class="notes">
+      <li id="n-2026-07-22">
+        <p class="nt-date"><a href="#n-2026-07-22">2026-07-22</a></p>
+        <p>Finished the TryHackMe room on network enumeration today. Learned that nmap has a lot of flags I had not used before, and that <code>-sV</code> is useful for version detection. Will use this in future scans.</p>
+      </li>
+
+      <li id="n-2026-06-30">
+        <p class="nt-date"><a href="#n-2026-06-30">2026-06-30</a></p>
+        <p>Great session on the OWASP Top 10. SQL injection is still the most common vulnerability out there. Practising on DVWA has really helped me understand how it works in practice.</p>
+      </li>
+
+      <li id="n-2026-06-11">
+        <p class="nt-date"><a href="#n-2026-06-11">2026-06-11</a></p>
+        <p>Reminder to self: always document your findings as you go. I lost an hour today retracing steps I had already done because I did not write them down.</p>
+      </li>
+
+      <li id="n-2026-05-14">
+        <p class="nt-date"><a href="#n-2026-05-14">2026-05-14</a></p>
+        <p>Started studying for Security+. The exam objectives cover a lot of ground. Making flashcards for the acronyms, of which there are many.</p>
+      </li>
+
+      <li id="n-2026-04-03">
+        <p class="nt-date"><a href="#n-2026-04-03">2026-04-03</a></p>
+        <p>Set up a home lab with VirtualBox today. Kali on one VM, Metasploitable on another. Excited to start practising properly.</p>
+      </li>
+
+      <li id="n-2026-03-18">
+        <p class="nt-date"><a href="#n-2026-03-18">2026-03-18</a></p>
+        <p>Read a good article on the importance of least privilege. It is a simple principle but it comes up everywhere in security.</p>
+      </li>
+    </ol>
+  </section>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <p class="foot-id"><strong>Alex Sharma</strong> &mdash; cybersecurity graduate.</p>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="index.html">Home</a>
+    <a href="investigations.html">Investigations</a>
+    <a href="notes.html">Notes</a>
+    <a href="about.html">About</a>
+  </nav>
+  <p class="foot-contact"><a href="mailto:alex.sharma@example.com">alex.sharma@example.com</a>
+  &middot; <a href="https://github.com/alexsharma">GitHub</a>
+  &middot; <a href="https://www.linkedin.com/in/alexsharma">LinkedIn</a></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+/* ============================================================
+   DIRECTION E — STATE
+   Position is data. An investigation's horizontal offset encodes
+   how settled it is: flush left = unresolved, indented right =
+   settled. Revised items show a ghost at their previous offset.
+
+   The axis is labelled ONCE, at the top. That single label is what
+   makes the system learnable without a legend — which is T3.
+   ============================================================ */
+:root{
+  --paper:#FBFAF8; --ink:#111014; --ink2:#55535E; --ink3:#8B8995;
+  --hair:#E3E0DA; --was:#B4331F;        /* reserved: change, and nothing else */
+  --sans:"Inter",system-ui,sans-serif;
+  --serif:"Newsreader",Georgia,serif;   /* used ONLY for superseded text */
+  --pad:clamp(1.25rem,4vw,3.5rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+body,h1,h2,h3,p,ul,ol,li,dl,dd,dt{margin:0;padding:0}
+ul,ol{list-style:none}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:1rem;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+::selection{background:var(--ink);color:var(--paper)}
+a{color:inherit;text-decoration:none}
+
+/* ---------- entrance: items settle INTO their positions ---------- */
+@keyframes settle{from{transform:translateX(-4vw);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.settle{animation:settle .85s cubic-bezier(.16,1,.3,1) both}
+.fade{animation:fadeIn .7s ease both}
+
+.top{display:flex;align-items:baseline;gap:1.5rem;padding:clamp(1rem,2.5vw,1.75rem) var(--pad)}
+.top .who{font-weight:600;letter-spacing:-.02em;font-size:1.0625rem}
+.top nav{margin-left:auto;display:flex;gap:1.25rem}
+.top nav a{font-size:.9375rem;color:var(--ink2);padding:.4rem 0}
+.top nav a:hover,.top nav a[aria-current]{color:var(--ink);text-decoration:underline;text-underline-offset:.3em}
+
+.head{padding:clamp(1.5rem,4vw,3rem) var(--pad) 0;max-width:34ch}
+.head h1{font-size:clamp(1.5rem,3.4vw,2.5rem);font-weight:600;letter-spacing:-.03em;line-height:1.15}
+.head p{margin-top:.9rem;color:var(--ink2);font-size:clamp(.9375rem,1.3vw,1.0625rem);line-height:1.6;max-width:44ch}
+.head p b{color:var(--ink);font-weight:600}
+
+/* ---------- THE AXIS — one label, and the system is legible ---------- */
+.axis{
+  margin-top:clamp(2.5rem,6vw,4.5rem);padding:0 var(--pad);
+  display:flex;align-items:center;gap:1rem;
+  font-size:.8125rem;color:var(--ink3);
+}
+.axis .line{flex:1;height:1px;background:linear-gradient(90deg,var(--ink3),var(--hair))}
+
+/* ---------- the record ---------- */
+.rec{padding:0 var(--pad)}
+.rec li{padding:clamp(1.5rem,3.5vw,2.75rem) 0;border-bottom:1px solid var(--hair)}
+/* the offset IS the data */
+.rec li[data-state="open"]      { --off:0%;   }
+.rec li[data-state="revised"]   { --off:14%;  }
+.rec li[data-state="closed"]    { --off:28%;  }
+.rec a{display:block;margin-left:var(--off);transition:margin-left .5s cubic-bezier(.16,1,.3,1)}
+.rec a:hover{margin-left:calc(var(--off) - 2%)}
+.rec h2{
+  font-size:clamp(1.25rem,3vw,2.125rem);font-weight:500;letter-spacing:-.028em;line-height:1.2;
+  max-width:24ch;
+}
+.rec .fr{margin-top:.6rem;color:var(--ink2);font-size:.9375rem;line-height:1.6;max-width:56ch}
+.rec .state{
+  margin-top:.85rem;font-size:.8125rem;color:var(--ink3);
+  display:flex;flex-wrap:wrap;gap:.3rem .9rem;align-items:baseline;
+}
+.rec .state .now{color:var(--ink);font-weight:500}
+/* the ghost: what this used to say, struck, in the reserved colour */
+.rec .was{
+  margin-top:.5rem;font-family:var(--serif);font-size:.9375rem;line-height:1.55;
+  color:var(--was);max-width:56ch;
+}
+.rec .was s{opacity:.72}
+.rec .was em{font-style:normal;color:var(--ink2)}
+
+/* size reinforces the same signal — open work is larger */
+.rec li[data-state="open"] h2{font-size:clamp(1.5rem,3.8vw,2.625rem)}
+.rec li[data-state="closed"] h2{font-size:clamp(1.125rem,2.4vw,1.75rem)}
+
+.note{padding:clamp(3rem,7vw,5.5rem) var(--pad) 0;max-width:62ch}
+.note h2{font-size:.8125rem;color:var(--ink3);font-weight:500;margin-bottom:.85rem}
+.note p{font-size:1.0625rem;line-height:1.7;color:var(--ink2)}
+.note p+p{margin-top:.9rem}
+.note p b{color:var(--ink);font-weight:600}
+
+.art{padding:clamp(1.5rem,4vw,3rem) var(--pad) 0;max-width:70ch}
+.art h1{font-size:clamp(1.5rem,3.6vw,2.5rem);font-weight:600;letter-spacing:-.03em;line-height:1.15;max-width:22ch}
+.art .state{margin-top:1rem;font-size:.8125rem;color:var(--ink3);display:flex;flex-wrap:wrap;gap:.3rem .9rem}
+.art .state .now{color:var(--ink);font-weight:500}
+.art p{font-size:1.0625rem;line-height:1.75;margin-top:1.1rem;max-width:64ch;color:var(--ink2)}
+.art p b{color:var(--ink);font-weight:600}
+.art h2{font-size:.8125rem;color:var(--ink3);font-weight:500;margin-top:2.75rem}
+.art .was{margin-top:1rem;font-family:var(--serif);color:var(--was);font-size:1rem;line-height:1.65;max-width:60ch}
+.art .was em{font-style:normal;color:var(--ink2)}
+.back{display:inline-block;font-size:.875rem;color:var(--ink2);padding:.4rem 0;margin-bottom:1.25rem}
+
+.about{padding:clamp(1.5rem,4vw,3rem) var(--pad) 0;max-width:62ch}
+.about p{font-size:1.0625rem;line-height:1.75;margin-top:1.15rem;color:var(--ink2)}
+.about p b{color:var(--ink);font-weight:600}
+.about h2{font-size:.8125rem;color:var(--ink3);font-weight:500;margin-top:2.5rem}
+.about dl{margin-top:.9rem;display:grid;gap:.75rem}
+.about dt{font-size:.8125rem;color:var(--ink3)}
+.about dd{font-size:.9375rem;color:var(--ink2)}
+
+footer{
+  margin-top:clamp(4rem,9vw,8rem);border-top:1px solid var(--hair);
+  padding:clamp(1.5rem,3vw,2.25rem) var(--pad) clamp(2rem,4vw,3rem);
+  display:flex;flex-wrap:wrap;gap:.6rem 2rem;font-size:.875rem;color:var(--ink3);
+}
+footer .l{margin-left:auto;display:flex;flex-wrap:wrap;gap:1.5rem}
+footer a{color:var(--ink2);padding:.35rem 0}
+footer a:hover{color:var(--ink)}
+
+a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:var(--pad);top:.5rem;z-index:20;background:var(--ink);color:var(--paper);padding:.6rem .9rem}
+
+/* ---------- mobile: the axis compresses but survives ----------
+   Percentage offsets would be unreadable at 375, so they shrink to a
+   scale that still differentiates without stealing the measure. */
+@media (max-width:700px){
+  .rec li[data-state="open"]    { --off:0;      }
+  .rec li[data-state="revised"] { --off:1.25rem;}
+  .rec li[data-state="closed"]  { --off:2.5rem; }
+  .rec a:hover{margin-left:var(--off)}
+  .axis{font-size:.75rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .settle{transform:none}
+}

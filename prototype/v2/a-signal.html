@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!-- ART DIRECTION A — "SIGNAL". Dark premium / technical instrument.
+     Investigation titles are placeholders pending Het's real work; every
+     employment, framework and credential fact is real. No dev text in the UI. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het Patel — security testing and regulated assurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#0B0C0E; --raise:#121417;
+  --primary:#EDEBE6; --secondary:#9B9A94; --muted:#6C6B66;
+  --hair:#212429; --hair-bright:#33373E;
+  --signal:#FF5D3A;
+  --sans:"Geist",system-ui,sans-serif;
+  --mono:"Geist Mono",ui-monospace,monospace;
+  --pad:clamp(1.25rem,4vw,3.5rem);
+  --rail:clamp(1.25rem,4vw,3.5rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+body,h1,h2,h3,p,ul,ol,li,figure,dl,dd,dt{margin:0;padding:0}
+ul,ol{list-style:none}
+html{font-size:100%;-webkit-text-size-adjust:100%}
+body{
+  background:var(--ground);color:var(--primary);
+  font-family:var(--sans);font-size:1rem;line-height:1.55;
+  font-weight:300;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--signal);color:#0B0C0E}
+a{color:inherit;text-decoration:none}
+
+/* ---------- entrance: mask reveal, staggered ---------- */
+@keyframes rise{from{transform:translateY(105%)}to{transform:translateY(0)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.mask{display:block;overflow:hidden}
+.mask>*{display:block;animation:rise .9s cubic-bezier(.16,1,.3,1) both}
+.fade{animation:fade .8s ease both}
+.rule{height:1px;background:var(--hair);transform-origin:0 50%;animation:draw 1s cubic-bezier(.16,1,.3,1) both}
+
+/* ---------- chrome ---------- */
+.bar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;gap:1.5rem;
+  padding:1.1rem var(--pad);
+  background:color-mix(in srgb,var(--ground) 82%,transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--hair);
+}
+.wordmark{
+  font-family:var(--mono);font-size:.8125rem;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.wordmark .dot{color:var(--signal)}
+.bar nav{margin-left:auto;display:flex;gap:1.75rem}
+.bar nav a{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--secondary);
+  padding:.4rem 0;position:relative;
+  transition:color .25s ease;
+}
+.bar nav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--signal);transform:scaleX(0);transform-origin:100% 50%;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.bar nav a:hover{color:var(--primary)}
+.bar nav a:hover::after,.bar nav a[aria-current]::after{transform:scaleX(1);transform-origin:0 50%}
+.bar nav a[aria-current]{color:var(--primary)}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:clamp(3rem,9vw,7rem) var(--pad) clamp(2.5rem,5vw,4rem);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(2rem,5vw,5rem);
+  align-items:end;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:clamp(1.25rem,3vw,2rem);
+}
+.eyebrow b{color:var(--primary);font-weight:500}
+h1{
+  font-size:clamp(2.6rem,7.4vw,6.5rem);
+  line-height:.94;font-weight:400;letter-spacing:-.035em;
+  max-width:16ch;
+}
+h1 .dim{color:var(--secondary)}
+/* the coordinate index — the technical geometry, not decoration:
+   it is the four things he actually works on, numbered */
+.index{
+  display:grid;gap:.55rem;padding-bottom:.5rem;
+  border-left:1px solid var(--hair);padding-left:clamp(1rem,2vw,1.75rem);
+}
+.index li{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;
+  color:var(--secondary);display:flex;gap:.85rem;white-space:nowrap;
+}
+.index .n{color:var(--muted)}
+.index li:first-child{color:var(--primary)}
+
+/* ---------- standfirst + role ---------- */
+.stand{
+  padding:0 var(--pad);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(1.5rem,4vw,4rem);align-items:start;
+  padding-top:clamp(2rem,4vw,3rem);
+}
+.stand p{
+  font-size:clamp(1.0625rem,1.35vw,1.3125rem);line-height:1.5;
+  color:var(--secondary);max-width:46ch;font-weight:300;
+}
+.stand p em{color:var(--primary);font-style:normal}
+.role{
+  display:grid;gap:.4rem;font-family:var(--mono);font-size:.78125rem;
+  letter-spacing:.04em;
+}
+.role .k{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:.6875rem}
+.role .v{color:var(--primary)}
+.role .v span{color:var(--secondary)}
+
+/* ---------- work ---------- */
+.section{padding:clamp(4rem,9vw,8rem) var(--pad) 0}
+.sec-head{
+  display:flex;align-items:baseline;gap:1rem;margin-bottom:clamp(1.5rem,3vw,2.5rem);
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+}
+.sec-head .count{margin-left:auto;color:var(--hair-bright)}
+
+.work li{border-top:1px solid var(--hair)}
+.work li:last-child{border-bottom:1px solid var(--hair)}
+.work a{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+  gap:clamp(1rem,3vw,2.5rem);align-items:baseline;
+  padding:clamp(1.35rem,2.6vw,2.1rem) 0;
+  position:relative;transition:padding-left .45s cubic-bezier(.16,1,.3,1);
+}
+.work a::before{
+  content:"";position:absolute;inset:0 -100vw 0 -100vw;
+  background:var(--raise);opacity:0;transition:opacity .35s ease;z-index:-1;
+}
+.work a:hover::before{opacity:1}
+.work a:hover{padding-left:clamp(.75rem,1.5vw,1.25rem)}
+.work .n{
+  font-family:var(--mono);font-size:.6875rem;color:var(--muted);
+  letter-spacing:.1em;transition:color .3s ease;
+}
+.work a:hover .n{color:var(--signal)}
+.work h3{
+  font-size:clamp(1.25rem,2.4vw,2rem);font-weight:400;
+  letter-spacing:-.02em;line-height:1.15;
+}
+.work .meta{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap;
+  display:flex;gap:.75rem;align-items:center;
+}
+.work .meta .st{color:var(--secondary)}
+.work .arrow{
+  display:inline-block;transform:translateX(-4px);opacity:0;
+  transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .3s ease;color:var(--signal);
+}
+.work a:hover .arrow{transform:translateX(0);opacity:1}
+
+/* ---------- current ---------- */
+.now{
+  margin-top:clamp(4rem,9vw,8rem);
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:1px;background:var(--hair);border:1px solid var(--hair);
+}
+.now div{background:var(--ground);padding:clamp(1.25rem,2.5vw,1.75rem)}
+.now dt{
+  font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;
+}
+.now dd{font-size:.9375rem;color:var(--secondary);line-height:1.5}
+.now dd b{color:var(--primary);font-weight:500}
+
+/* ---------- footer ---------- */
+footer{
+  margin-top:clamp(5rem,10vw,9rem);padding:clamp(2.5rem,5vw,4rem) var(--pad) clamp(2rem,4vw,3rem);
+  border-top:1px solid var(--hair);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;
+}
+footer .fid{font-size:clamp(1.5rem,4vw,2.75rem);font-weight:400;letter-spacing:-.03em;line-height:1.05}
+footer .fid span{color:var(--muted)}
+footer .fl{display:flex;flex-direction:column;gap:.5rem;text-align:right}
+footer .fl a{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;
+  color:var(--secondary);transition:color .25s ease;padding:.3rem 0;
+}
+footer .fl a:hover{color:var(--signal)}
+
+/* ---------- focus ---------- */
+a:focus-visible{outline:2px solid var(--signal);outline-offset:4px;border-radius:2px}
+
+/* ---------- mobile art direction ---------- */
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;gap:2rem;align-items:start}
+  h1{max-width:none;font-size:clamp(2.5rem,11.5vw,4rem)}
+  .index{border-left:0;border-top:1px solid var(--hair);padding-left:0;padding-top:1.25rem}
+  .index li{white-space:normal}
+  .stand{grid-template-columns:1fr;gap:1.75rem}
+  .work a{grid-template-columns:auto minmax(0,1fr);row-gap:.6rem}
+  .work .meta{grid-column:2;white-space:normal}
+  footer{grid-template-columns:1fr;align-items:start}
+  footer .fl{text-align:left}
+  .bar nav{gap:1.1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .mask>*{transform:none}
+  .rule{transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="bar fade" style="animation-delay:.15s">
+  <a class="wordmark" href="#">HET PATEL<span class="dot">.</span></a>
+  <nav aria-label="Primary">
+    <a href="#work" aria-current="page">Work</a>
+    <a href="#">About</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <p class="eyebrow fade" style="animation-delay:.25s">Cybersecurity Intern <b>· Info eShield Cyber Solutions</b> · Since Jan 2026</p>
+      <h1>
+        <span class="mask"><span style="animation-delay:.30s">I test systems,</span></span>
+        <span class="mask"><span style="animation-delay:.38s">then I test</span></span>
+        <span class="mask"><span style="animation-delay:.46s" class="dim">the evidence</span></span>
+        <span class="mask"><span style="animation-delay:.54s" class="dim">about them.</span></span>
+      </h1>
+    </div>
+    <ol class="index fade" style="animation-delay:.8s">
+      <li><span class="n">01</span> Web application VAPT</li>
+      <li><span class="n">02</span> Regulated assurance</li>
+      <li><span class="n">03</span> CSCRF · IRDAI</li>
+      <li><span class="n">04</span> ISO 27001 control mapping</li>
+    </ol>
+  </section>
+
+  <div class="rule" style="margin:0 var(--pad);animation-delay:.7s"></div>
+
+  <section class="stand">
+    <p class="fade" style="animation-delay:.85s">I find weaknesses in web applications, and I work on the compliance side of the
+      same problem. <em>A finding and a control are not the same object</em> — and the translation
+      between them is where I have learned the most.</p>
+    <dl class="role fade" style="animation-delay:.95s">
+      <div><dt class="k">Currently</dt><dd class="v">Cybersecurity Intern, VAPT &amp; Risk <span>— Info eShield Cyber Solutions</span></dd></div>
+      <div><dt class="k">Regulated exposure</dt><dd class="v">CSCRF and IRDAI audit engagements <span>— assisted, financial sector</span></dd></div>
+      <div><dt class="k">Studying</dt><dd class="v">CompTIA Security+ <span>— SY0-701, in progress</span></dd></div>
+    </dl>
+  </section>
+
+  <section class="section" id="work">
+    <div class="sec-head"><span>Investigations</span><span class="count">03</span></div>
+    <ol class="work">
+      <li><a href="#">
+        <span class="n">01</span>
+        <h3>Why an allow-list kept failing open</h3>
+        <span class="meta"><span class="st">Closed</span> · 2026 <span class="arrow">→</span></span>
+      </a></li>
+      <li><a href="#">
+        <span class="n">02</span>
+        <h3>Whether a control can be evidenced by its own absence</h3>
+        <span class="meta"><span class="st">Open</span> · 2026 <span class="arrow">→</span></span>
+      </a></li>
+      <li><a href="#">
+        <span class="n">03</span>
+        <h3>Two enumeration tools disagree on the same host</h3>
+        <span class="meta"><span class="st">Closed</span> · 2026 <span class="arrow">→</span></span>
+      </a></li>
+    </ol>
+
+    <dl class="now">
+      <div><dt>Method</dt><dd>Enumeration, then <b>Burp Suite by hand</b>. Scanners for what should be automated.</dd></div>
+      <div><dt>Assurance</dt><dd>Control mapping, audit documentation, <b>evidence that actually demonstrates the control</b>.</dd></div>
+      <div><dt>Honestly</dt><dd>Seven months is <b>exposure, not expertise</b>. I assisted; I did not lead.</dd></div>
+    </dl>
+  </section>
+</main>
+
+<footer>
+  <p class="fid">Het Patel<br><span>security testing &amp; regulated assurance</span></p>
+  <div class="fl">
+    <a href="mailto:patel.het7996@gmail.com">patel.het7996@gmail.com</a>
+    <a href="https://github.com/het-P301204">GitHub</a>
+    <a href="https://www.linkedin.com/in/het-patel-913017345">LinkedIn</a>
+  </div>
+</footer>
+
+</body>
+</html>

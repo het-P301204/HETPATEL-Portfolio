@@ -1,0 +1,1064 @@
+/* ============================================================================
+   HET // WORKSTATION � a Linux desktop, in this site's palette.
+
+   The idiom is Ubuntu/GNOME because that is the environment the work actually
+   happens in: a system panel across the top, a pinned launcher down the left
+   edge, and a workspace between them holding icons on a grid. Window chrome is
+   a header bar with three round controls at the right.
+
+   What it is not: a HUD. There is no scanline, no glow, no cyan, no monospace
+   shouting. The security identity is carried by what is *in* the files.
+   ========================================================================== */
+
+.dk {
+  position: fixed;
+  inset: 0;
+  z-index: 88;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  overflow: hidden;
+  /* Slightly tighter than the document: system UI, not editorial. */
+  font-size: 0.875rem;
+}
+
+/* --- system panel --------------------------------------------------------- */
+.dk__panel {
+  position: relative;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 2.25rem;
+  padding-inline: clamp(0.6rem, 1.5vw, 1.1rem);
+  background: color-mix(in srgb, var(--color-ink) 92%, transparent);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+.dk__panel-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dk__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-signal);
+}
+/* GNOME centres the clock. */
+.dk__panel-clock {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  opacity: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.dk__panel-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.dk__panel-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.75;
+}
+.dk__pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  animation: dk-pulse 2.4s ease-in-out infinite;
+}
+@keyframes dk-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+.dk__panel-btn {
+  min-height: 24px;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--color-paper) 28%, transparent);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  transition:
+    background-color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+.dk__panel-btn:hover {
+  background: color-mix(in srgb, var(--color-paper) 16%, transparent);
+}
+.dk__panel-btn.is-accent {
+  border-color: var(--color-signal);
+  color: var(--color-signal);
+}
+.dk__panel-btn.is-accent:hover {
+  background: var(--color-signal);
+  color: var(--color-paper);
+}
+
+/* --- shell: launcher + workspace ------------------------------------------ */
+.dk__shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  min-height: 0;
+}
+
+/* --- launcher (Ubuntu keeps it on the left) ------------------------------- */
+.dk__dock {
+  position: relative;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0.4rem;
+  background: color-mix(in srgb, var(--color-ink) 86%, transparent);
+}
+.dock__item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--color-paper) 8%, transparent);
+  transition:
+    background-color 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.dock__item:hover,
+.dock__item:focus-visible {
+  background: color-mix(in srgb, var(--color-paper) 18%, transparent);
+  transform: translateX(2px);
+}
+.dock__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+/* The running indicator sits on the launcher edge, as it does in Ubuntu. */
+.dock__run {
+  position: absolute;
+  left: -0.4rem;
+  top: 50%;
+  translate: 0 -50%;
+  width: 3px;
+  height: 0;
+  border-radius: 2px;
+  background: var(--color-signal);
+  transition: height 0.25s var(--ease);
+}
+.dock__item[data-open="true"] .dock__run {
+  height: 0.9rem;
+}
+.dock__item[data-live="true"] .dock__run {
+  height: 1.5rem;
+}
+.dock__tip {
+  position: absolute;
+  left: calc(100% + 0.6rem);
+  top: 50%;
+  translate: 0 -50%;
+  padding: 0.25rem 0.55rem;
+  border-radius: 0.35rem;
+  white-space: nowrap;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s var(--ease);
+}
+.dock__item:hover .dock__tip,
+.dock__item:focus-visible .dock__tip {
+  opacity: 1;
+}
+
+/* --- workspace ------------------------------------------------------------ */
+.dk__workspace {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(0.9rem, 2vw, 1.6rem);
+}
+/* A faint desktop texture, not a grid overlay effect. */
+.dk__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(var(--color-rule-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-rule-soft) 1px, transparent 1px);
+  background-size: 88px 88px;
+}
+.dk__hint {
+  position: absolute;
+  left: clamp(0.9rem, 2vw, 1.6rem);
+  bottom: clamp(0.7rem, 1.6vw, 1.1rem);
+  color: var(--color-grey-soft);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+/* --- system monitor -------------------------------------------------------
+   Workspace, session uptime and the windows that are actually open. Every
+   number on it is real; there is deliberately no network or threat readout,
+   because this site does not invent security state. */
+.dk__monitor {
+  position: absolute;
+  right: clamp(0.9rem, 2vw, 1.6rem);
+  bottom: clamp(0.9rem, 2vw, 1.6rem);
+  width: 13.5rem;
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-rule);
+  background: color-mix(in srgb, var(--color-paper) 76%, transparent);
+  backdrop-filter: blur(8px);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: var(--color-grey);
+}
+.dk__monitor-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-ink);
+}
+.dk__monitor-head i {
+  width: 6px;
+  height: 6px;
+  background: var(--color-signal);
+}
+.dk__monitor dl {
+  display: flex;
+  gap: 1.1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--color-rule-soft);
+}
+.dk__monitor dl > div {
+  display: grid;
+  gap: 0.05rem;
+}
+.dk__monitor dt {
+  color: var(--color-grey-soft);
+}
+.dk__monitor dd {
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+.dk__monitor-procs {
+  display: grid;
+  gap: 0.2rem;
+}
+.dk__monitor-procs li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-graphite);
+}
+.dk__monitor-procs em {
+  margin-left: auto;
+  font-style: normal;
+  color: var(--color-grey-soft);
+}
+.dk__monitor-state {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  background: var(--color-signal);
+}
+.dk__monitor-state[data-min="true"] {
+  background: transparent;
+  border: 1px solid var(--color-grey-soft);
+}
+.dk__monitor-idle {
+  color: var(--color-grey-soft);
+}
+@media (max-width: 1023px) {
+  .dk__monitor {
+    display: none;
+  }
+}
+
+.dk__panel-stat {
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Three columns by tier. Still a desk — no headings, no cards — but what gets
+   opened sits nearest the launcher and reference material sits furthest. */
+.dk__icons {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+.dk__tier {
+  display: grid;
+  grid-auto-rows: minmax(0, 6.5rem);
+  gap: 0.25rem;
+  width: 7.5rem;
+}
+/* The primary column is the one Het opens; it gets a fractionally larger icon
+   and the others recede. Hierarchy by weight, not by decoration. */
+.dk__tier[data-tier="primary"] .obj__icon {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+.dk__tier[data-tier="reference"] .obj__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.dk__tier[data-tier="reference"] .obj__name {
+  color: var(--color-graphite);
+}
+.obj {
+  display: block;
+}
+.obj__hit {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.3rem;
+  width: 100%;
+  padding: 0.5rem 0.3rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  background: none;
+  color: inherit;
+  text-align: center;
+  transition:
+    background-color 0.18s var(--ease),
+    border-color 0.18s var(--ease);
+}
+.obj__hit:hover {
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+}
+/* Approach lifts the icon a little and brings its name forward — enough to
+   read as an application under the pointer, not enough to bounce. */
+.obj__icon {
+  transition: transform 0.18s var(--ease);
+}
+.obj__hit:hover .obj__icon,
+.obj__hit:focus-visible .obj__icon {
+  transform: translateY(-2px) scale(1.06);
+}
+.obj__hit:hover .obj__name {
+  color: var(--color-ink);
+}
+/* The accent tick that marks the icon the pointer is on. */
+.obj__hit::after {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 4px;
+  height: 4px;
+  background: var(--color-signal);
+  opacity: 0;
+  transition: opacity 0.18s var(--ease);
+}
+.obj__hit {
+  position: relative;
+}
+.obj__hit:hover::after,
+.obj__hit:focus-visible::after {
+  opacity: 1;
+}
+/* Selection reads the way a file manager reads it: the name is highlighted. */
+.obj__hit.is-selected {
+  background: color-mix(in srgb, var(--color-signal) 12%, transparent);
+  border-color: color-mix(in srgb, var(--color-signal) 45%, transparent);
+}
+.obj__icon {
+  width: 2.9rem;
+  height: 2.9rem;
+}
+.obj__name {
+  font-size: 0.8rem;
+  line-height: 1.15;
+  word-break: break-word;
+}
+.obj__hit.is-selected .obj__name {
+  color: var(--color-signal);
+}
+.obj__meta {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--color-grey-soft);
+  line-height: 1.1;
+}
+
+/* --- the icon family ------------------------------------------------------ */
+/* Flat fill, one darker edge � how an icon theme is built. The accent carries
+   the folder colour so both themes stay coherent. */
+.fi-body {
+  fill: var(--color-signal);
+}
+.fi-shade {
+  fill: color-mix(in srgb, var(--color-signal) 62%, var(--color-ink));
+}
+.fi-edge {
+  stroke: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  stroke-width: 1;
+}
+.fi-rule {
+  stroke: color-mix(in srgb, var(--color-paper) 78%, transparent);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.fi-mark {
+  fill: var(--color-paper);
+}
+.fi-mark-stroke {
+  stroke: var(--color-paper);
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+}
+.fi-term {
+  fill: #1b1b1b;
+}
+.fi-term-bar {
+  fill: #2f2f2f;
+}
+.fi-prompt {
+  stroke: #eaeaea;
+  stroke-width: 2.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Documents are paper, not accent � so a folder still reads as the container. */
+.obj__icon .fi-body,
+.dock__icon .fi-body {
+  fill: var(--color-signal);
+}
+.fi:has(.fi-rule) .fi-body {
+  fill: color-mix(in srgb, var(--color-signal) 82%, var(--color-paper));
+}
+
+/* ============================================================================
+   WINDOWS � a GNOME header bar and a body
+   ========================================================================== */
+
+.win {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(46rem, calc(100% - 2rem));
+  height: min(34rem, calc(100% - 2rem));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: 0.75rem;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 18px 48px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transform: translate(
+      calc(-50% + var(--dx, 0px) + var(--ox, 0px)),
+      calc(-50% + var(--dy, 0px) + var(--oy, 0px))
+    )
+    scale(0.94);
+  opacity: 0;
+  transition:
+    transform 0.28s var(--ease),
+    opacity 0.22s var(--ease),
+    width 0.24s var(--ease),
+    height 0.24s var(--ease),
+    border-radius 0.24s var(--ease);
+}
+.win[data-open="true"] {
+  --ox: 0px;
+  --oy: 0px;
+  transform: translate(
+      calc(-50% + var(--dx, 0px)),
+      calc(-50% + var(--dy, 0px))
+    )
+    scale(1);
+  opacity: 1;
+}
+.win.is-dragging {
+  transition: none;
+  cursor: grabbing;
+}
+/* Maximise fills the workspace, not the screen � the panel and launcher stay. */
+.win[data-max="true"] {
+  --dx: 0px;
+  --dy: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border-color: transparent;
+}
+/* Minimise collapses toward the launcher on the left. */
+.win[data-min="true"] {
+  transform: translate(calc(-50% - 12vw), calc(-50% + 30vh)) scale(0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+.win[data-closing="true"] {
+  transform: translate(
+      calc(-50% + var(--dx, 0px)),
+      calc(-50% + var(--dy, 0px))
+    )
+    scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.win__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 2.6rem;
+  padding-inline: 0.5rem 0.5rem;
+  padding-left: 0.9rem;
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--color-paper));
+  border-bottom: 1px solid var(--color-rule);
+  cursor: grab;
+  user-select: none;
+}
+.win[data-max="true"] .win__bar {
+  cursor: default;
+}
+.win__title {
+  font-weight: 500;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.win__status {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--color-grey);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.win__controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+/* Adwaita's round controls: a soft disc that darkens on hover. */
+.win__ctl {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-ink) 10%, transparent);
+  color: var(--color-ink);
+  transition:
+    background-color 0.18s var(--ease),
+    color 0.18s var(--ease);
+}
+.win__ctl svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+.win__ctl:hover {
+  background: color-mix(in srgb, var(--color-ink) 20%, transparent);
+}
+.win__ctl--close:hover {
+  background: #c0392b;
+  color: #fff;
+}
+.win__ctl:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+.win__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+/* --- small screens: the desk becomes a list, windows become sheets -------- */
+@media (max-width: 767px) {
+  .dk__shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dk__dock {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.4rem;
+    z-index: 70;
+  }
+  .dock__item:hover,
+  .dock__item:focus-visible {
+    transform: none;
+  }
+  .dock__run {
+    left: 50%;
+    top: auto;
+    bottom: -0.3rem;
+    translate: -50% 0;
+    width: 0;
+    height: 3px;
+    transition: width 0.25s var(--ease);
+  }
+  .dock__item[data-open="true"] .dock__run {
+    height: 3px;
+    width: 0.9rem;
+  }
+  .dock__item[data-live="true"] .dock__run {
+    height: 3px;
+    width: 1.5rem;
+  }
+  .dock__tip {
+    display: none;
+  }
+  .dk__icons {
+    grid-auto-flow: row;
+    grid-template-rows: none;
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+    grid-auto-columns: auto;
+    justify-content: stretch;
+  }
+  .dk__workspace {
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+  .dk__hint {
+    display: none;
+  }
+  .dk__panel-clock {
+    display: none;
+  }
+  .win {
+    position: fixed;
+    left: 0;
+    top: auto;
+    bottom: 0;
+    width: 100%;
+    height: 86svh;
+    border-radius: 0.9rem 0.9rem 0 0;
+    transform: translateY(6%);
+  }
+  .win[data-open="true"] {
+    transform: translateY(0);
+  }
+  .win[data-min="true"],
+  .win[data-closing="true"] {
+    transform: translateY(100%);
+  }
+  .win[data-max="true"] {
+    height: 100%;
+    border-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk__pulse {
+    animation: none;
+  }
+  .win,
+  .dock__item,
+  .dock__run,
+  .dock__tip,
+  .obj__hit {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   WINDOW CONTENTS
+   ========================================================================== */
+
+.wc {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+.wc__lede {
+  max-width: 60ch;
+}
+.wc__label {
+  margin-top: 0.75rem;
+}
+.wc__para {
+  max-width: 62ch;
+}
+.wc__note {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-rule);
+  color: var(--color-grey);
+}
+.wc__file-title {
+  font-size: clamp(1.3rem, 3vw, 2.1rem);
+  line-height: 1;
+}
+.wc__motif {
+  margin: 0.5rem 0;
+}
+.wc__back,
+.wc__big-link {
+  justify-self: start;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--color-signal);
+}
+.wc__big-link {
+  font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+}
+.wc__empty {
+  font-size: clamp(1.6rem, 4vw, 2.75rem);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-ink);
+}
+
+.wc__meta > div,
+.wc__course li,
+.wc__contact li {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding-block: 0.4rem;
+  border-top: 1px solid var(--color-rule-soft);
+}
+.wc__steps li {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding-block: 0.25rem;
+}
+.wc__limits {
+  margin-top: 1rem;
+  padding: 0.85rem;
+  border: 1px solid var(--color-rule);
+}
+
+.wc__accordion li {
+  border-top: 1px solid var(--color-rule-soft);
+}
+.wc__accordion button {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  width: 100%;
+  padding: 0.6rem 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  text-align: left;
+}
+.wc__row-title {
+  font-size: clamp(1rem, 1.9vw, 1.4rem);
+}
+.wc__caps {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0 0 0.85rem 2.5rem;
+}
+
+.wc__files li,
+.wc__certs li {
+  border-top: 1px solid var(--color-rule-soft);
+}
+.wc__files button {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.6rem 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  text-align: left;
+}
+.wc__file-icon {
+  width: 13px;
+  height: 16px;
+  border: 1px solid var(--color-ink);
+}
+.wc__file-name {
+  color: var(--color-ink);
+}
+
+.wc__certs li {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: start;
+  padding-block: 0.65rem;
+}
+.wc__seal {
+  width: 9px;
+  height: 9px;
+  margin-top: 0.4em;
+  background: var(--color-ink);
+}
+.wc__certs li.is-pending .wc__seal {
+  background: transparent;
+  border: 1px solid var(--color-signal);
+}
+.wc__cert-body {
+  display: grid;
+  gap: 0.15rem;
+}
+.wc__cert-title {
+  font-size: clamp(0.95rem, 1.7vw, 1.25rem);
+  line-height: 1.05;
+}
+.wc__cert-note {
+  color: var(--color-signal);
+}
+.wc__cert-state {
+  color: var(--color-grey);
+}
+
+.wc__stamp {
+  justify-self: start;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-signal);
+  color: var(--color-signal);
+}
+.wc__chain {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding-left: 1.25rem;
+  position: relative;
+}
+.wc__chain::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0.5em;
+  bottom: 0.5em;
+  width: 1px;
+  background: var(--color-rule);
+}
+.wc__chain li {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.75rem;
+  align-items: baseline;
+}
+.wc__chain-node {
+  position: absolute;
+  left: -1.25rem;
+  top: 0.45em;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--color-grey-soft);
+  background: var(--color-paper);
+}
+.wc__record-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.wc__journey {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+.wc__journey li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+.wc__journey li > span:last-child {
+  display: grid;
+  gap: 0.2rem;
+}
+.wc__year {
+  font-size: clamp(1.2rem, 2.4vw, 1.75rem);
+}
+
+.wc--toolkit {
+  gap: 1.25rem;
+}
+.wc__tool-readout {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.9rem;
+  border: 1px solid var(--color-rule);
+}
+.wc__tool-name {
+  font-size: clamp(1.3rem, 2.8vw, 2rem);
+  line-height: 1;
+}
+.wc__tool-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 620px) {
+  .wc__tool-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 2rem;
+  }
+}
+.wc__tool-grid ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin-top: 0.2rem;
+}
+.wc__tool-grid button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--color-graphite);
+  font-size: 0.95rem;
+}
+.wc__tool-grid button.is-live,
+.wc__tool-grid button:hover {
+  color: var(--color-signal);
+}
+
+.wc__contact-value {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+}
+
+/* --- terminal ------------------------------------------------------------- */
+.term {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 0.5rem;
+  min-height: 100%;
+  color: var(--color-ink);
+}
+.term__out {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.term__echo {
+  color: var(--color-signal);
+}
+.term__in {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  border-top: 1px solid var(--color-rule);
+  padding-top: 0.5rem;
+}
+.term__prompt {
+  color: var(--color-signal);
+  white-space: nowrap;
+}
+.term__in input {
+  flex: 1;
+  background: none;
+  border: 0;
+  color: inherit;
+  outline: none;
+  min-width: 0;
+}
+
+/* ============================================================================
+   COMPACT — the digital desk
+   ========================================================================== */
+
+.dk.is-compact .dk__field {
+  overflow-y: auto;
+}
+.dk.is-compact .dk__objects {
+  position: relative;
+  inset: auto;
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem var(--pad) 8rem;
+}
+.dk.is-compact .obj {
+  position: relative;
+  transform: none;
+}
+.dk.is-compact .obj__hit {
+  grid-template-columns: 5rem minmax(0, 1fr);
+  justify-items: start;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--color-rule);
+  text-align: left;
+}
+.dk.is-compact .obj__art {
+  grid-row: span 2;
+  transform: scale(0.7);
+  transform-origin: left center;
+}
+.dk.is-compact .obj__meta {
+  opacity: 1;
+  transform: none;
+  text-align: left;
+}
+.dk.is-compact .dk__mark,
+.dk.is-compact .dk__dock {
+  display: none;
+}
+.dk.is-compact .win {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  width: 100%;
+  height: 84svh;
+  transform: translateY(0);
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.dk.is-compact .win.is-opening,
+.dk.is-compact .win.is-closing {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dk__pulse {
+    animation: none;
+    opacity: 0.8;
+  }
+  .win,
+  .obj,
+  .dk__dock,
+  .dock__item,
+  .dock__tip {
+    transition: none;
+  }
+  .dock__item[data-distance] {
+    transform: none;
+  }
+}
