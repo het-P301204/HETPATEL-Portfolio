@@ -114,17 +114,16 @@ export default function Contact() {
         note="OPEN TO JUNIOR ROLES"
       />
 
-      {/* "LET'S TALK SECURITY" was a pun on the subject rather than an
-          invitation, and it asked for nothing. This asks for the one thing
-          that starts a useful conversation, and it is the same question the
-          About section opens with — what does this system assume. */}
-      <h2
-        className="contact__title t-display"
-        aria-label="Tell me what you're building"
-      >
-        <AnimatedText text="TELL ME WHAT" as="span" className="contact__line" />
+      {/* Two short lines, and the second one shorter than the first so the
+          offset indent has somewhere to go. The size is `clamp(2.9rem, 14vw,
+          12rem)`, which only works because neither line is long: a replacement
+          phrased as "TELL ME WHAT / YOU'RE BUILDING." was tried here and broke
+          to four lines and off the right edge at the same viewport. Anything
+          set here has to be about this short. */}
+      <h2 className="contact__title t-display" aria-label="Let's talk security">
+        <AnimatedText text="LET'S TALK" as="span" className="contact__line" />
         <AnimatedText
-          text="YOU'RE BUILDING."
+          text="SECURITY."
           as="span"
           className="contact__line contact__line--offset"
           delay={0.08}
