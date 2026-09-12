@@ -213,6 +213,12 @@ export default function Projects() {
 
   const record = projects.find((p) => p.id === open) ?? null;
 
+  /* Featured cases drive the pinned reel. The fallback is not defensive
+     decoration: `featured` is an optional field, so a future edit that clears
+     every flag would otherwise pin an empty stage for one screen. */
+  const featured = projects.filter((p) => p.featured);
+  const reelItems = featured.length > 0 ? featured : projects.slice(0, 5);
+
   return (
     <Section id="projects" className="cases">
       <div ref={root as never}>
@@ -222,9 +228,17 @@ export default function Projects() {
           note={`SECURITY CASE ARCHIVE · ${projects.length} CASES · ${projectsByGroup.length} STRATA`}
         />
 
-        {/* The reel is the moment; the strata below are the record. Same data,
-            same open-the-case action — one is scrolled through, one is read. */}
-        <WorkReel items={projects} onOpen={setOpen} />
+        {/* The reel is the moment; the strata below are the record. Same
+            action — one is scrolled through, one is read.
+
+            The reel is pinned and costs one screen of scroll per case, so it
+            carries the featured selection rather than the whole archive: at
+            full length it would be sixteen screens of held scroll before the
+            record even begins. The strata below lose nothing — every case is
+            there, and the archive is the place to read them all. If nothing is
+            marked featured the reel falls back to the first five, so the
+            section can never render empty. */}
+        <WorkReel items={reelItems} onOpen={setOpen} />
 
         {/* Professional engagement work is described once, in WORK. Pointed at
             rather than restated. */}
@@ -282,6 +296,15 @@ export default function Projects() {
                     <span className="dossier__meta t-mono-sm">
                       <span>{p.domain}</span>
                       <span className="dossier__status">{p.status}</span>
+                      {/* Half this archive is now backed by a public
+                          repository and half is not, and that difference is
+                          the strongest thing the list can tell a reader. It
+                          was only visible after opening a case, so it is
+                          stated on the row. The URL itself stays inside the
+                          record — this marks that evidence exists. */}
+                      {p.repoUrl ? (
+                        <span className="dossier__code">SOURCE AVAILABLE</span>
+                      ) : null}
                     </span>
                     <span className="dossier__problem t-body">{p.problem}</span>
                     <span className="dossier__cta t-mono-sm">

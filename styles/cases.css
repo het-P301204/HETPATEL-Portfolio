@@ -643,6 +643,25 @@
 .dossier__status {
   color: var(--color-graphite);
 }
+/* The one row-level mark that says evidence exists for this case. It earns the
+   accent because it is a state a reader can act on, not decoration — the same
+   rule the rest of the site spends the accent by. Set in the label size it
+   sits beside, with a hairline tether rather than a pill, which would import a
+   badge language this archive does not use anywhere else. */
+.dossier__code {
+  color: var(--color-signal);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  white-space: nowrap;
+}
+.dossier__code::before {
+  content: "";
+  width: 10px;
+  height: 1px;
+  background: currentColor;
+  flex: none;
+}
 .dossier__problem {
   max-width: 54ch;
   margin-top: 0.4rem;
