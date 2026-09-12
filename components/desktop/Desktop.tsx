@@ -8,7 +8,6 @@ import SystemWindow, {
   type WindowState,
 } from "@/components/desktop/SystemWindow";
 import WindowContents from "@/components/desktop/WindowContents";
-import CaseFile from "@/components/desktop/CaseFile";
 import { dock, nodes } from "@/data/desktop";
 import { certificationStats } from "@/data/certifications";
 import { projects } from "@/data/projects";
@@ -58,7 +57,6 @@ export default function Desktop() {
   const root = useRef<HTMLDivElement>(null);
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [zTop, setZTop] = useState(1);
-  const [caseOpen, setCaseOpen] = useState(false);
   const [clock, setClock] = useState("");
   const [compact, setCompact] = useState(false);
 
@@ -147,10 +145,6 @@ export default function Desktop() {
 
   const open = useCallback(
     (id: string, origin: DOMRect | null) => {
-      if (id === "case-files") {
-        setCaseOpen(true);
-        return;
-      }
       setZTop((z) => z + 1);
       setWindows((ws) => {
         const existing = ws.find((w) => w.id === id);
@@ -206,10 +200,6 @@ export default function Desktop() {
   /** Launcher click: raise, restore or open — whichever the state calls for. */
   const launch = useCallback(
     (id: string) => {
-      if (id === "case-files") {
-        setCaseOpen(true);
-        return;
-      }
       const existing = windows.find((w) => w.id === id);
       if (!existing) return open(id, null);
       if (existing.minimized) {
@@ -264,10 +254,8 @@ export default function Desktop() {
       .slice()
       .sort((a, b) => b.z - a.z)
       .map((w) => ({ id: w.id, title: w.title, minimized: w.minimized }));
-    return caseOpen
-      ? [{ id: "case-files", title: "CTF — Case 001", minimized: false }, ...list]
-      : list;
-  }, [windows, caseOpen]);
+    return list;
+  }, [windows]);
 
   return (
     <div
@@ -319,8 +307,8 @@ export default function Desktop() {
         <nav className="dk__dock" data-dk="dock" aria-label="Launcher">
           {dock.map((id) => {
             const n = byId.get(id)!;
-            const isOpen = id === "case-files" ? caseOpen : present.has(id);
-            const isLive = id === "case-files" ? caseOpen : running.has(id);
+            const isOpen = present.has(id);
+            const isLive = running.has(id);
             return (
               <button
                 key={id}
@@ -423,7 +411,6 @@ export default function Desktop() {
         </main>
       </div>
 
-      {caseOpen ? <CaseFile onExit={() => setCaseOpen(false)} /> : null}
     </div>
   );
 }

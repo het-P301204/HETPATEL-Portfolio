@@ -61,15 +61,6 @@ export const nodes: DesktopNode[] = [
     meta: "",
   },
   {
-    id: "case-files",
-    tier: "secondary",
-    name: "CTF",
-    kind: "folder-locked",
-    title: "CTF",
-    status: "Case 001 — open",
-    meta: "1 open case",
-  },
-  {
     id: "academic-record",
     tier: "reference",
     name: "Academic",
@@ -151,7 +142,6 @@ export const nodes: DesktopNode[] = [
 export const dock: string[] = [
   "project-files",
   "certification-archive",
-  "case-files",
   "security-lab",
   "github",
   "contact",

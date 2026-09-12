@@ -298,7 +298,17 @@
    same size. Leaving it on the raw width clamp made it the larger of the two —
    the digits overran the loading header and the morph would have jumped. */
 .hero__count {
-  font-size: min(clamp(4rem, 17vw, 18rem), calc((100svh - 28rem) / 1.72));
+  /* The furniture allowance was 28rem, which left 17px between the foot of
+     PATEL and the top of the right-hand column at 1889x810 — clearance that
+     only holds while every other variable cooperates. A display face arriving
+     a frame late, a browser reporting svh with its chrome still counted, or
+     one more line in the discipline copy closes it, and the name sets straight
+     through the paragraph.
+
+     30rem buys roughly 50px of clearance for about 9% of name size, which at
+     this scale is not a visible loss. The width clamp still wins on tall
+     screens, so nothing changes at 1080 and above. */
+  font-size: min(clamp(4rem, 17vw, 18rem), calc((100svh - 30rem) / 1.72));
 }
 /* Proximity, expressed as tracking. Deliberately below the threshold of
    noticing it happen — it should only register as the page being awake. */

@@ -15,7 +15,6 @@
  *
  *   PERSONAL — things built alone, outside any engagement.
  *   LAB — lab environments and closed simulations. Never production.
- *   CTF — authored investigation exercises.
  *
  * COMPETITION AND GUIDED-LAB CREDENTIALS ARE NOT HERE EITHER. Kryptech CTF and
  * TryHackMe's Advent of Cyber were listed as cases *and* as certificates, so
@@ -47,7 +46,7 @@ export type ProjectMotif =
   | "trace"
   | "compete";
 
-export type ProjectGroup = "personal" | "lab" | "ctf";
+export type ProjectGroup = "personal" | "lab";
 
 export type Project = {
   id: string;
@@ -88,11 +87,6 @@ export const projectGroups: {
     id: "lab",
     label: "LAB / RESEARCH",
     note: "LAB ENVIRONMENTS AND CLOSED SIMULATIONS · NEVER PRODUCTION",
-  },
-  {
-    id: "ctf",
-    label: "INVESTIGATION",
-    note: "AUTHORED EXERCISE · SYNTHETIC DATA",
   },
 ];
 
@@ -224,32 +218,6 @@ export const projects: Project[] = [
     repoUrl: "",
   },
 
-  /* ----------------------------------------------------------------
-     CTF / INVESTIGATION
-     ---------------------------------------------------------------- */
-  {
-    id: "case-001",
-    number: "06",
-    group: "ctf",
-    title: "Case 001 — The Anomalous Request",
-    titleLines: ["CASE / 001 —", "THE ANOMALOUS REQUEST"],
-    domain: "INVESTIGATION",
-    status: "FICTIONAL TRAINING SCENARIO",
-    problem:
-      "Most security writing shows you a conclusion. It rarely shows you which three log rows the conclusion actually rests on, or what happens when you pick the right answer for the wrong reasons.",
-    approach: [
-      "Authored a correlation exercise across three synthetic log sources",
-      "Built it so the reader selects supporting evidence before selecting a conclusion",
-      "Made verification check the evidence, so a correct answer chosen without support is reported as unsupported",
-    ],
-    tools: ["LOG CORRELATION", "SYNTHETIC DATA"],
-    outcome:
-      "A playable exercise that lives in the desktop environment of this site. It demonstrates a method of reasoning rather than claiming an incident.",
-    limitations:
-      "Entirely fictional. Synthetic logs, RFC 5737 documentation addresses, no real host, account, organisation or incident. Nothing in it is a résumé fact.",
-    motif: "trace",
-    repoUrl: "",
-  },
 
   /* ----------------------------------------------------------------
      PUBLISHED WORK — 07 onward.

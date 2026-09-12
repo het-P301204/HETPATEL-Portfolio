@@ -11,7 +11,6 @@ import "../styles/practice.css";
 import "../styles/stack.css";
 import "../styles/selector.css";
 import "../styles/desktop.css";
-import "../styles/case.css";
 import "../styles/sections.css";
 
 const archivo = Archivo({

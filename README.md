@@ -59,20 +59,18 @@ flowchart TD
 
     S --> S1["Work · Practice · Experience<br/>Certifications · About"]
     D --> D1["Files · Archive · Toolkit · Terminal"]
-    D --> C["CASE / 001<br/>no wallpaper, no windows<br/>evidence and time"]
 
     S1 -.->|"CHANGE EXPERIENCE"| Q
     D1 -.->|"CHANGE EXPERIENCE"| Q
 
     style Q fill:#3157ff,stroke:#3157ff,color:#fff
-    style C fill:#0b0b0b,stroke:#3157ff,color:#f2f0ec
 ```
 
 | | STANDARD | DESKTOP |
 | --- | --- | --- |
 | **Answers** | Who is Het? | What does his world look like? |
 | **Form** | The editorial document | An environment of objects and windows |
-| **Inside** | Work, practice, experience, certifications, about | Files, archive, toolkit, terminal, and CASE / 001 |
+| **Inside** | Work, practice, experience, certifications, about | Files, archive, toolkit and terminal |
 
 <details>
 <summary><b>How the two worlds coexist without a route change</b></summary>
@@ -88,20 +86,6 @@ No route change, no reload: the editorial world stays mounted and is parked
 (`visibility: hidden`, `inert`) while the environment is on screen, so coming back lands exactly
 where you left. The desktop is a dynamic import, so a visitor who chooses STANDARD never downloads
 it.
-
-</details>
-
-<details>
-<summary><b>CASE / 001 — a correlation exercise, not a quiz</b></summary>
-
-<br>
-
-Inside the desktop, **CASE / 001** is a third environment again: no wallpaper, no windows — evidence
-and time. You select the log rows you think carry the account and then choose the account;
-verification checks the evidence as well as the answer, so **the right conclusion drawn from the
-wrong rows comes back as _unsupported_**.
-
-Every line of it is synthetic and labelled as such, permanently, in the header.
 
 </details>
 
@@ -265,7 +249,7 @@ flowchart LR
 
 | To add | Edit | Notes |
 | --- | --- | --- |
-| **A case** | `data/projects.ts` | `group` files it under `professional`, `personal`, `lab` or `ctf`; counts derive from it. `motif` picks the generated figure (`scan`, `vector`, `identity`, `token`, `timeline`, `control`, `trace`, `compete`). `confidential: true` adds the SEALED mark and withheld-scope banner. |
+| **A case** | `data/projects.ts` | `group` files it under `personal` or `lab`; counts derive from it. `motif` picks the generated figure (`scan`, `vector`, `identity`, `token`, `timeline`, `control`, `trace`, `compete`). `confidential: true` adds the SEALED mark and withheld-scope banner. |
 | **A certification** | `data/certifications.ts` | `status: "IN PROGRESS"` hollows the sheet, tints its note and updates header counts. `credentialUrl` decides the verification line. |
 | **A role** | `data/experience.ts` | A role is a header plus `tracks`; each track is one collapsible area of work. A second role is a second object. |
 | **An academic year** | `data/education.ts` → `journey` | `state: "UNDATED"` renders an open marker saying the source records nothing, rather than inventing a milestone. |
