@@ -114,20 +114,17 @@ export default function Contact() {
         note="OPEN TO JUNIOR ROLES"
       />
 
-      {/* Two short lines, and the second one shorter than the first so the
-          offset indent has somewhere to go. The size is `clamp(2.9rem, 14vw,
-          12rem)`, which only works because neither line is long: a replacement
-          phrased as "TELL ME WHAT / YOU'RE BUILDING." was tried here and broke
-          to four lines and off the right edge at the same viewport. Anything
-          set here has to be about this short. */}
-      <h2 className="contact__title t-display" aria-label="Let's talk security">
-        <AnimatedText text="LET'S TALK" as="span" className="contact__line" />
-        <AnimatedText
-          text="SECURITY."
-          as="span"
-          className="contact__line contact__line--offset"
-          delay={0.08}
-        />
+      {/* One line. The section already sits under a SECURITY marker and every
+          channel below it is a security channel, so the second word was saying
+          what the page had said twice already.
+
+          The size is `clamp(2.9rem, 14vw, 12rem)`, which only holds while the
+          line is short — "TELL ME WHAT / YOU'RE BUILDING." was tried here and
+          broke to four lines and off the right edge. Anything set here has to
+          be about this length. The stepped indent went with the second line;
+          with one line there is nothing to step from. */}
+      <h2 className="contact__title t-display" aria-label="Let's talk">
+        <AnimatedText text="LET'S TALK." as="span" className="contact__line" />
       </h2>
 
       <div className="contact__channels" ref={root} data-signal="off">

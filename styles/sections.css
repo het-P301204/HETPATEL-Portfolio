@@ -1897,9 +1897,10 @@
   font-size: clamp(2.9rem, 14vw, 12rem);
   line-height: 0.86;
 }
-.contact__line--offset {
-  padding-left: clamp(0px, 9vw, 11rem);
-}
+/* `.contact__line--offset` was the stepped indent for the heading's second
+   line. The heading is one line now, so the rule had no element left to match
+   and is removed rather than left behind — an unused selector is how a
+   stylesheet starts describing a page that no longer exists. */
 /* --- channels ------------------------------------------------------------- */
 .contact__channels {
   margin-top: clamp(2.5rem, 7vh, 4.5rem);
