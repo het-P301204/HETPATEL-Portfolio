@@ -22,13 +22,20 @@ import { useReducedMotion } from "@/lib/hooks";
  * Three bounds, because a loading screen that can trap someone is worse than no
  * loading screen:
  *
- *   FLOOR    260ms, so a warm cache does not produce a black flash.
+ *   FLOOR    700ms. With fonts already cached `fonts.ready` settles in under a
+ *            frame, and the first version held for 260ms — long enough to be
+ *            correct and too short to be seen, which is why it read as missing
+ *            entirely. 700ms is the shortest hold that registers as a
+ *            deliberate moment rather than a flicker.
  *   CEILING  2200ms, after which it leaves regardless. A slow font is a reason
  *            to show the page late, never a reason to withhold it.
- *   ONCE     Skipped entirely when the session has already booted, matching
- *            the entrance it hands off to.
+ *
+ * It runs on every load rather than once per session. The entrance behind it
+ * still plays once — that is choreography, and repeating it would be tiring —
+ * but the hold is the first frame of the site and skipping it on a reload
+ * meant the site had no consistent opening.
  */
-const FLOOR_MS = 260;
+const FLOOR_MS = 700;
 const CEILING_MS = 2200;
 
 export default function Boot() {
@@ -44,17 +51,6 @@ export default function Boot() {
   const started = useRef(0);
 
   useEffect(() => {
-    // sessionStorage can throw in a partitioned or locked-down context, and a
-    // storage failure must not be able to hold the panel up.
-    let already = false;
-    try {
-      already = sessionStorage.getItem("hp:booted") === "1";
-    } catch {}
-    if (already) {
-      setGone(true);
-      return;
-    }
-
     started.current = performance.now();
 
     let done = false;

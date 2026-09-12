@@ -114,10 +114,17 @@ export default function Contact() {
         note="OPEN TO JUNIOR ROLES"
       />
 
-      <h2 className="contact__title t-display" aria-label="Let's talk security">
-        <AnimatedText text="LET'S TALK" as="span" className="contact__line" />
+      {/* "LET'S TALK SECURITY" was a pun on the subject rather than an
+          invitation, and it asked for nothing. This asks for the one thing
+          that starts a useful conversation, and it is the same question the
+          About section opens with — what does this system assume. */}
+      <h2
+        className="contact__title t-display"
+        aria-label="Tell me what you're building"
+      >
+        <AnimatedText text="TELL ME WHAT" as="span" className="contact__line" />
         <AnimatedText
-          text="SECURITY."
+          text="YOU'RE BUILDING."
           as="span"
           className="contact__line contact__line--offset"
           delay={0.08}

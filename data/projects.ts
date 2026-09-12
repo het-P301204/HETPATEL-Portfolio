@@ -30,10 +30,17 @@
  * no outcomes. Everything written here describes intent, method and limitation
  * only. No finding, severity, CVE, count or client is claimed anywhere.
  *
- * `repoUrl` is filled for every case from 07 onward and empty for 01–06. That
- * split is the honest state of the archive, not an oversight: the early
- * entries describe work with nothing public to point at, the later ones point
- * at code. An empty value renders no link for that entry alone.
+ * `repoUrl` is filled wherever a public repository exists and empty where none
+ * does. That split is the honest state of the archive, not an oversight: some
+ * entries describe work with nothing to point at, the rest point at code. An
+ * empty value renders no link for that entry alone.
+ *
+ * ORDER IS DISPLAY ORDER, and `number` follows it. The array is grouped —
+ * every `personal` case, then every `lab` case — because the archive renders
+ * by stratum, so a number that ran in array order but not in group order came
+ * out as "02" followed by "07" on screen with nothing missing between them.
+ * Adding a case means inserting it into its own group and renumbering from
+ * there, not appending to the end.
  */
 
 export type ProjectMotif =
@@ -91,7 +98,6 @@ export const projectGroups: {
 ];
 
 export const projects: Project[] = [
-
   /* ----------------------------------------------------------------
      PERSONAL
      ---------------------------------------------------------------- */
@@ -141,13 +147,200 @@ export const projects: Project[] = [
     motif: "identity",
     repoUrl: "",
   },
+  /* ----------------------------------------------------------------
+     PUBLISHED WORK — 07 onward.
 
+     Everything below has a public repository, which changes what this
+     archive is allowed to say. The entries above describe intent and method
+     because there was nothing to point at; these point at the code, and a
+     reader can disagree with any sentence here by opening it.
+
+     Every `problem`, `approach` and `limitations` line is taken from the
+     repository's own README and description rather than characterised from
+     the outside. Where a project states a limitation about itself, that
+     wording is preserved — several of them are sharper about their own
+     boundaries than a summary would be.
+
+     `outcome` is the one field that is not lifted: it is written in first
+     person about what the work changed for Het, and these are drafted from
+     each README's stated reasoning. Read them as drafts and correct the
+     voice where it is not yours.
+     ---------------------------------------------------------------- */
+
+  {
+    id: "sunset",
+    number: "03",
+    group: "personal",
+    title: "Sunset",
+    titleLines: ["SUNSET"],
+    domain: "POST-QUANTUM MIGRATION",
+    status: "PUBLISHED TOOL",
+    featured: true,
+    problem:
+      "Discovery is solved. Scanners hand over every key in an estate; none of them answer what to migrate first. The model everyone agrees on needs two inputs, and neither can be found by scanning.",
+    approach: [
+      "Reads a CycloneDX CBOM and anchors each asset to a deadline rather than a severity label",
+      "Ranks by Mosca's inequality, so the ranking argues from migration time and secrecy lifetime instead of key size alone",
+      "Draws the unassessable remainder to scale and splits it into NOT SCORED and NO DEADLINE, which are not the same failure",
+      "Runs offline and deterministically, so the same input produces the same plan",
+    ],
+    tools: ["TYPESCRIPT", "REACT", "CYCLONEDX CBOM", "PQC"],
+    outcome:
+      "The honest answer to 'what do we migrate first' is mostly a question about data, not about cryptography. Building the ranking taught me to treat a missing input as a finding in its own right rather than a blank cell — which is why the tool names the field that is holding up each answer.",
+    limitations:
+      "It implements no cryptography. It does not scan, discover, connect to anything or block anything, and every enforcement view is labelled SIMULATION and stays that way.",
+    motif: "timeline",
+    repoUrl: "https://github.com/het-P301204/sunset",
+  },
+  {
+    id: "nullfire",
+    number: "04",
+    group: "personal",
+    title: "NullFire",
+    titleLines: ["NULLFIRE"],
+    domain: "DETECTION ENGINEERING",
+    status: "PUBLISHED TOOL",
+    featured: true,
+    problem:
+      "Zero alerts means one of two things, and a dashboard cannot tell them apart. Rules rot quietly: one renamed field, and the rule keeps its tags, keeps counting as coverage, and never fires again.",
+    approach: [
+      "Compares Sigma rules against a sample of the logs that actually arrive, after normalisation",
+      "Grades each rule by whether a viable matching path still exists against the observed schema",
+      "Generates the minimal event that would prove a given rule can fire",
+      "Separates UNASSESSED from NULLFIRE, because having nothing to judge a rule against is not a finding",
+    ],
+    tools: ["PYTHON", "PYSIGMA", "SIEM", "MITRE ATT&CK"],
+    outcome:
+      "Coverage dashboards measure the existence of rules, not their reachability, and the difference is invisible until someone asks for the event that would have fired. Writing the grader made me stop treating a rule count as a coverage number.",
+    limitations:
+      "It judges matchability against the sample it is given, not against every event a pipeline can emit. A rule whose log source is absent from that sample is reported as unassessed rather than graded.",
+    motif: "trace",
+    repoUrl: "https://github.com/het-P301204/NullFire",
+  },
+  {
+    id: "trustedge",
+    number: "05",
+    group: "personal",
+    title: "TrustEdge",
+    titleLines: ["TRUSTEDGE"],
+    domain: "CLOUD IDENTITY",
+    status: "PUBLISHED TOOL",
+    featured: true,
+    problem:
+      "A trust policy decides who may become a role. It is a door, and anyone through it holds real credentials. Two things decide whether it matters: how well it is locked, and what is behind it.",
+    approach: [
+      "Grades who outside an account can become an identity inside it, ranked by exposure against blast radius",
+      "Flags conditions that read like locks and are not: ...IfExists evaluates true when the key is absent, so a workflow that never mentions an environment sails through",
+      "Distinguishes the same missing condition meaning different things in different issuers",
+      "Runs entirely offline — no credentials, no API calls, no dependencies — and reports input problems rather than dropping them silently",
+    ],
+    tools: ["PYTHON", "AWS IAM", "STS", "GITHUB OIDC"],
+    outcome:
+      "The dangerous IAM finding is rarely a missing condition; it is a condition that reads as a constraint and evaluates as a formality. I now read trust policies for what they evaluate to when a claim is absent, which is not how they read on the page.",
+    limitations:
+      "It analyses trust policies and never executes anything, never claims a path is proven, and is not a replacement for IAM Access Analyzer — a different tool answering a different question.",
+    motif: "identity",
+    repoUrl: "https://github.com/het-P301204/TrustEdge-AWS-IAM-analyzer",
+  },
+  {
+    id: "pedigree",
+    number: "06",
+    group: "personal",
+    title: "Pedigree",
+    titleLines: ["PEDIGREE"],
+    domain: "SUPPLY CHAIN",
+    status: "PUBLISHED TOOL",
+    problem:
+      "npm provenance is solved on the publishing side. Publishing from CI produces a signed attestation naming the repository and workflow that built the tarball. Consuming it is where the gap is.",
+    approach: [
+      "Verifies each shipped dependency's origin cryptographically against the source policy expects",
+      "Reports what would break if that policy were enforced today, before it is enforced",
+      "Keeps observation and policy separate, so a mode cannot change an observation and an observation cannot change a mode",
+      "Distinguishes UNVERIFIABLE from MISMATCHED, and states that the first is not an accusation",
+    ],
+    tools: ["TYPESCRIPT", "SIGSTORE", "SLSA", "NPM"],
+    outcome:
+      "Most packages without provenance are not suspicious, they are just older than the feature — so a supply-chain gate that cannot say that clearly will be switched off in a week. Designing the report taught me that the absence of evidence has to be its own category, not a failure.",
+    limitations:
+      "It verifies origin, not the absence of malicious code. Not a vulnerability scanner, not a malware detector and not a replacement for npm audit, and it says so inside its own JSON output. Working and tested against real provenance, not yet published to the registry.",
+    motif: "token",
+    repoUrl: "https://github.com/het-P301204/Pedigree-npm-provenance-gate",
+  },
+  {
+    id: "securebridge-isms",
+    number: "07",
+    group: "personal",
+    title: "SecureBridge ISMS",
+    titleLines: ["SECUREBRIDGE", "ISMS 360"],
+    domain: "GOVERNANCE, RISK AND COMPLIANCE",
+    status: "PUBLISHED PORTFOLIO",
+    problem:
+      "Most ISO 27001 material is either theory notes or a template pack. Neither shows an ISMS being built, operated, audited and improved in a company that has to live with it.",
+    approach: [
+      "Ten connected projects covering context, risk, controls, policies, audit, evidence and management review",
+      "An eleventh consolidates the other ten into one integrated view rather than restating them",
+      "The consolidation imports each project's dataset, so no integrated figure can drift from its source register",
+      "Three required views have no source project and are labelled Demonstration throughout rather than invented",
+    ],
+    tools: ["ISO 27001:2022", "RISK REGISTER", "INTERNAL AUDIT", "GRC"],
+    outcome:
+      "The closing position I ended up defending is not that the ISMS works — it is that the organisation can now show whether it does. That distinction is the whole difference between compliance theatre and an evidence trail.",
+    limitations:
+      "SecureBridge Technologies is a fictional company. No real organisation, client, supplier or auditor appears anywhere in it, and the data is illustrative throughout.",
+    motif: "control",
+    repoUrl: "https://github.com/het-P301204/SecureBridge-ISMS-360",
+  },
+  {
+    id: "aegislens",
+    number: "08",
+    group: "personal",
+    title: "AegisLens",
+    titleLines: ["AEGISLENS"],
+    domain: "SECURITY OPERATIONS",
+    status: "PUBLISHED TOOL",
+    problem:
+      "Security evidence arrives as a pile of exports. Organising it, scoring risk consistently, and producing a report a reader can argue with are three problems usually solved by three tools.",
+    approach: [
+      "Organises uploaded sample evidence, tracks findings and generates a report from it",
+      "Recalculates the risk score server-side on every write, so a displayed score cannot drift from its inputs",
+      "Reports assessment, recommendation and missing information separately, and never claims a weakness it did not observe",
+    ],
+    tools: ["TYPESCRIPT", "REACT", "PYTHON", "RISK SCORING"],
+    outcome:
+      "Scoring is the easy half. The half that decides whether anyone trusts the output is being explicit about what was not assessed, which is why missing information is a first-class field rather than a footnote.",
+    limitations:
+      "Educational and defensive, on synthetic data. Not a replacement for a SIEM, a GRC platform, a vulnerability scanner or a professional audit, and there are no real organisations, credentials, keys or personal data in it.",
+    motif: "scan",
+    repoUrl: "https://github.com/het-P301204/AegisLens-security-workbench",
+  },
+  {
+    id: "pingmaster",
+    number: "09",
+    group: "personal",
+    title: "PingMaster",
+    titleLines: ["PINGMASTER"],
+    domain: "NETWORK TOOLING",
+    status: "PUBLISHED TOOL",
+    problem:
+      "Ping answers whether a host replies. It does not show how the latency behaves over time, which is usually the question actually being asked.",
+    approach: [
+      "Plots latency continuously rather than printing it line by line",
+      "Cross-platform, with no runtime to install alongside it",
+    ],
+    tools: ["RUST", "NETWORKING"],
+    outcome:
+      "The smallest project here and the only one that is not security work. It is on the list because a graph made a pattern obvious that a scrolling column of numbers had been hiding from me for an hour.",
+    limitations:
+      "A utility, not a monitoring system. It measures reachability and round-trip time and makes no claim beyond that.",
+    motif: "timeline",
+    repoUrl: "https://github.com/het-P301204/PingMaster",
+  },
   /* ----------------------------------------------------------------
      LAB / RESEARCH
      ---------------------------------------------------------------- */
   {
     id: "scanning-lab",
-    number: "03",
+    number: "10",
     group: "lab",
     title: "Network Vulnerability Scanning Lab",
     titleLines: ["NETWORK VULNERABILITY", "SCANNING LAB"],
@@ -173,7 +366,7 @@ export const projects: Project[] = [
   },
   {
     id: "phishing-sim",
-    number: "04",
+    number: "11",
     group: "lab",
     title: "Phishing Web — Social Engineering Simulation",
     titleLines: ["PHISHING WEB", "SOCIAL ENGINEERING"],
@@ -196,7 +389,7 @@ export const projects: Project[] = [
   },
   {
     id: "ir-sim",
-    number: "05",
+    number: "12",
     group: "lab",
     title: "Incident Response Simulation",
     titleLines: ["INCIDENT RESPONSE", "SIMULATION"],
@@ -217,56 +410,9 @@ export const projects: Project[] = [
     motif: "timeline",
     repoUrl: "",
   },
-
-
-  /* ----------------------------------------------------------------
-     PUBLISHED WORK — 07 onward.
-
-     Everything below has a public repository, which changes what this
-     archive is allowed to say. The entries above describe intent and method
-     because there was nothing to point at; these point at the code, and a
-     reader can disagree with any sentence here by opening it.
-
-     Every `problem`, `approach` and `limitations` line is taken from the
-     repository's own README and description rather than characterised from
-     the outside. Where a project states a limitation about itself, that
-     wording is preserved — several of them are sharper about their own
-     boundaries than a summary would be.
-
-     `outcome` is the one field that is not lifted: it is written in first
-     person about what the work changed for Het, and these are drafted from
-     each README's stated reasoning. Read them as drafts and correct the
-     voice where it is not yours.
-     ---------------------------------------------------------------- */
-
-  {
-    id: "sunset",
-    number: "07",
-    group: "personal",
-    title: "Sunset",
-    titleLines: ["SUNSET"],
-    domain: "POST-QUANTUM MIGRATION",
-    status: "PUBLISHED TOOL",
-    featured: true,
-    problem:
-      "Discovery is solved. Scanners hand over every key in an estate; none of them answer what to migrate first. The model everyone agrees on needs two inputs, and neither can be found by scanning.",
-    approach: [
-      "Reads a CycloneDX CBOM and anchors each asset to a deadline rather than a severity label",
-      "Ranks by Mosca's inequality, so the ranking argues from migration time and secrecy lifetime instead of key size alone",
-      "Draws the unassessable remainder to scale and splits it into NOT SCORED and NO DEADLINE, which are not the same failure",
-      "Runs offline and deterministically, so the same input produces the same plan",
-    ],
-    tools: ["TYPESCRIPT", "REACT", "CYCLONEDX CBOM", "PQC"],
-    outcome:
-      "The honest answer to 'what do we migrate first' is mostly a question about data, not about cryptography. Building the ranking taught me to treat a missing input as a finding in its own right rather than a blank cell — which is why the tool names the field that is holding up each answer.",
-    limitations:
-      "It implements no cryptography. It does not scan, discover, connect to anything or block anything, and every enforcement view is labelled SIMULATION and stays that way.",
-    motif: "timeline",
-    repoUrl: "https://github.com/het-P301204/sunset",
-  },
   {
     id: "blackout",
-    number: "08",
+    number: "13",
     group: "lab",
     title: "BlackOut",
     titleLines: ["BLACKOUT"],
@@ -290,7 +436,7 @@ export const projects: Project[] = [
   },
   {
     id: "afterlife",
-    number: "09",
+    number: "14",
     group: "lab",
     title: "AfterLife",
     titleLines: ["AFTERLIFE"],
@@ -314,82 +460,8 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/het-P301204/AfterLife",
   },
   {
-    id: "nullfire",
-    number: "10",
-    group: "personal",
-    title: "NullFire",
-    titleLines: ["NULLFIRE"],
-    domain: "DETECTION ENGINEERING",
-    status: "PUBLISHED TOOL",
-    featured: true,
-    problem:
-      "Zero alerts means one of two things, and a dashboard cannot tell them apart. Rules rot quietly: one renamed field, and the rule keeps its tags, keeps counting as coverage, and never fires again.",
-    approach: [
-      "Compares Sigma rules against a sample of the logs that actually arrive, after normalisation",
-      "Grades each rule by whether a viable matching path still exists against the observed schema",
-      "Generates the minimal event that would prove a given rule can fire",
-      "Separates UNASSESSED from NULLFIRE, because having nothing to judge a rule against is not a finding",
-    ],
-    tools: ["PYTHON", "PYSIGMA", "SIEM", "MITRE ATT&CK"],
-    outcome:
-      "Coverage dashboards measure the existence of rules, not their reachability, and the difference is invisible until someone asks for the event that would have fired. Writing the grader made me stop treating a rule count as a coverage number.",
-    limitations:
-      "It judges matchability against the sample it is given, not against every event a pipeline can emit. A rule whose log source is absent from that sample is reported as unassessed rather than graded.",
-    motif: "trace",
-    repoUrl: "https://github.com/het-P301204/NullFire",
-  },
-  {
-    id: "trustedge",
-    number: "11",
-    group: "personal",
-    title: "TrustEdge",
-    titleLines: ["TRUSTEDGE"],
-    domain: "CLOUD IDENTITY",
-    status: "PUBLISHED TOOL",
-    featured: true,
-    problem:
-      "A trust policy decides who may become a role. It is a door, and anyone through it holds real credentials. Two things decide whether it matters: how well it is locked, and what is behind it.",
-    approach: [
-      "Grades who outside an account can become an identity inside it, ranked by exposure against blast radius",
-      "Flags conditions that read like locks and are not: ...IfExists evaluates true when the key is absent, so a workflow that never mentions an environment sails through",
-      "Distinguishes the same missing condition meaning different things in different issuers",
-      "Runs entirely offline — no credentials, no API calls, no dependencies — and reports input problems rather than dropping them silently",
-    ],
-    tools: ["PYTHON", "AWS IAM", "STS", "GITHUB OIDC"],
-    outcome:
-      "The dangerous IAM finding is rarely a missing condition; it is a condition that reads as a constraint and evaluates as a formality. I now read trust policies for what they evaluate to when a claim is absent, which is not how they read on the page.",
-    limitations:
-      "It analyses trust policies and never executes anything, never claims a path is proven, and is not a replacement for IAM Access Analyzer — a different tool answering a different question.",
-    motif: "identity",
-    repoUrl: "https://github.com/het-P301204/TrustEdge-AWS-IAM-analyzer",
-  },
-  {
-    id: "pedigree",
-    number: "12",
-    group: "personal",
-    title: "Pedigree",
-    titleLines: ["PEDIGREE"],
-    domain: "SUPPLY CHAIN",
-    status: "PUBLISHED TOOL",
-    problem:
-      "npm provenance is solved on the publishing side. Publishing from CI produces a signed attestation naming the repository and workflow that built the tarball. Consuming it is where the gap is.",
-    approach: [
-      "Verifies each shipped dependency's origin cryptographically against the source policy expects",
-      "Reports what would break if that policy were enforced today, before it is enforced",
-      "Keeps observation and policy separate, so a mode cannot change an observation and an observation cannot change a mode",
-      "Distinguishes UNVERIFIABLE from MISMATCHED, and states that the first is not an accusation",
-    ],
-    tools: ["TYPESCRIPT", "SIGSTORE", "SLSA", "NPM"],
-    outcome:
-      "Most packages without provenance are not suspicious, they are just older than the feature — so a supply-chain gate that cannot say that clearly will be switched off in a week. Designing the report taught me that the absence of evidence has to be its own category, not a failure.",
-    limitations:
-      "It verifies origin, not the absence of malicious code. Not a vulnerability scanner, not a malware detector and not a replacement for npm audit, and it says so inside its own JSON output. Working and tested against real provenance, not yet published to the registry.",
-    motif: "token",
-    repoUrl: "https://github.com/het-P301204/Pedigree-npm-provenance-gate",
-  },
-  {
     id: "spectre-ssrf",
-    number: "13",
+    number: "15",
     group: "lab",
     title: "Spectre SSRF Lab",
     titleLines: ["SPECTRE", "SSRF LAB"],
@@ -410,75 +482,6 @@ export const projects: Project[] = [
       "Every service binds to localhost only. No real infrastructure is targeted, the instance-metadata endpoint is simulated locally and never contacted on a real network, and all credentials in it are clearly marked synthetic.",
     motif: "vector",
     repoUrl: "https://github.com/het-P301204/spectre-ssrf-lab",
-  },
-  {
-    id: "securebridge-isms",
-    number: "14",
-    group: "personal",
-    title: "SecureBridge ISMS",
-    titleLines: ["SECUREBRIDGE", "ISMS 360"],
-    domain: "GOVERNANCE, RISK AND COMPLIANCE",
-    status: "PUBLISHED PORTFOLIO",
-    problem:
-      "Most ISO 27001 material is either theory notes or a template pack. Neither shows an ISMS being built, operated, audited and improved in a company that has to live with it.",
-    approach: [
-      "Ten connected projects covering context, risk, controls, policies, audit, evidence and management review",
-      "An eleventh consolidates the other ten into one integrated view rather than restating them",
-      "The consolidation imports each project's dataset, so no integrated figure can drift from its source register",
-      "Three required views have no source project and are labelled Demonstration throughout rather than invented",
-    ],
-    tools: ["ISO 27001:2022", "RISK REGISTER", "INTERNAL AUDIT", "GRC"],
-    outcome:
-      "The closing position I ended up defending is not that the ISMS works — it is that the organisation can now show whether it does. That distinction is the whole difference between compliance theatre and an evidence trail.",
-    limitations:
-      "SecureBridge Technologies is a fictional company. No real organisation, client, supplier or auditor appears anywhere in it, and the data is illustrative throughout.",
-    motif: "control",
-    repoUrl: "https://github.com/het-P301204/SecureBridge-ISMS-360",
-  },
-  {
-    id: "aegislens",
-    number: "15",
-    group: "personal",
-    title: "AegisLens",
-    titleLines: ["AEGISLENS"],
-    domain: "SECURITY OPERATIONS",
-    status: "PUBLISHED TOOL",
-    problem:
-      "Security evidence arrives as a pile of exports. Organising it, scoring risk consistently, and producing a report a reader can argue with are three problems usually solved by three tools.",
-    approach: [
-      "Organises uploaded sample evidence, tracks findings and generates a report from it",
-      "Recalculates the risk score server-side on every write, so a displayed score cannot drift from its inputs",
-      "Reports assessment, recommendation and missing information separately, and never claims a weakness it did not observe",
-    ],
-    tools: ["TYPESCRIPT", "REACT", "PYTHON", "RISK SCORING"],
-    outcome:
-      "Scoring is the easy half. The half that decides whether anyone trusts the output is being explicit about what was not assessed, which is why missing information is a first-class field rather than a footnote.",
-    limitations:
-      "Educational and defensive, on synthetic data. Not a replacement for a SIEM, a GRC platform, a vulnerability scanner or a professional audit, and there are no real organisations, credentials, keys or personal data in it.",
-    motif: "scan",
-    repoUrl: "https://github.com/het-P301204/AegisLens-security-workbench",
-  },
-  {
-    id: "pingmaster",
-    number: "16",
-    group: "personal",
-    title: "PingMaster",
-    titleLines: ["PINGMASTER"],
-    domain: "NETWORK TOOLING",
-    status: "PUBLISHED TOOL",
-    problem:
-      "Ping answers whether a host replies. It does not show how the latency behaves over time, which is usually the question actually being asked.",
-    approach: [
-      "Plots latency continuously rather than printing it line by line",
-      "Cross-platform, with no runtime to install alongside it",
-    ],
-    tools: ["RUST", "NETWORKING"],
-    outcome:
-      "The smallest project here and the only one that is not security work. It is on the list because a graph made a pattern obvious that a scrolling column of numbers had been hiding from me for an hour.",
-    limitations:
-      "A utility, not a monitoring system. It measures reachability and round-trip time and makes no claim beyond that.",
-    motif: "timeline",
-    repoUrl: "https://github.com/het-P301204/PingMaster",
   },
 ];
 

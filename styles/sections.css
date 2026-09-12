@@ -1852,6 +1852,15 @@
   font-size: clamp(1.2rem, 2.3vw, 2rem);
   line-height: 1.18;
   letter-spacing: -0.03em;
+  /* Set in caps. Uppercase removes the ascender and descender variation the
+     eye uses to tell words apart at a glance, so it needs both tracking opened
+     back up from the -0.03em this line was drawn with and a word gap that the
+     negative value would otherwise eat — the same pairing the display face
+     needed. Sentence case remains in `data/profile.ts`, because that is the
+     source of truth and the transform is presentation. */
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  word-spacing: 0.08em;
 }
 .about__prose {
   display: grid;
