@@ -189,6 +189,17 @@ html.lenis body {
   font-weight: 800;
   line-height: 0.82;
   letter-spacing: -0.045em;
+  /* Tracking is applied to every glyph pair including the word space, so
+     -0.045em closes the gap between words by as much as it closes the gap
+     between letters. At 800 weight and uppercase that is enough to fuse them:
+     HOW DO YOU WANT TO ENTER reads as HOWDOYOUWANT, and SECURITY ENGINEERING
+     as one word. Both were shipping.
+
+     This returns the space at the word boundary only, so every display line
+     keeps the tracking it was drawn with and still parses as words. It is a
+     fraction of an em, and it scales with the type, so one declaration is
+     correct from the 1rem labels to the 12rem headings. */
+  word-spacing: 0.05em;
   font-variation-settings: "wdth" 100;
   text-transform: uppercase;
 }
@@ -285,6 +296,73 @@ html.lenis body {
 /* The editorial world, parked while the environment is on screen. It stays
    mounted so the visitor comes back to exactly where they left, but it stops
    painting entirely. */
+/* ============================================================================
+   BOOT — the hold before the hero
+   ========================================================================== */
+
+/* Sits on the site's own surface rather than on black, so the hand-off is a
+   panel leaving rather than a light coming on. */
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--color-paper);
+  /* Clipped from the bottom edge upward on exit. `clip-path` composites on the
+     GPU and leaves no stacking-context residue behind it, which `height` and
+     `transform: scaleY` both would against a fixed element this size. */
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.7s var(--ease-in-out-quart);
+}
+.boot[data-leaving="true"] {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* One hairline, breathing. It is deliberately not a bar that fills: there is
+   nothing to measure, so a measurement would be a lie. It reads as the page
+   being awake and nothing more, which is the only claim it can support. */
+.boot__rule {
+  width: clamp(3rem, 12vw, 9rem);
+  height: 1px;
+  background: var(--color-signal);
+  transform-origin: 50% 50%;
+  animation: boot-breathe 1.35s var(--ease-in-out-quart) infinite;
+}
+.boot[data-leaving="true"] .boot__rule {
+  opacity: 0;
+  transition: opacity 0.22s linear;
+}
+
+@keyframes boot-breathe {
+  0%,
+  100% {
+    transform: scaleX(0.25);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Reduced motion keeps the hold — it is doing real work — and drops every part
+   of it that moves. The panel cuts rather than wipes. */
+@media (prefers-reduced-motion: reduce) {
+  .boot {
+    transition: opacity 0.01s linear;
+  }
+  .boot[data-leaving="true"] {
+    clip-path: inset(0 0 0 0);
+    opacity: 0;
+  }
+  .boot__rule {
+    animation: none;
+    transform: scaleX(1);
+    opacity: 0.6;
+  }
+}
+
 .world.is-parked {
   visibility: hidden;
   pointer-events: none;

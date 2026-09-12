@@ -439,7 +439,19 @@
 .hero__roles li {
   font-size: clamp(1.05rem, 2.35vw, 2.05rem);
   line-height: 1.04;
+  /* Negative tracking is applied between every pair of glyphs, and a word
+     space is one of those pairs — so it tightens the gap between words by the
+     same amount it tightens the gap between letters. At 800 weight that reads
+     as SECURITYENGINEERING and RISK&COMPLIANCE: the letterforms are correct
+     and the words have fused.
+
+     `word-spacing` gives the difference back at the word boundary only, so the
+     line keeps the tracking it was designed with and still parses as three
+     words. It is set slightly above the -0.035em it compensates, because a
+     heavy uppercase face needs a fraction more separation than the arithmetic
+     suggests to read cleanly. */
   letter-spacing: -0.035em;
+  word-spacing: 0.06em;
 }
 
 .hero__right {

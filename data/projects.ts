@@ -249,7 +249,7 @@ export const projects: Project[] = [
     status: "PUBLISHED TOOL",
     featured: true,
     problem:
-      "Cryptographic discovery is already solved. A scanner will hand over every RSA key in an estate and CycloneDX gives the output a schema. What none of them answer is what to migrate first, and that gap is structural: the prioritisation model everyone agrees on is Mosca's inequality, and neither input on its left-hand side can be discovered by scanning.",
+      "Discovery is solved. Scanners hand over every key in an estate; none of them answer what to migrate first. The model everyone agrees on needs two inputs, and neither can be found by scanning.",
     approach: [
       "Reads a CycloneDX CBOM and anchors each asset to a deadline rather than a severity label",
       "Ranks by Mosca's inequality, so the ranking argues from migration time and secrecy lifetime instead of key size alone",
@@ -274,7 +274,7 @@ export const projects: Project[] = [
     status: "LAB ENVIRONMENT",
     featured: true,
     problem:
-      "When the service holding an authorization decision stops answering, does the application deny the request or quietly grant it? The whole vulnerability is one except block long, and the code containing it has no backdoor, no missing check and no inverted comparison.",
+      "When the service holding an authorization decision stops answering, does the application deny the request or quietly grant it? The whole vulnerability is one except block long.",
     approach: [
       "Reproduces the fail-open as a working exploit, then the root cause, then the fix",
       "Ships a detection rule for it and a regression test that keeps the fix honest",
@@ -323,7 +323,7 @@ export const projects: Project[] = [
     status: "PUBLISHED TOOL",
     featured: true,
     problem:
-      "Zero alerts means one of two things, and a dashboard cannot tell them apart. Detection rules rot quietly: a rule can reference a field the pipeline renamed or a schema that changed two vendor versions ago, keep its ATT&CK tags, keep counting as audit evidence, and never fire again.",
+      "Zero alerts means one of two things, and a dashboard cannot tell them apart. Rules rot quietly: one renamed field, and the rule keeps its tags, keeps counting as coverage, and never fires again.",
     approach: [
       "Compares Sigma rules against a sample of the logs that actually arrive, after normalisation",
       "Grades each rule by whether a viable matching path still exists against the observed schema",
@@ -348,7 +348,7 @@ export const projects: Project[] = [
     status: "PUBLISHED TOOL",
     featured: true,
     problem:
-      "An IAM role's trust policy decides who is allowed to become that role. It is a door, and anyone through it holds real credentials. Two questions decide whether a door matters — how well it is locked, and what is behind it — and you need both answers, because a screen door on a vault is the one that should wake you up.",
+      "A trust policy decides who may become a role. It is a door, and anyone through it holds real credentials. Two things decide whether it matters: how well it is locked, and what is behind it.",
     approach: [
       "Grades who outside an account can become an identity inside it, ranked by exposure against blast radius",
       "Flags conditions that read like locks and are not: ...IfExists evaluates true when the key is absent, so a workflow that never mentions an environment sails through",
@@ -372,7 +372,7 @@ export const projects: Project[] = [
     domain: "SUPPLY CHAIN",
     status: "PUBLISHED TOOL",
     problem:
-      "npm provenance is solved on the publishing side: publishing with provenance from a CI workflow produces a signed attestation recording which repository and which workflow built the tarball. Consuming it is where the gap is.",
+      "npm provenance is solved on the publishing side. Publishing from CI produces a signed attestation naming the repository and workflow that built the tarball. Consuming it is where the gap is.",
     approach: [
       "Verifies each shipped dependency's origin cryptographically against the source policy expects",
       "Reports what would break if that policy were enforced today, before it is enforced",
@@ -444,7 +444,7 @@ export const projects: Project[] = [
     domain: "SECURITY OPERATIONS",
     status: "PUBLISHED TOOL",
     problem:
-      "Security evidence arrives as a pile of exports. Organising it, scoring the risk consistently and producing a report a reader can argue with are three different problems usually solved by three different tools.",
+      "Security evidence arrives as a pile of exports. Organising it, scoring risk consistently, and producing a report a reader can argue with are three problems usually solved by three tools.",
     approach: [
       "Organises uploaded sample evidence, tracks findings and generates a report from it",
       "Recalculates the risk score server-side on every write, so a displayed score cannot drift from its inputs",

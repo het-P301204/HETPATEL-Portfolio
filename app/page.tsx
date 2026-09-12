@@ -3,6 +3,7 @@ import { ModeProvider } from "@/lib/mode";
 import ExperienceShell from "@/components/experience/ExperienceShell";
 import SmoothScroll from "@/components/system/SmoothScroll";
 import Cursor from "@/components/system/Cursor";
+import Boot from "@/components/system/Boot";
 import Nav from "@/components/system/Nav";
 import ProgressIndex from "@/components/system/ProgressIndex";
 import Hero from "@/components/sections/Hero";
@@ -22,6 +23,10 @@ export default function Page() {
   return (
     <StageProvider>
       <ModeProvider>
+        {/* Outside ExperienceShell on purpose: the hold covers the mode
+            selector as well as the hero, so the first thing a visitor sees is
+            never a half-set question. */}
+        <Boot />
         <SmoothScroll />
         <Cursor />
 

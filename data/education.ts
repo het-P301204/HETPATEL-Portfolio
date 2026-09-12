@@ -53,7 +53,7 @@ export const journey: JourneyMark[] = [
     state: "UNDATED",
     label: "IN PROGRAMME",
     detail:
-      "Degree in progress. The coursework on the résumé is not dated to a year, so nothing is assigned to this one.",
+      "Mid-degree. The coursework on the résumé is not dated to a year, so nothing is assigned to this one.",
     events: [],
   },
   {
@@ -61,7 +61,7 @@ export const journey: JourneyMark[] = [
     state: "UNDATED",
     label: "IN PROGRAMME",
     detail:
-      "Degree in progress. Same position: the record supports the span, not a milestone inside it.",
+      "Mid-degree. Same position: the record supports the span, not a milestone inside it.",
     events: [],
   },
   {

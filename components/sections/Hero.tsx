@@ -70,10 +70,38 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    setBooted(
-      typeof sessionStorage !== "undefined" &&
-        sessionStorage.getItem("hp:booted") === "1",
-    );
+    let already = false;
+    try {
+      already = sessionStorage.getItem("hp:booted") === "1";
+    } catch {}
+
+    /* The entrance animates two words in a variable display face. Starting it
+       before that face resolves means the glyphs reflow mid-movement and the
+       sequence reads as a stutter, so it waits on the same
+       `document.fonts.ready` the boot panel waits on — one signal, so the
+       panel leaving and the name rising cannot drift apart.
+
+       The timeout is the same ceiling the panel uses. A font that never
+       resolves must not be able to leave the hero sitting in its loading
+       state, which hides every element it is about to animate. */
+    if (already) {
+      setBooted(true);
+      return;
+    }
+
+    let settled = false;
+    const go = () => {
+      if (settled) return;
+      settled = true;
+      setBooted(false);
+    };
+
+    const ceiling = window.setTimeout(go, 2200);
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    if (fonts?.ready) fonts.ready.then(go).catch(go);
+    else go();
+
+    return () => window.clearTimeout(ceiling);
   }, []);
 
   /* ---- initialisation, then entrance ------------------------------------- */

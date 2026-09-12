@@ -108,10 +108,17 @@ export const profile = {
     "and how they can be reduced.",
   ],
 
+  /**
+   * Three paragraphs, tightened. The middle one carried its definition inside
+   * a pair of em dashes, which is the construction that makes a line hard to
+   * scan: the reader holds the sentence open across an aside and picks the
+   * thread back up afterwards. The definition is now its own sentence, which
+   * is shorter and says the same thing.
+   */
   about: [
-    "Most of what I do begins with the same question: what does this system assume, and what happens when the assumption is false. Testing a web application answers it directly. Mapping a control to a policy answers it slowly, on paper, and usually with less certainty.",
-    "A finding and a control are not the same object. Translating one into the other — a request that returns something it should not, into a statement an auditor will accept — is the part of the work I have learned the most from.",
-    "I am early. The record below is an internship, a degree in progress, structured coursework and lab work. It is written to be checked, not to impress.",
+    "Most of what I do begins with one question: what does this system assume, and what happens when the assumption is false. Testing a web application answers it directly. Mapping a control to a policy answers it slowly, on paper, with less certainty.",
+    "A finding and a control are not the same object. One is a request that returns something it should not. The other is a statement an auditor will accept. Translating between them is the part of the work I have learned the most from.",
+    "I am early. The record below is an internship, a completed degree, structured coursework and lab work. It is written to be checked, not to impress.",
   ],
 } as const;
 
