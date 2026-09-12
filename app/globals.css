@@ -288,6 +288,17 @@ html.lenis body {
 .world.is-parked {
   visibility: hidden;
   pointer-events: none;
+  /* The parked world is ~24,000px of document with pinned stages and their
+     GSAP transform layers still in the layout behind a fixed overlay. It is
+     invisible and inert, but the compositing cost is still being paid, and on
+     a phone that is the kind of resident memory that gets a tab killed rather
+     than merely slowed.
+
+     `content-visibility: hidden` drops the subtree's rendering work while
+     keeping the element's own box, so the document does not collapse and the
+     scroll position the visitor came from still resolves when it is unparked
+     — which is the whole reason this is parked instead of unmounted. */
+  content-visibility: hidden;
 }
 
 /* The inverted surface. It re-declares the same runtime variables with the

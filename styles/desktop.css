@@ -393,7 +393,13 @@
 .obj__name {
   font-size: 0.8rem;
   line-height: 1.15;
-  word-break: break-word;
+  /* `word-break: break-word` was here and it is the reason a squeezed column
+     produced "Pro / ject / s". It breaks inside a word whenever the line is
+     tight, not only when the word genuinely cannot fit. `overflow-wrap` breaks
+     only in the second case, so a narrow column wraps between words and a
+     single unbreakable string still cannot overflow its box. */
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 .obj__hit.is-selected .obj__name {
   color: var(--color-signal);
@@ -603,8 +609,34 @@
 
 /* --- small screens: the desk becomes a list, windows become sheets -------- */
 @media (max-width: 767px) {
+  /* `.dk` is a grid and `.dk__shell` is one of its items, so it inherits
+     `min-width: auto` and refuses to shrink below the panel's min-content
+     width — the workstation name, three stat pairs and the exit control laid
+     out in a row that wants about 494px. `.dk` clips at 375, which is why the
+     exit control was cut in half off the right edge rather than wrapping.
+     Both levels have to opt out for the shrink to reach the content. */
   .dk__shell {
     grid-template-columns: minmax(0, 1fr);
+    min-width: 0;
+  }
+  .dk__workspace {
+    min-width: 0;
+  }
+  /* Once it can shrink, the panel needs somewhere to put the overflow. The
+     identity and the way out are what a visitor needs from it; the telemetry
+     is desk furniture and is the first thing to go. */
+  .dk__panel {
+    gap: 0.6rem;
+    min-width: 0;
+  }
+  .dk__panel-mark {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .dk__panel-stat {
+    display: none;
   }
   .dk__dock {
     position: fixed;
@@ -640,12 +672,59 @@
   .dock__tip {
     display: none;
   }
+  /* `.dk__icons` is `display: flex` above. This block used to set four grid
+     properties on it and never `display: grid`, so every one of them was inert
+     and the three tiers stayed a flex row: three 7.5rem columns inside a 390px
+     screen. That is what shattered the labels — "Certifications" had about two
+     characters of width to work with, so it broke into "Cer / tific / atio /
+     ns" and ran under the column beside it.
+
+     A phone does not have a desk. It has a list. The tiers stop being columns
+     and become consecutive rows of one file manager, which is also why the
+     tier-specific icon sizes are neutralised below: rank was carried by column
+     position, and there are no columns here to carry it. */
   .dk__icons {
-    grid-auto-flow: row;
-    grid-template-rows: none;
-    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
-    grid-auto-columns: auto;
-    justify-content: stretch;
+    display: block;
+  }
+  .dk__tier {
+    display: block;
+    width: auto;
+    grid-auto-rows: auto;
+  }
+  .obj__hit {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    grid-template-areas:
+      "icon name"
+      "icon meta";
+    justify-items: start;
+    align-items: center;
+    text-align: left;
+    gap: 0.1rem 0.9rem;
+    padding: 0.7rem 0.25rem;
+    border-radius: 0;
+    border-color: transparent;
+    border-bottom-color: var(--color-rule);
+  }
+  /* Every tier draws at one size now; the desk's rank cue does not survive a
+     single column and a half-size icon would just read as an error. */
+  .dk__tier[data-tier="primary"] .obj__icon,
+  .dk__tier[data-tier="reference"] .obj__icon,
+  .obj__icon {
+    grid-area: icon;
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+  .obj__name {
+    grid-area: name;
+    font-size: 0.95rem;
+  }
+  .obj__meta {
+    grid-area: meta;
+  }
+  /* The hover tick is a pointer affordance with nothing to point with here,
+     and at this size it lands on top of the name. */
+  .obj__hit::after {
+    display: none;
   }
   .dk__workspace {
     overflow-y: auto;
@@ -989,39 +1068,24 @@
    COMPACT — the digital desk
    ========================================================================== */
 
+/* This block used to describe the compact desk against `.dk__objects`, `.obj`
+   and `.obj__art`. Only `.obj` is in the markup — the other two were renamed
+   at some point and the rules were never followed across, so the styling that
+   was supposed to turn the desk into a list on a phone had not applied to
+   anything for as long as those names have been wrong. The layout it was
+   reaching for now lives in the `max-width: 767px` block above, written
+   against the classes that exist.
+
+   What stays here is what genuinely needs the JS flag rather than the
+   viewport: `is-compact` is set from `matchMedia` in Desktop.tsx and also
+   drives tap-to-open instead of double-click, so keeping the two in one place
+   would let them disagree. */
 .dk.is-compact .dk__field {
   overflow-y: auto;
-}
-.dk.is-compact .dk__objects {
-  position: relative;
-  inset: auto;
-  display: grid;
-  gap: 0.5rem;
-  padding: 1rem var(--pad) 8rem;
 }
 .dk.is-compact .obj {
   position: relative;
   transform: none;
-}
-.dk.is-compact .obj__hit {
-  grid-template-columns: 5rem minmax(0, 1fr);
-  justify-items: start;
-  align-items: center;
-  width: 100%;
-  gap: 1rem;
-  padding: 0.65rem 0;
-  border-bottom: 1px solid var(--color-rule);
-  text-align: left;
-}
-.dk.is-compact .obj__art {
-  grid-row: span 2;
-  transform: scale(0.7);
-  transform-origin: left center;
-}
-.dk.is-compact .obj__meta {
-  opacity: 1;
-  transform: none;
-  text-align: left;
 }
 .dk.is-compact .dk__mark,
 .dk.is-compact .dk__dock {
