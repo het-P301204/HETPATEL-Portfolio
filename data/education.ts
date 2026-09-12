@@ -1,9 +1,9 @@
 /**
  * SOURCE OF TRUTH — academic record.
  *
- * The résumé gives the degree, the institution and the span: Sept 2022 to an
- * expected June 2026. It does NOT date the coursework, and it does not say what
- * happened in any particular year.
+ * The résumé gives the degree, the institution and the span: Sept 2022 to
+ * June 2026, now completed. It does NOT date the coursework, and it does not
+ * say what happened in any particular year.
  *
  * So the journey is five years wide and honest about which of them it can
  * actually speak to. 2022, 2025 and 2026 carry anchors the source supports.
@@ -19,7 +19,13 @@ export const education = {
   degree: "B.E. COMPUTER ENGINEERING",
   start: "SEPT 2022",
   end: "JUNE 2026",
-  endQualifier: "EXPECTED",
+  /**
+   * The degree is finished. This read "EXPECTED" while it was in progress and
+   * the qualifier is now empty, which is the whole point of keeping it as a
+   * field: the span never changes, only what the site is willing to say about
+   * it. Empty renders as nothing rather than as a word doing no work.
+   */
+  endQualifier: "",
 };
 
 export type JourneyState = "DONE" | "UNDATED" | "IN PROGRESS";
@@ -70,16 +76,16 @@ export const journey: JourneyMark[] = [
   },
   {
     year: "2026",
-    state: "IN PROGRESS",
-    label: "INTERNSHIP AND FINAL YEAR",
+    state: "DONE",
+    label: "INTERNSHIP AND GRADUATION",
     detail:
-      "The internship at Info eShield Cyber Solutions runs alongside the final year of the degree — testing applications in the day, finishing the programme around it.",
+      "The internship at Info eShield Cyber Solutions ran alongside the final year of the degree: testing applications in the day, finishing the programme around it. The degree completed in June.",
     events: [
       {
         when: "JAN 2026",
         what: "Cybersecurity Intern — Info eShield Cyber Solutions",
       },
-      { when: "JUNE 2026", what: "B.E. Computer Engineering — expected" },
+      { when: "JUNE 2026", what: "B.E. Computer Engineering — awarded" },
     ],
   },
 ];

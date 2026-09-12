@@ -382,6 +382,20 @@ html.lenis body {
 .link:focus-visible::after {
   transform: scaleX(1);
 }
+/* A control that reads as a link but *acts* — retrying a failed render — is a
+   button, not an anchor, and the error boundary uses one. Without this it
+   would arrive wearing the browser's own button chrome: a grey field, a bevel
+   and the platform UI font, none of which belong to this system. */
+button.link {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  background: none;
+  border: 0;
+  padding: 0 0 0.12em;
+  cursor: pointer;
+  text-align: inherit;
+}
 
 /* ============================================================================
    CURSOR

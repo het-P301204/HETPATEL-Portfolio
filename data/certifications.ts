@@ -213,6 +213,25 @@ export const certifications: Certification[] = [
       "https://drive.google.com/file/d/1_4fSzEz3oKM1spZuY2ltXC8L3cK-ANDM/view?usp=sharing",
   },
   {
+    /**
+     * Read off the certificate: awarded to Het Patel, 11 September 2026, for
+     * the "Cyber Security 101" learning path, 45 hours 23 minutes of course
+     * duration, TryHackMe code THM-OMHAPZMCTO. The duration is printed on the
+     * document and is the only hours figure on the site, which is why it is
+     * quoted rather than rounded.
+     */
+    name: "Cyber Security 101",
+    nameLines: ["CYBER SECURITY 101"],
+    provider: "TryHackMe",
+    year: "2026",
+    category: "PATHWAY",
+    status: "COMPLETED",
+    logo: "tryhackme",
+    ref: "45H 23M",
+    credentialUrl:
+      "https://drive.google.com/file/d/1C493jcsupVXW2aZSm_ljER7guO3FuVwb/view?usp=sharing",
+  },
+  {
     name: "Advent of Cyber 2025",
     nameLines: ["ADVENT OF CYBER 2025"],
     provider: "TryHackMe",

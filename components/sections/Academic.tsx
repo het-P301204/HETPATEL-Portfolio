@@ -67,7 +67,11 @@ export default function Academic() {
         <SectionLabel
           marker="academic"
           label="ACADEMIC JOURNEY"
-          note={`${education.start} — ${education.end} ${education.endQualifier}`}
+          /* The qualifier is empty once the degree is awarded; join on it so an
+             empty value leaves no orphaned space in the rendered label. */
+          note={[`${education.start} – ${education.end}`, education.endQualifier]
+            .filter(Boolean)
+            .join(" ")}
         />
 
         <div className="acad__institution">

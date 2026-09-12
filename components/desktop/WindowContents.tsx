@@ -271,7 +271,7 @@ function AcademicRecord() {
       <div className="wc__record-head">
         <span className="t-mono text-grey">RECORD · EDUCATION</span>
         <span className="t-mono-sm text-grey-soft">
-          {education.end} {education.endQualifier}
+          {[education.end, education.endQualifier].filter(Boolean).join(" ")}
         </span>
       </div>
       <h3 className="wc__file-title t-display">{education.degree}</h3>
