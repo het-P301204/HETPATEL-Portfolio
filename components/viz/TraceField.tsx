@@ -41,6 +41,8 @@ export default function TraceField({ progress, onLatchedChange }: Props) {
   const { theme } = useTheme();
   const [latched, setLatched] = useState<number[]>([]);
   const latchedRef = useRef<number[]>([]);
+  /* With the loop stopped under reduced motion, a latch still has to repaint. */
+  const redraw = useRef<(() => void) | null>(null);
 
   /* Scroll is the floor: it latches nodes in order regardless of input. */
   useEffect(() => {
@@ -61,6 +63,10 @@ export default function TraceField({ progress, onLatchedChange }: Props) {
   useEffect(() => {
     onLatchedChange?.(latched.length);
   }, [latched, onLatchedChange]);
+
+  useEffect(() => {
+    if (reduced) redraw.current?.();
+  }, [latched, reduced]);
 
   useEffect(() => {
     const wrapEl = wrap.current;
@@ -197,11 +203,18 @@ export default function TraceField({ progress, onLatchedChange }: Props) {
         ctx.fill();
       }
 
-      if (!visible && trail.length === 0) {
+      /* Under reduced motion every edge completes in the frame it appears and
+         the pointer trail is never fed, so there is nothing left to animate:
+         one pass draws the finished figure and the loop stops. It used to keep
+         redrawing identical geometry at 60fps for as long as the section was
+         on screen. */
+      if ((reduced || !visible) && trail.length === 0) {
         cancelAnimationFrame(frame);
         frame = 0;
       }
     };
+
+    redraw.current = draw;
 
     const io = new IntersectionObserver(
       ([entry]) => {

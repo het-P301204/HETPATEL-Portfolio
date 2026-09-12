@@ -104,7 +104,12 @@ export default function Certifications() {
       <SectionLabel
         marker="certifications"
         label="CERTIFICATION ARCHIVE"
-        note={`${total} ARTIFACTS · ${pending} IN PROGRESS · ${linked} VERIFIABLE`}
+        /* Not "${linked} VERIFIABLE". Ten entries carry a link and only
+            three of them are the issuer confirming the credential; the rest
+            are hosted copies of the document, which is weaker evidence and
+            should not be counted as the same thing in a summary line on a
+            site whose whole claim is that it is written to be checked. */
+        note={`${total} ARTIFACTS · ${certificationStats.issuerVerified} ISSUER-VERIFIED · ${certificationStats.hostedCopy} HOSTED COPY · ${pending} IN PROGRESS`}
       />
 
       <div className="cert__archive" ref={root}>

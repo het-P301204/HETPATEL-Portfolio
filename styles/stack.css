@@ -2,6 +2,12 @@
    TECHNICAL TOOLKIT — matrix left, readout right.
    ========================================================================== */
 
+.stack__crossref {
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+  max-width: 62ch;
+  line-height: 1.7;
+}
+
 .stack__body {
   display: grid;
   gap: clamp(1.5rem, 4vh, 2.5rem);
@@ -34,10 +40,16 @@
 .stack__items {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.75rem;
+  gap: 0.25rem 1.75rem;
 }
+/* Twenty-one of these are the section's content, and on a phone they were
+   about 22px of tappable height. The drawn size is unchanged; the box grows
+   under it. */
 .stack__item {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
   background: none;
   border: 0;
   padding: 0.1rem 0;

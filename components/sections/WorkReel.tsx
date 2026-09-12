@@ -138,7 +138,7 @@ export default function WorkReel({
               key={p.id}
               className={cn("reel__figure", i === active && "is-live")}
             >
-              <ProjectMotif motif={p.motif} ambient />
+              <ProjectMotif motif={p.motif} caption={p.motifCaption} ambient />
             </span>
           ))}
         </div>

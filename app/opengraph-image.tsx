@@ -4,7 +4,18 @@ export const alt = "Het Patel — Cybersecurity Analyst. VAPT, security engineer
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/** The share card is the hero, reduced to what survives at thumbnail size. */
+/**
+ * The share card is the hero, reduced to what survives at thumbnail size.
+ *
+ * No location, here or anywhere else public — the same rule the copy, the
+ * metadata and the structured data all follow. This is the most republished
+ * surface the site has, so it is the one place a leak is hardest to take back.
+ *
+ * The colours are the light theme's real tokens rather than approximations:
+ * this file cannot read CSS, so the values are duplicated by hand, and a
+ * duplicate that is close but wrong is how a share card stops looking like the
+ * site it belongs to.
+ */
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -15,8 +26,8 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#f5f4f1",
-          color: "#0d0d0c",
+          background: "#f7f6f3",
+          color: "#0b0b0b",
           padding: "64px 72px",
         }}
       >
@@ -26,11 +37,11 @@ export default function OpengraphImage() {
             justifyContent: "space-between",
             fontSize: 20,
             letterSpacing: 4,
-            color: "#78766f",
+            color: "#5c5a54",
           }}
         >
           <span>SECURITY PROFILE / 2026</span>
-          <span>SURAT, INDIA</span>
+          <span>VAPT · RISK &amp; COMPLIANCE</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -58,8 +69,8 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          <div style={{ display: "flex", height: 3, background: "#1436e8", width: 220 }} />
-          <span style={{ fontSize: 24, letterSpacing: 3, color: "#3b3a37" }}>
+          <div style={{ display: "flex", height: 3, background: "#3157ff", width: 220 }} />
+          <span style={{ fontSize: 24, letterSpacing: 3, color: "#35342f" }}>
             VULNERABILITY ASSESSMENT · SECURITY ENGINEERING · RISK &amp; COMPLIANCE
           </span>
         </div>

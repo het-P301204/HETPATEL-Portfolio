@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Section, { SectionLabel } from "@/components/primitives/Section";
 import ScrollReveal from "@/components/primitives/ScrollReveal";
 import { experience } from "@/data/experience";
@@ -24,9 +24,19 @@ export default function Work() {
   const tracks = role.tracks;
   const [active, setActive] = useState(0);
   const current = tracks[active];
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const step = (delta: number) =>
-    setActive((i) => (i + delta + tracks.length) % tracks.length);
+  /* Roving tabindex means the selected tab is the only one in the tab order,
+     so an arrow key has to move DOM focus as well as selection. It used to
+     move selection only: focus stayed on the tab that had just become
+     `aria-selected={false}` and `tabIndex={-1}`, so the focus ring and the
+     open area pointed at two different rows, and the next Tab left the group
+     from the wrong place. */
+  const step = (delta: number) => {
+    const next = (active + delta + tracks.length) % tracks.length;
+    setActive(next);
+    tabRefs.current[next]?.focus();
+  };
 
   return (
     <Section id="work" className="work">
@@ -43,7 +53,19 @@ export default function Work() {
           <ul
             role="tablist"
             aria-label="Areas of professional work"
+            aria-orientation="vertical"
             onKeyDown={(e) => {
+              if (e.key === "Home") {
+                e.preventDefault();
+                setActive(0);
+                tabRefs.current[0]?.focus();
+              }
+              if (e.key === "End") {
+                e.preventDefault();
+                const last = tracks.length - 1;
+                setActive(last);
+                tabRefs.current[last]?.focus();
+              }
               if (e.key === "ArrowDown" || e.key === "ArrowRight") {
                 e.preventDefault();
                 step(1);
@@ -59,9 +81,17 @@ export default function Work() {
                 <button
                   type="button"
                   role="tab"
+                  ref={(n) => {
+                    tabRefs.current[i] = n;
+                  }}
                   id={`work-tab-${t.id}`}
                   aria-selected={i === active}
-                  aria-controls={`work-panel-${t.id}`}
+                  /* Only the open area is rendered, so only the open tab can
+                     point at it. Every tab used to claim a panel id and four
+                     of the five resolved to nothing. */
+                  aria-controls={
+                    i === active ? `work-panel-${t.id}` : undefined
+                  }
                   tabIndex={i === active ? 0 : -1}
                   className={cn("work__tab", i === active && "is-active")}
                   onClick={() => setActive(i)}
@@ -87,6 +117,10 @@ export default function Work() {
           role="tabpanel"
           id={`work-panel-${current.id}`}
           aria-labelledby={`work-tab-${current.id}`}
+          /* The panel is prose with nothing focusable inside it. Without a tab
+             stop of its own, Tab leaves the tablist and skips straight past
+             the content the tablist exists to reveal. */
+          tabIndex={0}
           key={current.id}
         >
           <p className="t-lede work__panel-summary">{current.summary}</p>

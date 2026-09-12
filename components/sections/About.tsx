@@ -31,6 +31,14 @@ export default function About() {
   useEffect(() => {
     const el = root.current;
     if (!el) return;
+    /* Every other scroll sequence on the site is behind a reduced-motion gate.
+       This one took `reduced` as a dependency and never read it, so the word
+       still cycled and the trace still latched for a visitor who had asked the
+       system for none of that. */
+    if (reduced) {
+      setProgress(1);
+      return;
+    }
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
@@ -39,7 +47,16 @@ export default function About() {
         start: "top 72%",
         end: "bottom 78%",
         scrub: true,
-        onUpdate: (self) => setProgress(self.progress),
+        /* Quantised. `scrub: true` calls this on every frame the section is
+           on screen, and an unconditional setState there re-rendered About and
+           TraceField — canvas, five node markers and a progress effect — sixty
+           times a second. Nothing downstream can resolve finer than a
+           hundredth: the word steps five times across the range and the trace
+           latches five nodes. */
+        onUpdate: (self) =>
+          setProgress((prev) =>
+            Math.abs(prev - self.progress) < 0.01 ? prev : self.progress,
+          ),
       });
     }, root);
 

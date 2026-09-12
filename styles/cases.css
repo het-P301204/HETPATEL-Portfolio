@@ -479,7 +479,23 @@
 
 /* Below the breakpoint the pin is released and the archive underneath carries
    the same cases as a readable index, so the reel steps aside. */
+/* The reel does not run on a phone.
+
+   It is a pinned stage: one screen of held scroll per case, advanced by a
+   ScrollTrigger that only exists above 768px. Below that the pin was released
+   and the markup was left behind, so a phone got a full screen of stage that
+   showed case 01 and nothing else — under a header reading KEEP SCROLLING, a
+   counter reading 01 / 05, and a progress bar pinned at zero. Three separate
+   promises that scrolling would do something, and it did not.
+
+   Nothing is lost by removing it. Every case in the reel is also in the strata
+   below, as a readable row with its own problem statement, which is the better
+   way to read fifteen cases on a phone anyway. The rules below are kept for
+   the reduced-motion case, where the stage does still render in flow. */
 @media (max-width: 767px) {
+  .reel {
+    display: none;
+  }
   .reel__title-line,
   .reel__u,
   .reel__tag {

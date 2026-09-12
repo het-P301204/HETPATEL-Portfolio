@@ -129,7 +129,15 @@ export default function Terminal() {
       onClick={() => inputRef.current?.focus()}
       data-cursor="text"
     >
-      <div className="term__out t-mono-md">
+      {/* Every command appends lines here and nothing else changes on screen.
+          Without a log role a screen-reader user could type `help`, press
+          Enter, and receive silence. */}
+      <div
+        className="term__out t-mono-md"
+        role="log"
+        aria-live="polite"
+        aria-atomic="false"
+      >
         {lines.map((l, i) => (
           <div key={i} className={l.startsWith(PROMPT) ? "term__echo" : undefined}>
             {l || " "}

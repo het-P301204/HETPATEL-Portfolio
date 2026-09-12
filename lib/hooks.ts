@@ -6,6 +6,19 @@ import { useEffect, useLayoutEffect, useState } from "react";
 export const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
+/**
+ * Deliberately false on the first render rather than read lazily from
+ * `matchMedia`.
+ *
+ * Reading the real value in a `useState` initialiser is tempting — it would
+ * stop Lenis and the cursor being constructed and immediately torn down for a
+ * reduced-motion visitor. It is also wrong here: both answers gate *rendered
+ * markup*, not just effects (Hero renders the pointer readout only when
+ * `fine && !reduced`). A lazy initialiser runs during hydration, so the first
+ * client render would disagree with the server HTML and React would report a
+ * hydration mismatch. One discarded Lenis instance on mount is the cheaper of
+ * the two costs, and it is paid once.
+ */
 function useMediaQuery(query: string, initial = false) {
   const [matches, setMatches] = useState(initial);
 
@@ -28,8 +41,4 @@ export function useReducedMotion() {
 /** True only for precision pointers — the gate for every hover-driven idea. */
 export function useFinePointer() {
   return useMediaQuery("(hover: hover) and (pointer: fine)");
-}
-
-export function useIsDesktop() {
-  return useMediaQuery("(min-width: 1024px)");
 }

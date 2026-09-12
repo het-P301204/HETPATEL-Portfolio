@@ -109,7 +109,7 @@ Format: DECISION · REASON · SOURCE · CONFIDENCE · DATE.
 
 ## P0-015 — Exclude location from the brand architecture
 **Decision:** No physical location anywhere public — copy, header, footer, metadata, structured data, or IA. The site must survive an international move with zero structural change. Public email: `patel.het7996@gmail.com`.
-**Reason:** Het's explicit instruction. His location is temporary (Surat → expected USA for a master's).
+**Reason:** Het's explicit instruction. His location is temporary (current city withheld → expected USA for a master's).
 **Source:** Het's explicit answer.
 **Confidence:** HIGH.
 **Date:** 2026-08-14

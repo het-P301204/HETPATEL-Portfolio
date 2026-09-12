@@ -156,16 +156,20 @@
   top: 50%;
   translate: 0 -50%;
   width: 3px;
-  height: 0;
+  /* Drawn at full length and scaled, rather than grown by animating `height`.
+     Same movement, no layout pass. The centring lives on `translate`, which is
+     its own property, so `transform` is free to carry the scale alone. */
+  height: 1.5rem;
+  transform: scaleY(0);
   border-radius: 2px;
   background: var(--color-signal);
-  transition: height 0.25s var(--ease);
+  transition: transform 0.25s var(--ease);
 }
 .dock__item[data-open="true"] .dock__run {
-  height: 0.9rem;
+  transform: scaleY(0.6);
 }
 .dock__item[data-live="true"] .dock__run {
-  height: 1.5rem;
+  transform: scaleY(1);
 }
 .dock__tip {
   position: absolute;
@@ -657,17 +661,16 @@
     top: auto;
     bottom: -0.3rem;
     translate: -50% 0;
-    width: 0;
+    width: 1.5rem;
     height: 3px;
-    transition: width 0.25s var(--ease);
+    transform: scaleX(0);
+    transition: transform 0.25s var(--ease);
   }
   .dock__item[data-open="true"] .dock__run {
-    height: 3px;
-    width: 0.9rem;
+    transform: scaleX(0.6);
   }
   .dock__item[data-live="true"] .dock__run {
-    height: 3px;
-    width: 1.5rem;
+    transform: scaleX(1);
   }
   .dock__tip {
     display: none;
@@ -1007,10 +1010,13 @@
     gap: 0.75rem 2rem;
   }
 }
+/* 18px tall with a 4px gap put centre-to-centre at ~22px, under the 24px that
+   SC 2.5.8 requires by either size or spacing. The type is unchanged; the row
+   just stops being tighter than a fingertip. */
 .wc__tool-grid ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1rem;
+  gap: 0.5rem 1rem;
   margin-top: 0.2rem;
 }
 .wc__tool-grid button {
@@ -1019,6 +1025,9 @@
   padding: 0;
   color: var(--color-graphite);
   font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 .wc__tool-grid button.is-live,
 .wc__tool-grid button:hover {
@@ -1055,13 +1064,19 @@
   color: var(--color-signal);
   white-space: nowrap;
 }
+/* `outline: none` used to live here unconditionally, and at (0,1,1) it beat
+   the global `:focus-visible` rule. With no border and no background there was
+   nothing left to show focus with, on the one text input the site has. */
 .term__in input {
   flex: 1;
   background: none;
   border: 0;
   color: inherit;
-  outline: none;
   min-width: 0;
+}
+.term__in input:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
 }
 
 /* ============================================================================
@@ -1103,11 +1118,6 @@
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-}
-.dk.is-compact .win.is-opening,
-.dk.is-compact .win.is-closing {
-  transform: translateY(100%);
-  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

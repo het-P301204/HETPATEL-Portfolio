@@ -1,5 +1,3 @@
-"use client";
-
 import Section, { SectionLabel } from "@/components/primitives/Section";
 import AnimatedText from "@/components/primitives/AnimatedText";
 import ScrollReveal from "@/components/primitives/ScrollReveal";

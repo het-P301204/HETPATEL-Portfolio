@@ -86,7 +86,13 @@
     color 0.5s var(--ease),
     transform 0.6s var(--ease),
     opacity 0.5s var(--ease);
-  opacity: 0.55;
+  /* Was 0.55. The stroke is #0b0b0b, so at 0.55 over paper it composites to
+     roughly rgb(142,140,138) — 4.28:1, under the 4.5:1 these need. The type
+     starts at 21.6px, which is not large text, so there is no exemption to
+     lean on, and these six names are the section's content rather than its
+     decoration. 0.7 composites to about 7.8:1 and the outline still reads as
+     unselected against the solid active state. */
+  opacity: 0.7;
 }
 .practice__btn.is-active .practice__name {
   color: var(--color-ink);

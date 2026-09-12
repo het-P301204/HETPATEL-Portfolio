@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useFinePointer } from "@/lib/hooks";
+import { useFinePointer, useReducedMotion } from "@/lib/hooks";
 
 /**
  * Ask the cursor to re-read what is under it.
@@ -41,16 +41,26 @@ export function resyncCursor() {
  *     the visitor happened to move the mouse. Visibility is now derived from
  *     one fact — do we know where the pointer is — and every pointer event,
  *     window focus and resync re-asserts it.
+ *
+ * ── reduced motion ────────────────────────────────────────────────────────
+ * It stands down entirely. This was claimed on the accessibility page before
+ * it was true: the instrument was gated on pointer precision alone, so a
+ * visitor who had asked the system to reduce motion lost the native pointer to
+ * `cursor: none` and was handed a lerping, stretching, rotating ring instead —
+ * the exact opposite of the request. Nothing replaces it; the native cursor is
+ * the correct instrument when motion is unwelcome.
  */
 export default function Cursor() {
   const fine = useFinePointer();
+  const reduced = useReducedMotion();
+  const live = fine && !reduced;
   const root = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLDivElement>(null);
   const dot = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!fine) return;
+    if (!live) return;
     const rootEl = root.current!;
     const ringEl = ring.current!;
     const dotEl = dot.current!;
@@ -82,9 +92,22 @@ export default function Cursor() {
       const index = holder?.dataset.cursorIndex ?? "";
       if (labelEl.dataset.text !== text + index) {
         labelEl.dataset.text = text + index;
-        labelEl.innerHTML = text
-          ? `${index ? `<i>${index}</i>` : ""}<b>${text}</b>`
-          : "";
+        /* Built, not parsed. Every value reaching here is a build-time
+           constant from a `data/` file, so this was not exploitable — but an
+           HTML sink fed from DOM attributes is a gadget waiting for the bug
+           that makes it one, and SECURITY.md states that nothing but two
+           known constants goes through unsafe HTML. Now that is true. */
+        labelEl.replaceChildren();
+        if (text) {
+          if (index) {
+            const i = document.createElement("i");
+            i.textContent = index;
+            labelEl.append(i);
+          }
+          const b = document.createElement("b");
+          b.textContent = text;
+          labelEl.append(b);
+        }
       }
     };
 
@@ -98,6 +121,7 @@ export default function Cursor() {
       }
       show();
       setState(e.target as Element);
+      wake();
     };
 
     const onDown = () => (rootEl.dataset.press = "true");
@@ -115,10 +139,19 @@ export default function Cursor() {
     const onResync = () => {
       show();
       setState(document.elementFromPoint(tx, ty));
+      wake();
+    };
+
+    /* The instrument only has work to do while it is catching up with the
+       pointer. It used to re-schedule unconditionally, which is a permanent
+       60fps compositor job on every desktop visit — including the long
+       stretches where the mouse has not moved at all. It now settles and
+       stops, and any pointer event wakes it. */
+    const wake = () => {
+      if (!frame) frame = requestAnimationFrame(render);
     };
 
     const render = () => {
-      frame = requestAnimationFrame(render);
       const prx = rx;
       const pry = ry;
       rx += (tx - rx) * 0.16;
@@ -138,6 +171,12 @@ export default function Cursor() {
         `rotate(${-angle}deg)`;
       dotEl.style.transform = `translate3d(${dx}px, ${dy}px, 0) translate(-50%, -50%)`;
       labelEl.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+
+      const settled =
+        Math.abs(tx - rx) + Math.abs(ty - ry) < 0.05 &&
+        Math.abs(tx - dx) + Math.abs(ty - dy) < 0.05 &&
+        stretch < 0.002;
+      frame = settled ? 0 : requestAnimationFrame(render);
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -150,7 +189,7 @@ export default function Cursor() {
     frame = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(frame);
+      if (frame) cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
@@ -160,9 +199,9 @@ export default function Cursor() {
       document.removeEventListener("pointerout", onOut);
       delete document.body.dataset.cursor;
     };
-  }, [fine]);
+  }, [live]);
 
-  if (!fine) return null;
+  if (!live) return null;
 
   return (
     <div

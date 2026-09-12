@@ -24,6 +24,7 @@ export default function SecurityDoc({
   expires: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [ready, setReady] = useState(false);
   const timer = useRef<number | undefined>(undefined);
 
@@ -37,14 +38,19 @@ export default function SecurityDoc({
   }, []);
 
   const copy = async () => {
+    window.clearTimeout(timer.current);
     try {
       await navigator.clipboard.writeText(email);
       setCopied(true);
-      window.clearTimeout(timer.current);
+      setFailed(false);
       timer.current = window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard can be blocked; the address is on screen and the mail link
-      // beside this works, so there is nothing to recover from.
+      // The clipboard can be blocked by permission or by an insecure context.
+      // The address is on screen and the mail link beside this works, but a
+      // visitor who cannot see it has to be told that, not left in silence.
+      setFailed(true);
+      setCopied(false);
+      timer.current = window.setTimeout(() => setFailed(false), 4000);
     }
   };
 
@@ -115,17 +121,25 @@ export default function SecurityDoc({
           REPORT A VULNERABILITY <i aria-hidden="true">→</i>
         </a>
 
+        {/* The button's name is constant; the result is announced by the
+            status region below, because a name change on an already-focused
+            control is not reliably read out. */}
         <button
           type="button"
           className={cn("sec__cta t-mono", copied && "is-done")}
           onClick={copy}
           data-cursor="link"
         >
-          <span aria-hidden="true">{copied ? "COPIED ✓" : "COPY EMAIL"}</span>
-          <span className="sr-only">
-            {copied ? "Email address copied" : "Copy email address"}
-          </span>
+          <span aria-hidden="true">{copied ? "COPIED" : "COPY EMAIL"}</span>
+          <span className="sr-only">Copy email address</span>
         </button>
+        <span role="status" className="sr-only">
+          {copied
+            ? "Email address copied to clipboard"
+            : failed
+              ? `Copying was blocked. The address is ${email}`
+              : ""}
+        </span>
 
         <a className="sec__cta t-mono" href="/security.txt" data-cursor="link">
           VIEW RAW SECURITY.TXT <i aria-hidden="true">↗</i>

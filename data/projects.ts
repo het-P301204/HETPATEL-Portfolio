@@ -50,8 +50,38 @@ export type ProjectMotif =
   | "token"
   | "timeline"
   | "control"
-  | "trace"
-  | "compete";
+  | "trace";
+
+/**
+ * The words a figure prints, supplied by the case rather than baked into the
+ * shape.
+ *
+ * Seven shapes carry fifteen cases, so a shape is reused — which is correct,
+ * because the shapes are arguments about structure and several cases share a
+ * structure. The labels were reused with them, and labels are not structural:
+ * they name a discipline. That is how a post-quantum migration planner came to
+ * be captioned DETECTION / CONTAINMENT / RECOVERY.
+ *
+ * Every slot is optional. Omit it and the figure's own default stands, which
+ * is the right answer whenever the shape was chosen because its default
+ * vocabulary already fits — the incident-response simulation keeps the
+ * incident-response words.
+ *
+ *   items  the labelled parts of the figure, in drawing order. Must match the
+ *          figure's own count or it is ignored, so a miscount degrades to the
+ *          default instead of rendering a blank.
+ *   lead   the label at the lower left
+ *   trail  the label at the lower right
+ *   note   the label inside the figure
+ *   foot   the caption under the whole figure
+ */
+export type MotifCaption = {
+  items?: string[];
+  lead?: string;
+  trail?: string;
+  note?: string;
+  foot?: string;
+};
 
 export type ProjectGroup = "personal" | "lab";
 
@@ -75,6 +105,8 @@ export type Project = {
   limitations: string;
 
   motif: ProjectMotif;
+  /** Overrides for the figure's own labels. See `MotifCaption`. */
+  motifCaption?: MotifCaption;
   featured?: boolean;
   /** "" until a real repository exists and Het supplies the URL. */
   repoUrl: string;
@@ -190,6 +222,15 @@ export const projects: Project[] = [
     limitations:
       "It implements no cryptography. It does not scan, discover, connect to anything or block anything, and every enforcement view is labelled SIMULATION and stays that way.",
     motif: "timeline",
+    /* The shape is right — this is a case about time — and every word on it
+       was wrong. It read DETECTION / CONTAINMENT / RECOVERY, which is the
+       incident-response vocabulary, on a tool whose entire argument is that
+       ranking should come from a deadline rather than a severity label. */
+    motifCaption: {
+      items: ["SECRECY LIFETIME", "MIGRATION TIME", "DEADLINE"],
+      note: "MOSCA'S LINE",
+      foot: "RANKED BY DEADLINE, NOT BY KEY SIZE",
+    },
     repoUrl: "https://github.com/het-P301204/sunset",
   },
   {
@@ -215,6 +256,13 @@ export const projects: Project[] = [
     limitations:
       "It judges matchability against the sample it is given, not against every event a pipeline can emit. A rule whose log source is absent from that sample is reported as unassessed rather than graded.",
     motif: "trace",
+    /* The lanes and the correlation are exactly this case. The foot was not:
+       "SYNTHETIC DATA · FICTIONAL SCENARIO" is the incident simulation's
+       disclaimer, and this is a published tool. What belongs there is the
+       case's own thesis. */
+    motifCaption: {
+      foot: "A RULE THAT STOPPED FIRING STILL COUNTS AS COVERAGE",
+    },
     repoUrl: "https://github.com/het-P301204/NullFire",
   },
   {
@@ -264,6 +312,15 @@ export const projects: Project[] = [
     limitations:
       "It verifies origin, not the absence of malicious code. Not a vulnerability scanner, not a malware detector and not a replacement for npm audit, and it says so inside its own JSON output. Working and tested against real provenance, not yet published to the registry.",
     motif: "token",
+    /* Issue, sign and verify are the right four beats for an attestation, and
+       the case is that verification is the one nobody does. The axis was
+       wrong: an npm provenance attestation has no session and no lifetime. */
+    motifCaption: {
+      items: ["BUILD", "ATTEST", "VERIFY", "TRUST"],
+      lead: "PUBLISH",
+      trail: "CONSUME",
+      note: "THE HALF NOBODY RUNS",
+    },
     repoUrl: "https://github.com/het-P301204/Pedigree-npm-provenance-gate",
   },
   {
@@ -311,6 +368,9 @@ export const projects: Project[] = [
     limitations:
       "Educational and defensive, on synthetic data. Not a replacement for a SIEM, a GRC platform, a vulnerability scanner or a professional audit, and there are no real organisations, credentials, keys or personal data in it.",
     motif: "scan",
+    /* The figure describes a set with a flagged minority, which is right. It
+       said HOSTS and VERIFIED, which belongs to the scanning lab below. */
+    motifCaption: { lead: "EVIDENCE 001—012", trail: "RAISED 03" },
     repoUrl: "https://github.com/het-P301204/AegisLens-security-workbench",
   },
   {
@@ -333,6 +393,14 @@ export const projects: Project[] = [
     limitations:
       "A utility, not a monitoring system. It measures reachability and round-trip time and makes no claim beyond that.",
     motif: "timeline",
+    /* A time series, which the shape draws well, and the three phases of an
+       incident response, which this is not. The case is that a single reply
+       says nothing and the shape of the latency over time says everything. */
+    motifCaption: {
+      items: ["BASELINE", "DRIFT", "LOSS"],
+      note: "FIRST SPIKE",
+      foot: "THE SHAPE OVER TIME, NOT A SINGLE REPLY",
+    },
     repoUrl: "https://github.com/het-P301204/PingMaster",
   },
   /* ----------------------------------------------------------------
@@ -431,7 +499,17 @@ export const projects: Project[] = [
       "A control that fails is not the same object as a control that is absent, and only one of them shows up in a review of the code. I now read every error path around a security decision as a policy statement, because that is what it is.",
     limitations:
       "Local red/blue lab, synthetic data only, never production. Docker is not installed on the machine it was developed on, so the compose file is structurally validated but has not been run — the repository says so in its own limitations document.",
-    motif: "control",
+    /* Was "control" — the compliance coverage matrix, which belongs to
+       SECUREBRIDGE and says nothing about an authorization decision. This is a
+       case about a request that should have been refused and was not, so it
+       draws the boundary figure, with the accent on the path that got through.
+       Its default trailing label says ONE PATH REFUSED, which is the exact
+       opposite of the finding. */
+    motif: "identity",
+    motifCaption: {
+      lead: "ROLE · SCOPE · DECISION",
+      trail: "THE PATH THAT SHOULD HAVE BEEN REFUSED",
+    },
     repoUrl: "https://github.com/het-P301204/BlackOut",
   },
   {
@@ -456,7 +534,14 @@ export const projects: Project[] = [
       "Keeping the naive rule in the repository was the most useful decision in it. A rule that looks obviously correct and quietly misses is worth more as a demonstration than a rule that works, because the failure mode is the thing that generalises.",
     limitations:
       "A local lab for one vulnerability class, synthetic throughout. The state audit exists precisely because the detection pack cannot see everything, and the repository is explicit about which lineages it cannot speak to.",
-    motif: "identity",
+    /* Was "identity", the cloud boundary figure, while the credential
+       lifecycle figure next to it described this case exactly: a token that is
+       issued, signed, verified, and never expires when it should. */
+    motif: "token",
+    motifCaption: {
+      trail: "THE SESSION THAT OUTLIVED THE RESET",
+      note: "EXPIRY IS THE HARD PART",
+    },
     repoUrl: "https://github.com/het-P301204/AfterLife",
   },
   {
@@ -481,6 +566,11 @@ export const projects: Project[] = [
     limitations:
       "Every service binds to localhost only. No real infrastructure is targeted, the instance-metadata endpoint is simulated locally and never contacted on a real network, and all credentials in it are clearly marked synthetic.",
     motif: "vector",
+    /* A request that branches, one branch reaching somewhere it should not —
+       the right shape. PRETEXT and CAPTURE are social-engineering words and
+       belong to the phishing case that shares the figure. The foot stays: this
+       one really is a closed environment. */
+    motifCaption: { items: ["REQUEST", "FETCHER", "INTERNAL", "BLOCKED"] },
     repoUrl: "https://github.com/het-P301204/spectre-ssrf-lab",
   },
 ];

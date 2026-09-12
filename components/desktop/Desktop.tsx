@@ -263,6 +263,17 @@ export default function Desktop() {
       className={cn("dk", compact && "is-compact")}
       data-booted="false"
     >
+      {/* The environment's own document title.
+
+          Choosing DESKTOP marks the editorial world inert and aria-hidden,
+          and the site's only h1 lives inside it — so this world had no
+          top-level heading at all and its outline began at h3. Visually there
+          is nothing to add: the panel already says whose workstation this is.
+          A screen reader needed telling. */}
+      <h1 className="sr-only">
+        Het Patel — workstation. An alternative way through the same portfolio.
+      </h1>
+
       {/* ---------------- system panel ---------------- */}
       <header className="dk__panel" data-dk="panel">
         <span className="dk__panel-mark">
@@ -337,8 +348,17 @@ export default function Desktop() {
           {/* Three columns by tier: what gets opened sits nearest the
               launcher, reference material sits furthest from it. */}
           <div className="dk__icons" role="list" aria-label="Home">
+            {/* `role="presentation"`: the tier wrappers are layout, and an
+                ARIA list does not own listitems through a generic element in
+                between — the three columns were breaking the relationship
+                between the list and every icon in it. */}
             {TIERS.map((tier) => (
-              <div className="dk__tier" key={tier} data-tier={tier}>
+              <div
+                className="dk__tier"
+                role="presentation"
+                key={tier}
+                data-tier={tier}
+              >
                 {nodes
                   .filter((n) => n.tier === tier)
                   .map((n) => (

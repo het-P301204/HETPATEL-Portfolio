@@ -21,6 +21,38 @@ export const scroller: { current: Lenis | null } = { current: null };
  */
 const locks = new Set<string>();
 
+/**
+ * A destination chosen while the document was locked.
+ *
+ * Every row of the site index is an anchor, and the index locks the document
+ * while it is open. The handler below intercepted the click and asked Lenis to
+ * travel — but Lenis is stopped while a lock is held and quietly ignores
+ * `scrollTo`, and `preventDefault` had already removed the browser's own hash
+ * jump. So choosing a destination from the index did nothing at all: the panel
+ * closed and the reader stayed exactly where they were. All nine rows, every
+ * time.
+ *
+ * The intent was always that the overlay leaves first and the scroll follows.
+ * That is what this does — the destination is held until the last lock lifts,
+ * then travelled to. Any future overlay containing a hash link inherits the
+ * behaviour without knowing about it.
+ */
+let deferred: { el: HTMLElement; reduced: boolean } | null = null;
+
+/** Travel to a section and leave focus on it, so the keyboard follows the eye. */
+function travelTo(el: HTMLElement, reduced: boolean) {
+  if (scroller.current) {
+    scroller.current.scrollTo(el, { offset: 0, duration: 1.15 });
+  } else {
+    el.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "start",
+    });
+  }
+  el.setAttribute("tabindex", "-1");
+  el.focus({ preventScroll: true });
+}
+
 export function lockScroll(locked: boolean, owner = "default") {
   if (locked) locks.add(owner);
   else locks.delete(owner);
@@ -31,11 +63,27 @@ export function lockScroll(locked: boolean, owner = "default") {
   }
   document.documentElement.classList.toggle("lenis-stopped", held);
   document.body.style.overflow = held ? "hidden" : "";
+
+  /* The document is free again, so anything that was waiting on it can go. One
+     frame, so the release has been applied before the travel starts — and so
+     the overlay's own focus restore runs first and this has the last word. */
+  if (!held && deferred) {
+    const { el, reduced } = deferred;
+    deferred = null;
+    requestAnimationFrame(() => travelTo(el, reduced));
+  }
 }
 
 /**
- * Smooth scrolling, and the scroll velocity signal the typography reads.
- * Lenis drives GSAP's ticker so the two never fight over the frame.
+ * Smooth scrolling. Lenis drives GSAP's ticker so the two never fight over the
+ * frame.
+ *
+ * This used to publish a damped `--vel` custom property on <html> for
+ * typography to lean with the scroll. That effect was removed and the signal
+ * was not: nothing in any stylesheet or component read `--vel`, while a
+ * scroll handler and an unconditional every-frame ticker callback kept writing
+ * it. Writing a custom property on the document element invalidates inherited
+ * style for the whole tree, so this was the most expensive no-op on the page.
  */
 export default function SmoothScroll() {
   const reduced = useReducedMotion();
@@ -54,20 +102,16 @@ export default function SmoothScroll() {
       const el = document.querySelector(id);
       if (!el) return;
       e.preventDefault();
-      if (scroller.current) {
-        scroller.current.scrollTo(el as HTMLElement, {
-          offset: 0,
-          duration: 1.15,
-        });
-      } else {
-        el.scrollIntoView({
-          behavior: reduced ? "auto" : "smooth",
-          block: "start",
-        });
+
+      /* Locked means an overlay owns the screen. Remember where they asked to
+         go; `lockScroll` takes them there when the last lock lifts. */
+      if (locks.size > 0) {
+        deferred = { el: el as HTMLElement, reduced };
+        return;
       }
+
       // Keyboard users must land on the section, not stay behind on the link.
-      (el as HTMLElement).setAttribute("tabindex", "-1");
-      (el as HTMLElement).focus({ preventScroll: true });
+      travelTo(el as HTMLElement, reduced);
     };
     document.addEventListener("click", onClick);
 
@@ -84,36 +128,17 @@ export default function SmoothScroll() {
     });
     scroller.current = lenis;
 
-    const root = document.documentElement;
-    let velocity = 0;
-
-    lenis.on("scroll", (e: { velocity: number }) => {
-      ScrollTrigger.update();
-      // A damped, clamped signal — typography leans with the scroll, never lurches.
-      velocity = gsap.utils.clamp(-1, 1, e.velocity / 40);
-      root.style.setProperty("--vel", velocity.toFixed(3));
-    });
+    lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
-    // Bleed the signal back to zero when the scroll stops.
-    const decay = () => {
-      if (Math.abs(velocity) > 0.001) {
-        velocity *= 0.92;
-        root.style.setProperty("--vel", velocity.toFixed(3));
-      }
-    };
-    gsap.ticker.add(decay);
-
     return () => {
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(raf);
-      gsap.ticker.remove(decay);
       lenis.destroy();
       scroller.current = null;
-      root.style.removeProperty("--vel");
     };
   }, [reduced]);
 

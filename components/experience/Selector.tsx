@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useMode } from "@/lib/mode";
+import { profile } from "@/data/profile";
 import { useIsomorphicLayoutEffect, useReducedMotion } from "@/lib/hooks";
+import { useOverlay } from "@/lib/useOverlay";
 import { cn } from "@/lib/cn";
 
 
@@ -16,12 +18,28 @@ import { cn } from "@/lib/cn";
  * more typographic, the environment one starts assembling small objects at the
  * edges. Choosing dissolves the question into whichever world was chosen.
  */
-export default function Selector({ onLeave }: { onLeave?: () => void }) {
+export default function Selector() {
   const { enter, remembered } = useMode();
   const reduced = useReducedMotion();
   const root = useRef<HTMLDivElement>(null);
   const [lean, setLean] = useState<"standard" | "desktop" | null>(null);
   const [leaving, setLeaving] = useState<"standard" | "desktop" | null>(null);
+
+  /* The exit animation needs to tell the chosen door from the other one. It
+     used to ask the DOM — `[data-sel='chosen']` and `[data-sel='other']`,
+     attributes derived from the `leaving` state. But `choose()` set that
+     state and built the timeline in the same tick, so GSAP ran its query
+     against markup React had not re-rendered yet: both buttons still read
+     `data-sel="choice"`, both selectors matched nothing, and GSAP logged
+     "target not found" on every entry to the site. The two beats that give the
+     moment its meaning — the chosen door taking the screen, the other one
+     dropping away — had never once played.
+
+     Holding the nodes directly removes the race rather than deferring it: a
+     ref is correct on the frame it is read, whatever React has done since. */
+  const choiceRefs = useRef<
+    Record<"standard" | "desktop", HTMLButtonElement | null>
+  >({ standard: null, desktop: null });
 
   /* entrance */
   useIsomorphicLayoutEffect(() => {
@@ -59,20 +77,31 @@ export default function Selector({ onLeave }: { onLeave?: () => void }) {
     return () => ctx.revert();
   }, [reduced]);
 
-  /* keyboard: the two doors are also 1 and 2 */
+  /* keyboard: the two doors are also 1 and 2.
+
+     The handler is read through a ref at event time, so the listener is bound
+     once for the life of the question. It previously had no dependency array
+     at all, which rebound it on every render — and `setLean` fires on every
+     hover and focus of either choice, so simply pointing at a door tore the
+     document listener down and built it again. */
+  const chooseRef = useRef<(next: "standard" | "desktop") => void>(() => {});
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "1") choose("standard");
-      if (e.key === "2") choose("desktop");
+      /* A modifier means the visitor is talking to the browser, not to us. */
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === "1") chooseRef.current("standard");
+      if (e.key === "2") chooseRef.current("desktop");
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  });
+  }, []);
+
+  const exitCtx = useRef<gsap.Context | null>(null);
 
   const choose = (next: "standard" | "desktop") => {
     if (leaving) return;
     setLeaving(next);
-    onLeave?.();
 
     if (reduced) {
       enter(next);
@@ -82,16 +111,20 @@ export default function Selector({ onLeave }: { onLeave?: () => void }) {
     const el = root.current;
     if (!el) return enter(next);
 
+    const chosen = choiceRefs.current[next];
+    const other =
+      choiceRefs.current[next === "standard" ? "desktop" : "standard"];
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ onComplete: () => enter(next) });
-      tl.to("[data-sel='other']", { opacity: 0, duration: 0.28, ease: "power2.in" })
+      tl.to(other, { opacity: 0, duration: 0.28, ease: "power2.in" })
         .to(
           "[data-sel='ask'], [data-sel='foot']",
           { opacity: 0, y: -18, duration: 0.35, ease: "power2.in" },
           "<",
         )
         .to(
-          "[data-sel='chosen']",
+          chosen,
           next === "standard"
             ? { scale: 0.94, opacity: 0, duration: 0.5, ease: "power2.inOut" }
             : { scale: 1.06, opacity: 0, duration: 0.5, ease: "power2.inOut" },
@@ -113,8 +146,30 @@ export default function Selector({ onLeave }: { onLeave?: () => void }) {
         );
     }, root);
 
-    return () => ctx.revert();
+    /* Not returned as a cleanup: this is an event handler, so nothing would
+       ever call it. The context is reverted when the question unmounts, which
+       is the next thing that happens. */
+    exitCtx.current = ctx;
   };
+
+  useEffect(() => () => exitCtx.current?.revert(), []);
+
+  chooseRef.current = choose;
+
+  /* It declares itself a modal dialog, so it has to behave like one: focus
+     moves into it, Tab stays inside, and the document under it is locked.
+     It previously declared all of that and did none of it.
+
+     Escape resolves to STANDARD rather than doing nothing. A dialog that
+     cannot be dismissed is the one case APG allows, but there is a better
+     answer here: dismissing the question means "stop asking and show me the
+     portfolio", and the portfolio is exactly what STANDARD is. */
+  useOverlay({
+    open: true,
+    onClose: () => chooseRef.current("standard"),
+    owner: "selector",
+    ref: root,
+  });
 
   return (
     <div
@@ -146,10 +201,29 @@ export default function Selector({ onLeave }: { onLeave?: () => void }) {
         </div>
 
         <div className="selector__inner shell">
+          {/* The masthead, not just a wordmark.
+
+              This screen is the first thing a visitor sees, and it used to
+              answer none of the questions they arrive with: it gave a name and
+              then asked them a question about navigation. Someone opening this
+              from an application had to pick a door before learning what the
+              person behind it does. The question stays — it is the concept —
+              but it is no longer the only thing on the screen that means
+              anything. Role and focus are read from the same profile the hero
+              and the document metadata read, so there is nothing here to keep
+              in sync by hand. */}
           <div className="selector__top t-mono" data-sel="foot">
-            <span>
-              <span className="selector__dot" aria-hidden="true" />
-              HET PATEL
+            <span className="selector__id">
+              <span className="selector__id-name">
+                <span className="selector__dot" aria-hidden="true" />
+                {profile.name.toUpperCase()}
+              </span>
+              <span className="text-grey selector__id-role">
+                {profile.role.toUpperCase()}
+              </span>
+              <span className="text-grey selector__id-focus">
+                {profile.focus}
+              </span>
             </span>
             <span className="text-grey">ENTRY / SELECT ONE</span>
           </div>
@@ -167,7 +241,10 @@ export default function Selector({ onLeave }: { onLeave?: () => void }) {
             <button
               type="button"
               className="selector__choice"
-              data-sel={leaving === "standard" ? "chosen" : leaving ? "other" : "choice"}
+              ref={(n) => {
+                choiceRefs.current.standard = n;
+              }}
+              data-sel="choice"
               onMouseEnter={() => setLean("standard")}
               onMouseLeave={() => setLean(null)}
               onFocus={() => setLean("standard")}
@@ -188,7 +265,10 @@ export default function Selector({ onLeave }: { onLeave?: () => void }) {
             <button
               type="button"
               className="selector__choice selector__choice--desktop"
-              data-sel={leaving === "desktop" ? "chosen" : leaving ? "other" : "choice"}
+              ref={(n) => {
+                choiceRefs.current.desktop = n;
+              }}
+              data-sel="choice"
               onMouseEnter={() => setLean("desktop")}
               onMouseLeave={() => setLean(null)}
               onFocus={() => setLean("desktop")}

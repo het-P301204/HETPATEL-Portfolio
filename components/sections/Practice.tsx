@@ -62,10 +62,13 @@ export default function Practice() {
         <header className="practice__head t-mono">
           {/* The same mark the navigation uses for this section, so the pinned
               sections are recognisably part of the same system as the rest. */}
-          <span className="practice__head-title">
+          {/* An h2, like every other section title. This was a span, so the
+              one section that pins itself across a full screen of scroll was
+              also the one section missing from the document outline. */}
+          <h2 className="practice__head-title">
             <SectionMarker id="practice" />
             SECURITY PRACTICE
-          </span>
+          </h2>
           <span className="text-grey">
             {String(active + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}
           </span>

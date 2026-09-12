@@ -16,7 +16,15 @@
   padding-block: clamp(4.5rem, 12vh, 8rem);
   overflow: clip;
 }
-@media (min-width: 768px) {
+/* The pin exists only to give the scrub somewhere to happen. It is gated on
+   exactly the query the GSAP timeline in Manifesto.tsx is gated on, so the
+   frame is never held open for a sequence that is not going to run. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  /* Sixteen fragments drift at three rates, but only here — below this query
+     nothing moves them, so nothing below it needs a layer. */
+  .manifesto__fragment {
+    will-change: transform;
+  }
   .manifesto {
     height: 230svh;
   }
@@ -40,7 +48,6 @@
   white-space: nowrap;
   color: var(--color-grey-soft);
   opacity: 0.26;
-  will-change: transform;
   user-select: none;
 }
 .manifesto__fragment[data-depth="1"] {
@@ -69,14 +76,16 @@
   position: relative;
   align-self: center;
   display: grid;
+  gap: clamp(1.5rem, 5vh, 3rem);
 }
 .manifesto__stanza {
-  grid-area: 1 / 1;
   display: grid;
   justify-items: start;
 }
+/* Scrubbed continuously against scroll position, so this one earns it. */
 .manifesto__line {
   display: block;
+  will-change: transform;
   font-size: clamp(2.1rem, 8.4vw, 8rem);
   line-height: 0.92;
 }
@@ -108,7 +117,6 @@
   height: 2px;
   width: min(30vw, 22rem);
   background: var(--color-signal);
-  transform: scaleX(0);
   transform-origin: 0 50%;
 }
 

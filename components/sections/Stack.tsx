@@ -19,7 +19,7 @@ export default function Stack() {
     name: "TOOLING",
     lines: [
       `${count} ENTRIES · ${stack.length} GROUPS`,
-      "POINT AT ONE TO READ ITS FUNCTION",
+      "SELECT ONE TO READ ITS FUNCTION",
     ],
   });
 
@@ -30,6 +30,21 @@ export default function Stack() {
         label="TECHNICAL TOOLKIT"
         note="TOOLING · PROTOCOLS · FRAMEWORKS"
       />
+
+      {/* A list of tools answers "what" and, through the readout, "why". It
+          cannot answer "on what basis" without asserting something per tool
+          that the record does not state — several of these appear in a
+          discipline list and nowhere else. SECURITY PRACTICE does state it,
+          per domain, so this points there rather than inventing a provenance
+          for each row. */}
+      <p className="t-mono-sm text-grey stack__crossref">
+        WHERE EACH OF THESE COMES FROM — INTERNSHIP, LAB, COURSEWORK OR
+        SELF-DIRECTED — IS STATED BY DOMAIN IN{" "}
+        <a href="#practice" className="link" data-cursor="link">
+          SECURITY PRACTICE ↑
+        </a>
+        .
+      </p>
 
       <div className="stack__body">
         <div className="stack__matrix">

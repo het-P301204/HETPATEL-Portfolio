@@ -46,6 +46,22 @@ export default function Hero() {
   const [booted, setBooted] = useState<boolean | null>(null);
   const [stamp, setStamp] = useState("");
 
+  /* Whether the hero is anywhere near the viewport. Two things depend on it:
+     the pointer instrument's animation frame, and the auto-advancing index.
+     Both used to run for the whole visit regardless of where the reader was. */
+  const [onScreen, setOnScreen] = useState(true);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => setOnScreen(entry.isIntersecting),
+      { threshold: 0 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   /* Client-only so the server and the client can never disagree on the clock. */
   useEffect(() => {
     const tick = () => {
@@ -208,6 +224,9 @@ export default function Hero() {
     if (!el) return;
     gsap.registerPlugin(ScrollTrigger);
 
+    /* `reduced` is not a dependency: gsap.matchMedia owns the preference and
+       re-evaluates itself. Listing it tore down and rebuilt the entire sticky
+       outro whenever the setting changed. */
     const mm = gsap.matchMedia();
     mm.add(
       "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
@@ -265,11 +284,11 @@ export default function Hero() {
     );
 
     return () => mm.revert();
-  }, [ready, reduced]);
+  }, [ready]);
 
   /* ---- instrument layer --------------------------------------------------- */
   useEffect(() => {
-    if (!fine || reduced) return;
+    if (!fine || reduced || !onScreen) return;
     const el = root.current;
     if (!el) return;
 
@@ -321,17 +340,22 @@ export default function Hero() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("resize", measure);
     };
-  }, [fine, reduced]);
+  }, [fine, reduced, onScreen]);
 
-  /* ---- the composition changes on its own when nobody is driving it ------ */
+  /* ---- the composition changes on its own when nobody is driving it ------
+     Only while it is on screen. It checked `document.hidden`, which covers a
+     backgrounded tab and nothing else: on a foregrounded tab it kept cycling —
+     and kept re-rendering the largest component on the page — for the entire
+     visit, including the twenty-odd screens where the hero is nowhere near the
+     viewport. Pointing at or focusing an entry still holds it. */
   useEffect(() => {
-    if (held || reduced || !ready) return;
+    if (held || reduced || !ready || !onScreen) return;
     const id = window.setInterval(() => {
       if (document.hidden) return;
       setActive((i) => (i + 1) % disciplines.length);
     }, 5200);
     return () => window.clearInterval(id);
-  }, [held, reduced, ready]);
+  }, [held, reduced, ready, onScreen]);
 
   const current = disciplines[active];
 
@@ -444,27 +468,38 @@ export default function Hero() {
               onMouseLeave={() => setHeld(false)}
               aria-label="Disciplines"
             >
+              {/* These were `<li tabIndex={0}>`: four tab stops that a screen
+                  reader announced as list items with nothing actionable about
+                  them, and which a keyboard could focus but never operate. They
+                  select a discipline, so they are buttons, and `aria-pressed`
+                  states which one is selected. */}
               {disciplines.map((d, i) => (
-                <li
-                  key={d.id}
-                  className={cn("hero__item", i === active && "is-active")}
-                  tabIndex={0}
-                  onMouseEnter={() => {
-                    setActive(i);
-                    setHeld(true);
-                  }}
-                  onFocus={() => {
-                    setActive(i);
-                    setHeld(true);
-                  }}
-                  onBlur={() => setHeld(false)}
-                  data-cursor="analyze"
-                  data-cursor-label="ANALYZE"
-                  data-cursor-index={d.index}
-                >
-                  <span className="t-mono hero__item-idx">{d.index}</span>
-                  <span className="t-mono hero__item-label">{d.label}</span>
-                  <span className="sr-only"> — {d.descriptor}</span>
+                <li key={d.id}>
+                  <button
+                    type="button"
+                    className={cn("hero__item", i === active && "is-active")}
+                    aria-pressed={i === active}
+                    onMouseEnter={() => {
+                      setActive(i);
+                      setHeld(true);
+                    }}
+                    onFocus={() => {
+                      setActive(i);
+                      setHeld(true);
+                    }}
+                    onBlur={() => setHeld(false)}
+                    onClick={() => {
+                      setActive(i);
+                      setHeld(true);
+                    }}
+                    data-cursor="analyze"
+                    data-cursor-label="ANALYZE"
+                    data-cursor-index={d.index}
+                  >
+                    <span className="t-mono hero__item-idx">{d.index}</span>
+                    <span className="t-mono hero__item-label">{d.label}</span>
+                    <span className="sr-only"> — {d.descriptor}</span>
+                  </button>
                 </li>
               ))}
             </ol>
@@ -477,7 +512,15 @@ export default function Hero() {
               ) : (
                 <span />
               )}
-              <a href="#work" className="hero__scroll t-mono-sm" data-cursor="link">
+              {/* Points at the next section, not at WORK. Labelled SCROLL, it
+                  reads as "continue" — and it used to skip the statement and
+                  the whole of FIELD EXPERIENCE to land four sections down. The
+                  skip link in the navigation is the one that jumps. */}
+              <a
+                href="#manifesto"
+                className="hero__scroll t-mono-sm"
+                data-cursor="link"
+              >
                 SCROLL
                 <i />
               </a>

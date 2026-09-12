@@ -47,12 +47,22 @@ export default function ExperienceShell({ children }: { children: ReactNode }) {
 
   const parked = mode === "desktop";
 
+  /* Two different reasons to take the world out of play, and they are not the
+     same reason. `parked` also stops it painting, because the environment is
+     mounted above it for the rest of the visit. `asking` only has to stop it
+     being reachable: the veil is opaque, but opacity is not inertness, and the
+     nav behind it kept every one of its controls in the tab order. A keyboard
+     visitor met the question by tabbing through a skip link, a wordmark, six
+     section links, the theme toggle and the index button — all of them
+     invisible, all of them behind a dialog that claimed to be modal. */
+  const sealed = parked || asking;
+
   return (
     <>
       <div
         className={cn("world", parked && "is-parked")}
-        aria-hidden={parked}
-        inert={parked}
+        aria-hidden={sealed}
+        inert={sealed}
       >
         {children}
       </div>

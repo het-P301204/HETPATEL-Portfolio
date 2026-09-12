@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { useFinePointer, useReducedMotion } from "@/lib/hooks";
+import { subscribePointer } from "@/lib/pointerField";
 
 type Props = {
   children: ReactNode;
@@ -35,12 +36,14 @@ export default function MagneticElement({
     const xTo = gsap.quickTo(el, "x", { duration: 0.5, ease: "power3.out" });
     const yTo = gsap.quickTo(el, "y", { duration: 0.5, ease: "power3.out" });
 
-    const onMove = (e: PointerEvent) => {
+    /* One window listener is shared by every magnet on the page and coalesced
+       to a single frame; see lib/pointerField.ts. */
+    const onMove = (px: number, py: number) => {
       const r = el.getBoundingClientRect();
       const cx = r.left + r.width / 2;
       const cy = r.top + r.height / 2;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
+      const dx = px - cx;
+      const dy = py - cy;
       const inside =
         Math.abs(dx) < r.width / 2 + radius &&
         Math.abs(dy) < r.height / 2 + radius;
@@ -56,9 +59,9 @@ export default function MagneticElement({
       }
     };
 
-    window.addEventListener("pointermove", onMove, { passive: true });
+    const unsubscribe = subscribePointer(onMove);
     return () => {
-      window.removeEventListener("pointermove", onMove);
+      unsubscribe();
       gsap.set(el, { x: 0, y: 0 });
     };
   }, [fine, reduced, strength, radius]);

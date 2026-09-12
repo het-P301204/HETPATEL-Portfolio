@@ -51,8 +51,9 @@ export default function AccessibilityPage() {
             surface in both themes, including the 10–11px mono labels.
           </li>
           <li>
-            Both themes are available manually and the site follows the system
-            setting until a choice is made.
+            Both themes are complete and switchable at any time. The site does
+            not follow the system setting: it opens dark, which is the theme it
+            was composed in, and remembers your choice from then on.
           </li>
           <li>
             Colour is never the only signal. Certification status, confidential

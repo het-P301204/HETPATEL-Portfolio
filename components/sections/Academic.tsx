@@ -124,7 +124,11 @@ export default function Academic() {
         </div>
 
         {/* --- the year being read ------------------------------------------ */}
-        <div className="acad__readout" aria-live="polite">
+        {/* Not a live region. Its content is driven by scroll position and by
+          hover, so it announced a fresh year every time the reader moved
+          through the section — and the same text is already in the sr-only
+          spans on the controls that change it. */}
+      <div className="acad__readout">
           <p className="t-mono acad__readout-year">{mark.year}</p>
           <div className="acad__readout-body">
             <h4 className="t-display acad__readout-label">{mark.label}</h4>

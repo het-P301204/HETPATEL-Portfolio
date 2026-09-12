@@ -16,11 +16,12 @@ import { cn } from "@/lib/cn";
 /**
  * PROJECTS — the security case archive.
  *
- * Not a card grid and not one long list: four strata, because four different
- * kinds of claim are being made and they are not equally strong. Engagement
- * work, personal builds, lab work and competition work are separated in the
- * structure itself, so a reviewer can weigh them without reading a word of body
- * copy. Confidential entries carry their own seal.
+ * Not a card grid and not one long list: the archive is stratified, because
+ * different kinds of claim are being made and they are not equally strong.
+ * Work built alone and work done in a lab are separated in the structure
+ * itself, so a reviewer can weigh them without reading a word of body copy.
+ * Engagement work is not here at all — it lives once, in WORK — and
+ * competition credentials live once, in the certification archive.
  *
  * Each stratum lays its cases asymmetrically — the archive reads as a pile that
  * has been worked through rather than a table that was generated. Opening a
@@ -100,7 +101,11 @@ function CaseRecord({
           </div>
 
           <div className="record__col">
-            <ProjectMotif motif={record.motif} className="record__motif" />
+            <ProjectMotif
+              motif={record.motif}
+              caption={record.motifCaption}
+              className="record__motif"
+            />
             <dl className="record__meta">
               <div>
                 <dt className="t-mono text-grey-soft">DOMAIN</dt>
@@ -313,7 +318,7 @@ export default function Projects() {
                   </button>
 
                   <span className="dossier__figure" aria-hidden="true">
-                    <ProjectMotif motif={p.motif} />
+                    <ProjectMotif motif={p.motif} caption={p.motifCaption} />
                   </span>
 
                   {p.confidential ? (
@@ -343,7 +348,13 @@ export default function Projects() {
                       delay={i * 0.03}
                       className="dir"
                     >
-                      <span className="t-mono-sm dir__n">{d.number}</span>
+                      {/* Prefixed REF. These are catalogue ids carried over from the
+                          strategy document, not a sequence: read bare and in
+                          priority order they run 099, 100, 101, 016, 098 —
+                          which looks like a numbering bug rather than a
+                          reference. The order is deliberate (selected first),
+                          so the label is what had to change. */}
+                      <span className="t-mono-sm dir__n">REF {d.number}</span>
                       <span className="dir__body">
                         <span className="dir__title t-mono">{d.title}</span>
                         <span className="t-body dir__premise">{d.premise}</span>

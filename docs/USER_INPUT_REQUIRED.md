@@ -19,7 +19,7 @@ Education (C.K. Pithawala College, B.E. Computer Engineering, Sept 2022 – June
 |---|---|
 | **CSCRF / IRDAI** | Real. Personally performed for a leading financial firm. High-level/anonymised presentation only; nothing client-sensitive without explicit clearance. |
 | **Email** | `patel.het7996@gmail.com` |
-| **Location** | Not displayed publicly. Temporary (Surat → expected USA for master's). Excluded from brand and architecture. |
+| **Location** | Not displayed publicly. Temporary (current city withheld → expected USA for master's). Excluded from brand and architecture. |
 | **GitHub** | https://github.com/het-P301204 — audited, see `github/PUBLIC_GITHUB_AUDIT.md` |
 | **Strategy documents** | Adopted working strategy, not authored work. No claim of original authorship over frameworks or prose. |
 | **Project descriptions** | Het will supply separately. Nothing invented. |

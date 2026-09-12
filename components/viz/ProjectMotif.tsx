@@ -1,16 +1,43 @@
-import type { ProjectMotif as Motif } from "@/data/projects";
+import type { MotifCaption, ProjectMotif as Motif } from "@/data/projects";
 
 /**
  * Every project draws its own diagram. No photography, no stock imagery, no
  * dashboard screenshots — a portfolio about systems should render systems.
  * Geometry is deterministic so server and client always agree, and each figure
  * is built from the same vocabulary: hairlines, ticks, nodes, one accent mark.
+ *
+ * ── why the words are a prop ───────────────────────────────────────────────
+ * There are seven shapes and fifteen cases, so shapes get reused, and that is
+ * fine: a time series is a time series. The words were not fine. Every label
+ * was hardcoded inside its shape, so reusing a shape silently reused another
+ * project's vocabulary.
+ *
+ * The results were not subtle. SUNSET, a post-quantum migration planner, was
+ * captioned DETECTION / CONTAINMENT / RECOVERY and "THE RECORD IS WRITTEN
+ * DURING, NOT AFTER" — incident-response language on a tool about migration
+ * deadlines. PINGMASTER, a latency monitor, carried those same three words.
+ * AFTERLIFE is a case about a session outliving the reset meant to kill it,
+ * and it drew the cloud-identity figure while the ISSUE / SIGN / VERIFY /
+ * EXPIRE figure described it exactly. On a site whose whole claim is that it
+ * is written to be checked, a figure asserting the wrong discipline is worse
+ * than no figure at all.
+ *
+ * So the geometry stays shared and the vocabulary comes from the case. Each
+ * figure declares defaults for its own slots; `data/projects.ts` overrides the
+ * ones that would otherwise be untrue.
  */
+
+type Caption = MotifCaption;
+
+/** Prefer the case's word, fall back to the figure's own. */
+const pick = (a: string | undefined, b: string) => a ?? b;
+const pickList = (a: string[] | undefined, b: string[]) =>
+  a && a.length === b.length ? a : b;
 
 const SCAN_BARS = [18, 42, 26, 64, 12, 88, 30, 52, 20, 74, 34, 46];
 const SCAN_FLAGS = [3, 5, 9];
 
-function Scan() {
+function Scan({ caption: c = {} }: { caption?: Caption }) {
   return (
     <>
       {/* port / host map — bar height is response, flagged bars are followed up */}
@@ -50,16 +77,16 @@ function Scan() {
         />
       ))}
       <text x={12} y={244} className="mv-label">
-        HOSTS 001—012
+        {pick(c.lead, "HOSTS 001—012")}
       </text>
       <text x={388} y={244} className="mv-label" textAnchor="end">
-        VERIFIED 03
+        {pick(c.trail, "VERIFIED 03")}
       </text>
     </>
   );
 }
 
-function Vector() {
+function Vector({ caption: c = {} }: { caption?: Caption }) {
   return (
     <>
       {/* delivery path, and the branch that is the actual attack */}
@@ -69,19 +96,22 @@ function Vector() {
         className="mv-dash mv-accent"
       />
       <path d="M240 118 C 300 118, 300 62, 360 62" className="mv-dash" />
-      {[
-        [40, 70, "SOURCE"],
-        [240, 118, "PRETEXT"],
-        [360, 176, "CAPTURE"],
-        [360, 62, "IGNORED"],
-      ].map(([x, y, label]) => (
+      {(() => {
+        const n = pickList(c.items, ["SOURCE", "PRETEXT", "CAPTURE", "IGNORED"]);
+        return [
+          [40, 70, n[0]],
+          [240, 118, n[1]],
+          [360, 176, n[2]],
+          [360, 62, n[3]],
+        ] as [number, number, string][];
+      })().map(([x, y, label], li) => (
         <g key={label as string}>
           <rect
             x={(x as number) - 4}
             y={(y as number) - 4}
             width={8}
             height={8}
-            className={label === "CAPTURE" ? "mv-accent-fill" : "mv-fill"}
+            className={li === 2 ? "mv-accent-fill" : "mv-fill"}
           />
           {/* Labels sit above their node so nothing crosses an edge. */}
           <text
@@ -98,13 +128,13 @@ function Vector() {
       ))}
       <line x1={12} y1={224} x2={388} y2={224} className="mv-hair" />
       <text x={12} y={244} className="mv-label">
-        CLOSED ENVIRONMENT
+        {pick(c.foot, "CLOSED ENVIRONMENT")}
       </text>
     </>
   );
 }
 
-function Identity() {
+function Identity({ caption: c = {} }: { caption?: Caption }) {
   return (
     <>
       {/* nested boundaries; the permission that was refused stays dashed */}
@@ -136,17 +166,17 @@ function Identity() {
         </g>
       ))}
       <text x={16} y={244} className="mv-label">
-        ROLE · SCOPE · DEFAULT
+        {pick(c.lead, "ROLE · SCOPE · DEFAULT")}
       </text>
       <text x={384} y={244} className="mv-label" textAnchor="end">
-        ONE PATH REFUSED
+        {pick(c.trail, "ONE PATH REFUSED")}
       </text>
     </>
   );
 }
 
-function Token() {
-  const steps = ["ISSUE", "SIGN", "VERIFY", "EXPIRE"];
+function Token({ caption: c = {} }: { caption?: Caption }) {
+  const steps = pickList(c.items, ["ISSUE", "SIGN", "VERIFY", "EXPIRE"]);
   return (
     <>
       {steps.map((s, i) => {
@@ -187,13 +217,13 @@ function Token() {
         />
       ))}
       <text x={14} y={206} className="mv-label">
-        T0
+        {pick(c.lead, "T0")}
       </text>
       <text x={386} y={206} className="mv-label" textAnchor="end">
-        SESSION LIFETIME
+        {pick(c.trail, "SESSION LIFETIME")}
       </text>
       <text x={252} y={78} className="mv-label" textAnchor="middle">
-        THE HARD PART
+        {pick(c.note, "THE HARD PART")}
       </text>
     </>
   );
@@ -201,7 +231,7 @@ function Token() {
 
 const EVENTS = [30, 58, 74, 96, 150, 178, 206, 248, 300, 322, 356];
 
-function Timeline() {
+function Timeline({ caption: c = {} }: { caption?: Caption }) {
   return (
     <>
       <line x1={14} y1={130} x2={386} y2={130} className="mv-stroke" />
@@ -216,11 +246,14 @@ function Timeline() {
         />
       ))}
       <rect x={14} y={130} width={136} height={0.5} className="mv-fill" />
-      {[
-        [14, 150, "DETECTION"],
-        [150, 236, "CONTAINMENT"],
-        [292, 386, "RECOVERY"],
-      ].map(([a, b, label]) => (
+      {(() => {
+        const n = pickList(c.items, ["DETECTION", "CONTAINMENT", "RECOVERY"]);
+        return [
+          [14, 150, n[0]],
+          [150, 236, n[1]],
+          [292, 386, n[2]],
+        ] as [number, number, string][];
+      })().map(([a, b, label]) => (
         <g key={label as string}>
           <line
             x1={a as number}
@@ -249,10 +282,10 @@ function Timeline() {
         </g>
       ))}
       <text x={150} y={88} className="mv-label">
-        FIRST SIGNAL
+        {pick(c.note, "FIRST SIGNAL")}
       </text>
       <text x={14} y={222} className="mv-label">
-        THE RECORD IS WRITTEN DURING, NOT AFTER
+        {pick(c.foot, "THE RECORD IS WRITTEN DURING, NOT AFTER")}
       </text>
     </>
   );
@@ -264,7 +297,7 @@ const CONTROL_ROWS = 5;
 const CONTROL_COLS = 8;
 const CONTROL_GAP = [2, 5] as const; // row, column of the cell that is only claimed
 
-function Control() {
+function Control({ caption: c = {} }: { caption?: Caption }) {
   return (
     <>
       {Array.from({ length: CONTROL_ROWS }).map((_, r) =>
@@ -291,13 +324,13 @@ function Control() {
       <line x1={48} y1={32} x2={48} y2={200} className="mv-stroke" />
       <line x1={48} y1={200} x2={388} y2={200} className="mv-stroke" />
       <text x={12} y={52} className="mv-label">
-        CTRL
+        {pick(c.note, "CTRL")}
       </text>
       <text x={48} y={224} className="mv-label">
-        EVIDENCE →
+        {pick(c.lead, "EVIDENCE →")}
       </text>
       <text x={388} y={224} className="mv-label" textAnchor="end">
-        ONE CONTROL ASSERTED, NOT SHOWN
+        {pick(c.trail, "ONE CONTROL ASSERTED, NOT SHOWN")}
       </text>
     </>
   );
@@ -310,10 +343,10 @@ const TRACE_LANES = [
   { y: 174, label: "NETWORK", hit: 6 },
 ];
 
-function Trace() {
+function Trace({ caption: c = {} }: { caption?: Caption }) {
   return (
     <>
-      {TRACE_LANES.map((lane) => (
+      {TRACE_LANES.map((lane, li) => (
         <g key={lane.label}>
           <line
             x1={86}
@@ -323,7 +356,12 @@ function Trace() {
             className="mv-hair"
           />
           <text x={12} y={lane.y + 4} className="mv-label">
-            {lane.label}
+            {
+              pickList(
+                c.items,
+                TRACE_LANES.map((l) => l.label),
+              )[li]
+            }
           </text>
           {Array.from({ length: 13 }).map((_, i) => {
             const x = 96 + i * 22;
@@ -344,55 +382,22 @@ function Trace() {
       {/* the vertical the three lanes share */}
       <line x1={228} y1={54} x2={228} y2={190} className="mv-dash mv-accent" />
       <text x={228} y={44} className="mv-label" textAnchor="middle">
-        CORRELATED
+        {pick(c.note, "CORRELATED")}
       </text>
       <text x={12} y={224} className="mv-label">
-        SYNTHETIC DATA · FICTIONAL SCENARIO
+        {pick(c.foot, "SYNTHETIC DATA · FICTIONAL SCENARIO")}
       </text>
     </>
   );
 }
 
-/* A challenge board against a clock. Deliberately abstract: no score, no
-   placing and no solve count is claimed, because none is on the record. */
-function Compete() {
-  return (
-    <>
-      {Array.from({ length: 4 }).map((_, r) =>
-        Array.from({ length: 7 }).map((__, c) => {
-          const x = 44 + c * 44;
-          const y = 40 + r * 38;
-          // A fixed pattern, not a tally — the figure says "a challenge set was
-          // worked", not "this many were solved".
-          const solved = (r * 3 + c * 5) % 4 < 2;
-          return (
-            <rect
-              key={`${r}-${c}`}
-              x={x}
-              y={y}
-              width={26}
-              height={22}
-              className={solved ? "mv-stroke" : "mv-hair"}
-            />
-          );
-        }),
-      )}
-      {/* the clock, which is the actual constraint */}
-      <line x1={14} y1={196} x2={386} y2={196} className="mv-stroke" />
-      <line x1={14} y1={190} x2={14} y2={202} className="mv-stroke" />
-      <line x1={386} y1={190} x2={386} y2={202} className="mv-stroke" />
-      <rect x={250} y={190} width={6} height={12} className="mv-accent-fill" />
-      <text x={14} y={222} className="mv-label">
-        CHALLENGE SET
-      </text>
-      <text x={386} y={222} className="mv-label" textAnchor="end">
-        TIME-BOUNDED
-      </text>
-    </>
-  );
-}
-
-const FIGURES: Record<Motif, () => React.JSX.Element> = {
+/* `compete` was here too, and nothing referenced it: the Kryptech CTF moved to
+   the certification archive, because a credential someone else issued belongs
+   with the other credentials rather than among work Het authored. */
+const FIGURES: Record<
+  Motif,
+  (p: { caption?: Caption }) => React.JSX.Element
+> = {
   scan: Scan,
   vector: Vector,
   identity: Identity,
@@ -400,15 +405,17 @@ const FIGURES: Record<Motif, () => React.JSX.Element> = {
   timeline: Timeline,
   control: Control,
   trace: Trace,
-  compete: Compete,
 };
 
 export default function ProjectMotif({
   motif,
+  caption,
   className,
   ambient = false,
 }: {
   motif: Motif;
+  /** The case's own words for this figure's slots. */
+  caption?: Caption;
   className?: string;
   /** Fill a whole stage instead of sitting in a column: the same figure,
       cropped to the frame and dropped back to a background weight. */
@@ -420,11 +427,13 @@ export default function ProjectMotif({
       viewBox="0 0 400 260"
       preserveAspectRatio={ambient ? "xMidYMid slice" : undefined}
       className={`motif ${ambient ? "motif--ambient" : ""} ${className ?? ""}`}
-      role="img"
+      /* Decorative. It also carried `role="img"`, which contradicted the
+         aria-hidden beside it and named nothing anyway — the figure has no
+         title or label. What it depicts is stated in the case record's prose. */
       aria-hidden="true"
       focusable="false"
     >
-      <Figure />
+      <Figure caption={caption} />
     </svg>
   );
 }

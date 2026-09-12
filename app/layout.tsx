@@ -13,9 +13,12 @@ import "../styles/selector.css";
 import "../styles/desktop.css";
 import "../styles/sections.css";
 
+/* No `axes: ["wdth"]`. Requesting the width axis materially enlarges the
+   variable font on the critical path, and the only thing that ever referenced
+   it asked for `"wdth" 100` — the default. The site paid for an axis it never
+   moved. */
 const archivo = Archivo({
   subsets: ["latin"],
-  axes: ["wdth"],
   display: "swap",
   variable: "--font-archivo",
 });
@@ -26,6 +29,16 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
   variable: "--font-plex-mono",
 });
+
+/**
+ * JSON.stringify does not escape `<`, so a value containing `</script>` would
+ * end the block early and everything after it would be parsed as markup. Every
+ * value here is a build-time constant from `data/profile.ts`, so this is not
+ * reachable today — it is closed by construction so that it cannot become
+ * reachable by someone later adding a field that is not.
+ */
+const jsonLd = (data: unknown) =>
+  JSON.stringify(data).replace(/</g, "\\u003c");
 
 const title = "HET PATEL — CYBERSECURITY";
 const description =
@@ -109,7 +122,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLd({
               "@context": "https://schema.org",
               "@type": "Person",
               name: profile.name,

@@ -23,9 +23,57 @@
   z-index: 2;
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  /* minmax(0, 1fr), so the flexible row can collapse instead of forcing the
+     grid taller than its container. */
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: clamp(1.25rem, 3vh, 2.5rem);
   padding-block: clamp(1.25rem, 3.5vh, 2.25rem);
+  /* The last resort, and it should never be needed after the short-viewport
+     rules below. The veil clips its overflow, so anything past the fold was
+     not merely awkward to reach — it could not be reached at all. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* --- short viewports ------------------------------------------------------
+   A phone held sideways, or a small window. The question is composed for
+   height it does not have here: at 844x390 the ask alone took the top third,
+   the doors stack below 860px, and DESKTOP sat off the bottom of a surface
+   that cannot scroll. One of the site's two front doors was unreachable.
+
+   The composition is the same, tuned down: the question gets a size that
+   suits the space, the vertical air between it and the doors comes out, and
+   the doors go side by side, because a viewport that is short is almost
+   always wide. */
+@media (max-height: 620px) {
+  .selector__inner {
+    grid-template-rows: auto auto auto;
+    gap: clamp(0.6rem, 2vh, 1.1rem);
+    padding-block: clamp(0.7rem, 2.5vh, 1.2rem);
+    align-content: center;
+  }
+  .selector__ask {
+    padding-top: 0;
+  }
+  .selector__ask .t-display {
+    font-size: clamp(1.4rem, 4.6vw, 3rem);
+  }
+  .selector__ask-2 {
+    padding-left: clamp(0.6rem, 4vw, 3rem);
+  }
+  .selector__choice {
+    padding-top: clamp(0.5rem, 1.5vh, 0.9rem);
+  }
+  .selector__name {
+    font-size: clamp(1.3rem, 3.6vw, 2.4rem);
+  }
+}
+@media (max-height: 620px) and (min-width: 560px) {
+  .selector__choices {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.25rem, 4vw, 3.5rem);
+    align-items: start;
+  }
 }
 
 .selector__top,
@@ -36,6 +84,28 @@
   gap: 1rem;
   color: var(--color-grey);
 }
+/* The identity block. Stacked, so the name keeps the weight it had and the
+   qualifiers sit under it rather than competing on the same line. The focus
+   line is the first thing to go when there is no room for it: the role is what
+   has to survive every viewport. */
+.selector__id {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+}
+.selector__id-name {
+  display: flex;
+  align-items: center;
+}
+.selector__id-focus {
+  display: none;
+}
+@media (min-width: 720px) and (min-height: 560px) {
+  .selector__id-focus {
+    display: block;
+  }
+}
+
 .selector__dot {
   display: inline-block;
   width: 6px;
@@ -161,12 +231,38 @@
   }
 }
 
-/* --- leaning: the screen tips toward the world under the pointer ---------- */
-.selector.is-lean-standard .selector__choice--desktop {
-  opacity: 0.4;
-}
+/* --- leaning: the screen tips toward the world under the pointer ----------
+   The other door used to recede by dropping to `opacity: 0.4`, and the state
+   is entered on focus as well as hover — so tabbing to one choice left the
+   other one's text sitting at 2.7:1 (its call to action) and 1.8:1 (its kind
+   line) indefinitely. Raising the value does not rescue it: the kind line is
+   the cobalt accent, which clears 4.5:1 at full strength by 0.43 and fails at
+   any dim at all in the light theme.
+
+   So the recession is spatial instead of tonal. Tipping was always a spatial
+   metaphor; the door that is not being pointed at now settles back and its
+   rule retracts, while every piece of text on it keeps the contrast it was
+   drawn with. */
+.selector.is-lean-standard .selector__choice--desktop,
 .selector.is-lean-desktop .selector__choice:not(.selector__choice--desktop) {
-  opacity: 0.4;
+  transform: scale(0.978) translateY(4px);
+}
+.selector.is-lean-standard .selector__choice--desktop::after,
+.selector.is-lean-desktop
+  .selector__choice:not(.selector__choice--desktop)::after {
+  transform: scaleX(0);
+}
+.selector__choice {
+  transform-origin: 0 50%;
+  transition:
+    transform 0.55s var(--ease),
+    opacity 0.35s var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .selector.is-lean-standard .selector__choice--desktop,
+  .selector.is-lean-desktop .selector__choice:not(.selector__choice--desktop) {
+    transform: none;
+  }
 }
 /* Editorial: the question grows, the surface calms. */
 .selector.is-lean-standard .selector__ask .t-display {

@@ -19,6 +19,7 @@
 .index-overlay__change,
 .copy-email,
 .hero__scroll,
+.exp__handoff,
 .footer__links a,
 .cert__cred--live {
   display: inline-flex;
@@ -816,6 +817,34 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.28s var(--ease);
+  /* Nine destinations plus a header, a preview panel and a footer do not fit
+     768px, which is an ordinary laptop. The panel is fixed and the document
+     behind it is locked, so anything past the fold was simply gone — and the
+     row that fell off the bottom was CONTACT, which is the one a reader is
+     most likely to have come for. It scrolls now, and `overscroll-behavior`
+     keeps that scroll from leaking to the locked page underneath. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Short viewports: take the air out before taking the scroll. The list is the
+   content here; the generous padding above and below it is not.
+
+   Qualified by the parent rather than left bare. A media query adds no
+   specificity, and the base rules for these two live further down the file —
+   so the unqualified version lost to them on source order and did nothing at
+   all. The extra class is what makes the override independent of position. */
+@media (max-height: 860px) {
+  .index-overlay .index-overlay__inner {
+    padding-block: clamp(3.25rem, 7vh, 4.5rem);
+    gap: clamp(0.85rem, 2vh, 1.4rem) clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .index-overlay .ix__row {
+    padding: clamp(0.2rem, 0.6vh, 0.4rem) 0;
+  }
+  .index-overlay .ix__row-label {
+    font-size: clamp(1.1rem, 2.4vw, 1.85rem);
+  }
 }
 .index-overlay[hidden] {
   display: none;
@@ -1222,107 +1251,9 @@
   transform: translateX(5px);
 }
 
-/* --- tracks: the role, opened one area of work at a time ------------------ */
-.exp__tracks-hint {
-  margin-top: clamp(1.5rem, 4vh, 2.25rem);
-}
-.exp__tracks {
-  margin-top: 0.75rem;
-  border-top: 1px solid var(--color-rule);
-}
-.exp__track {
-  border-bottom: 1px solid var(--color-rule);
-}
-.exp__track-btn {
-  display: grid;
-  grid-template-columns: 1.5rem minmax(0, 1fr);
-  gap: 0.3rem 0.85rem;
-  width: 100%;
-  padding-block: clamp(0.9rem, 2.2vh, 1.3rem);
-  text-align: left;
-  background: none;
-  border: 0;
-  color: inherit;
-}
-/* A plus that becomes a minus. Two rules, one rotation — no icon font, no
-   glyph that has to be translated. */
-.exp__track-sign {
-  position: relative;
-  grid-row: 1 / span 2;
-  width: 11px;
-  height: 11px;
-  margin-top: 0.45em;
-}
-.exp__track-sign i {
-  position: absolute;
-  inset: 50% 0 auto 0;
-  height: 1px;
-  background: var(--color-ink);
-  transition: transform 0.45s var(--ease);
-}
-.exp__track-sign i:last-child {
-  transform: rotate(90deg);
-}
-.exp__track-btn.is-open .exp__track-sign i {
-  background: var(--color-signal);
-}
-.exp__track-btn.is-open .exp__track-sign i:last-child {
-  transform: rotate(0deg);
-}
-.exp__track-label {
-  transition: color 0.35s var(--ease);
-}
-.exp__track-btn:hover .exp__track-label,
-.exp__track-btn.is-open .exp__track-label {
-  color: var(--color-signal);
-}
-.exp__track-summary {
-  grid-column: 2;
-  max-width: 62ch;
-  color: var(--color-grey);
-}
-
-.exp__track-body[hidden] {
-  display: none;
-}
-.exp__track-inner {
-  display: grid;
-  gap: 0.85rem;
-  padding: 0 0 clamp(1.1rem, 3vh, 1.75rem) 2.35rem;
-  animation: track-open 0.5s var(--ease) both;
-}
-@keyframes track-open {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-.exp__track-para {
-  max-width: 62ch;
-}
-.exp__track-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.9rem;
-  color: var(--color-grey);
-}
-/* The boundary a reader should not have to infer. */
-.exp__track-note {
-  max-width: 62ch;
-  padding-left: 0.85rem;
-  border-left: 2px solid var(--color-signal);
-  color: var(--color-signal);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .exp__track-inner {
-    animation: none;
-  }
-}
+/* The role's areas of work used to open here, one at a time, in an accordion.
+   They moved to WORK as a tablist and the ~100 lines that styled the accordion
+   stayed behind. Experience.tsx hands off now rather than listing. */
 
 /* ============================================================================
    ACADEMIC JOURNEY
@@ -1912,7 +1843,11 @@
   display: grid;
   gap: 0.35rem;
   padding-block: clamp(1.1rem, 2.6vh, 1.6rem);
-  transition: padding-left 0.55s var(--ease);
+  /* The open-out is a transform, not padding. Padding is a layout property and
+     five of these rows share one grid, so animating it re-laid the whole group
+     out on every frame of a hover. The movement is identical; it now runs on
+     the compositor. */
+  transition: transform 0.55s var(--ease);
 }
 @media (min-width: 768px) {
   .channel {
@@ -1925,7 +1860,7 @@
   }
   /* Pointing at a channel opens it out from its rule. */
   .channel.is-live {
-    padding-left: clamp(0.5rem, 1.5vw, 1.25rem);
+    transform: translateX(clamp(0.5rem, 1.5vw, 1.25rem));
   }
 }
 

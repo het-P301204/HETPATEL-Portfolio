@@ -9,22 +9,24 @@
  * constructed. A link is set only when the certificate behind it has been
  * opened and confirmed to name Het.
  *
- * Two are set, both hosted copies of the certificate itself: Advent of Cyber
- * 2025 and the Deloitte / Forage job simulation. Both documents carry his name
- * and a date. Note what this claims and what it does not — a hosted copy is
- * evidence you can read, not issuer-side verification. Where the issuer
- * publishes a verification page (TryHackMe prints a code on its certificate;
- * Forage prints two; Credly and Coursera both expose public credential URLs),
- * that link is strictly better and should replace the copy.
+ * Ten of the eleven are set now, and they are not equal evidence. Three are
+ * issuer-side verification — Coursera's accomplishment page, Credly's badge
+ * page, and the Credly profile — and the rest are hosted copies of the
+ * certificate itself. Note what a hosted copy claims and what it does not: it
+ * is evidence you can read, not proof the issuer stands behind. Where the
+ * issuer publishes a verification page (TryHackMe prints a code on its
+ * certificate; Forage prints two), that link is strictly better and should
+ * replace the copy.
  *
- * Two certificates exist but are deliberately NOT linked:
+ * The section header states the split, so a reader is told how many entries
+ * can be checked rather than being left to click through eleven and find out.
  *
- *   CTF Excellence (Kryptech) and Student SOC Program Foundations were both
- *   issued as unfilled templates — the recipient line and the date line are
- *   blank on the document. Linking a certificate that names nobody would
- *   weaken the archive rather than support it, which is the opposite of what
- *   this field is for. Ask each issuer to reissue a completed copy, then set
- *   the link.
+ * Two of those hosted copies — CTF Excellence (Kryptech) and Student SOC
+ * Program Foundations — were issued as unfilled templates: the recipient line
+ * and the date line are blank on the document. They are linked at Het's
+ * instruction and each carries that caveat at its own entry. They evidence the
+ * event, not the attendee. Ask each issuer to reissue a completed copy, then
+ * replace the link.
  *
  * A GDG on Campus Solution Challenge certificate (Hack2skill, ID
  * 2025H2S01GSC-I07241) also exists. It is not listed here: it recognises
@@ -284,11 +286,33 @@ export const certifications: Certification[] = [
   },
 ];
 
+/**
+ * Issuer-side verification, told apart from a hosted copy by where the link
+ * points. A Coursera accomplishment page or a Credly badge page is the issuer
+ * asserting the credential; a Drive link is a scan of a document that the
+ * issuer knows nothing about.
+ *
+ * The distinction is drawn here rather than recorded by hand on each entry,
+ * because a hand-kept flag drifts the moment a link is replaced with a better
+ * one — which is exactly what several of these entries are waiting for.
+ */
+const HOSTED_COPY_HOSTS = ["drive.google.com"];
+
+const isIssuerVerified = (url: string) =>
+  Boolean(url) && !HOSTED_COPY_HOSTS.some((h) => url.includes(h));
+
 /** Derived once so the section header and the desktop window cannot disagree. */
 export const certificationStats = {
   total: certifications.length,
   completed: certifications.filter((c) => c.status === "COMPLETED").length,
   pending: certifications.filter((c) => c.status === "IN PROGRESS").length,
-  /** How many entries can currently be verified by a visitor. */
+  /** Entries carrying any link at all, issuer page or hosted copy. */
   linked: certifications.filter((c) => c.credentialUrl).length,
+  /** Entries the issuer itself confirms. */
+  issuerVerified: certifications.filter((c) => isIssuerVerified(c.credentialUrl))
+    .length,
+  /** Entries evidenced only by a copy of the document. */
+  hostedCopy: certifications.filter(
+    (c) => c.credentialUrl && !isIssuerVerified(c.credentialUrl),
+  ).length,
 };

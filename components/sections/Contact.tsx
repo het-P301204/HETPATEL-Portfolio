@@ -10,8 +10,11 @@ import { useReducedMotion } from "@/lib/hooks";
 import { cn } from "@/lib/cn";
 
 /**
- * The terminal point of the journey. No form, no card — the two words that
- * matter at the size they deserve, and three channels you can actually act on.
+ * The terminal point of the journey. No form, no card — the words that matter
+ * at the size they deserve, and the channels you can actually act on. How many
+ * there are is decided by which URLs are filled in, so it is counted from the
+ * data rather than stated here; `contactChannels` in data/profile.ts is the
+ * same list the site index reads.
  *
  * A channel is a surface, not a row: pointing at one raises it, brings its
  * address forward and starts the signal running along its rule. The signal is
@@ -19,8 +22,9 @@ import { cn } from "@/lib/cn";
  * pointed at, so the section is still at rest.
  *
  * GitHub stays in the list whether or not there is a URL. Hiding it would be a
- * quieter kind of dishonesty than saying there isn't one — and the moment
- * `githubUrl` is filled in, the same row becomes a working link.
+ * quieter kind of dishonesty than saying there isn't one — and now that
+ * `githubUrl` is filled in, the same row is a working link, with the
+ * unavailable copy still standing by in case it is ever cleared.
  */
 
 type Channel = {

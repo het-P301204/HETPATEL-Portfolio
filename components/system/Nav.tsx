@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { profile } from "@/data/profile";
+import { contactChannels, profile } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { projects } from "@/data/projects";
 import { practice, stack } from "@/data/skills";
@@ -55,7 +55,7 @@ const INDEX: {
   },
   {
     id: "projects",
-    label: "PROJECTS — CASE ARCHIVE",
+    label: "PROJECTS",
     brief:
       "Built outside any engagement: personal builds, lab environments, competition and investigation work.",
     stat: `${String(projects.length).padStart(2, "0")} CASES`,
@@ -97,8 +97,9 @@ const INDEX: {
   {
     id: "contact",
     label: "CONTACT",
-    brief: "Email, LinkedIn, and an honest state for the GitHub that is not linked.",
-    stat: "03 CHANNELS",
+    brief:
+      "Direct address, professional profile, source, and the two practice accounts the record can be checked against.",
+    stat: `${String(contactChannels.length).padStart(2, "0")} CHANNELS`,
   },
 ];
 
@@ -142,8 +143,14 @@ export default function Nav() {
     if (!open) setHover(null);
   }, [open]);
 
-  /* progress, compaction, and inversion over dark sections — one listener */
+  /* progress, compaction, and inversion over dark sections — one listener.
+
+     Reads are taken before the single write, so the frame never measures,
+     mutates, then measures again. The inverted panels are collected once: no
+     section currently sets `tone="ink"`, so the common case is a querySelectorAll
+     and an empty loop on every scroll frame for nothing. */
   useEffect(() => {
+    const panels = Array.from(document.querySelectorAll(".on-ink"));
     let frame = 0;
     const onScroll = () => {
       if (frame) return;
@@ -154,18 +161,19 @@ export default function Nav() {
           1,
           document.documentElement.scrollHeight - window.innerHeight,
         );
-        setCompact(y > 40);
-        if (bar.current)
-          bar.current.style.transform = `scaleX(${Math.min(1, y / max)})`;
 
         // The bar reads whatever surface is behind it, not the section it links to.
         const band = 34;
         let dark = false;
-        document.querySelectorAll(".on-ink").forEach((el) => {
+        for (const el of panels) {
           const r = el.getBoundingClientRect();
           if (r.top <= band && r.bottom >= band) dark = true;
-        });
+        }
+
+        setCompact(y > 40);
         setInverted(dark);
+        if (bar.current)
+          bar.current.style.transform = `scaleX(${Math.min(1, y / max)})`;
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -237,7 +245,7 @@ export default function Nav() {
                   href={`#${item.id}`}
                   className={cn("nav__link", active === item.id && "is-active")}
                   data-cursor="link"
-                  aria-current={active === item.id ? "true" : undefined}
+                  aria-current={active === item.id ? "location" : undefined}
                 >
                   <SectionMarker id={item.id} className="nav__glyph" />
                   <span className="nav__roll">
@@ -343,7 +351,11 @@ export default function Nav() {
             ))}
           </ol>
 
-          <aside className="ix__context" aria-live="polite">
+          {/* A preview, not an announcement. It follows hover and focus, so
+              as a live region it interrupted with the full brief on every one
+              of the nine rows while tabbing through them. The row's own
+              accessible name already carries the destination. */}
+          <aside className="ix__context" aria-label="Selected destination">
             <SectionMarker id={preview.id} className="ix__context-mark" />
             <p className="t-mono ix__context-label">{preview.label}</p>
             <p className="t-body ix__context-brief">{preview.brief}</p>

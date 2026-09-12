@@ -200,7 +200,6 @@ html.lenis body {
      fraction of an em, and it scales with the type, so one declaration is
      correct from the 1rem labels to the 12rem headings. */
   word-spacing: 0.05em;
-  font-variation-settings: "wdth" 100;
   text-transform: uppercase;
 }
 
@@ -413,9 +412,12 @@ html.lenis body {
 .at .mask > span {
   transform: translate3d(0, 108%, 0);
   transition: transform 0.95s var(--ease);
+  will-change: transform;
 }
+/* Hint withdrawn once the reveal has run: it has nothing left to promote. */
 .at.is-in .mask > span {
   transform: none;
+  will-change: auto;
 }
 @media (prefers-reduced-motion: reduce) {
   .at .mask > span {
@@ -429,9 +431,14 @@ html.lenis body {
   padding-bottom: 0.06em; /* descenders must not be clipped */
   margin-bottom: -0.06em;
 }
+/* No blanket `will-change`. The mask primitive is used by AnimatedText (once
+   per word), the hero, the manifesto, the reel titles and About — 36 elements
+   in the delivered HTML, most of which are static the moment their one reveal
+   has finished. A permanent compositor-layer hint on all of them is the
+   opposite of what the property is for. It is applied below, on the few
+   elements that are actually scrubbed continuously. */
 .mask > * {
   display: block;
-  will-change: transform;
 }
 
 .fade-up {
@@ -668,6 +675,13 @@ button.link {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    /* Durations were collapsed and delays were not, so staggered sequences
+       still staged themselves in: the reel's numbered method (0.05–0.33s), the
+       hero tags, the section rows, the index list. Each item simply appeared
+       late instead of moving. Zeroing the delays is what actually makes a
+       reduced-motion page arrive all at once. */
+    animation-delay: 0s !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
   .fade-up {

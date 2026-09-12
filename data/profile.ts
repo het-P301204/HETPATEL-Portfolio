@@ -17,6 +17,22 @@ function resolveSiteUrl(): string {
   const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (vercel) return `https://${vercel.replace(/\/+$/, "")}`;
 
+  /* Reaching here on a real deployment means the sitemap, the canonical link,
+     the Open Graph URL and security.txt would all be published pointing at a
+     laptop. The comment on `siteUrl` below says a wrong origin "does not fail
+     loudly"; on a deployment it now does.
+
+     Gated on VERCEL rather than on NODE_ENV, because `next build` sets
+     NODE_ENV=production locally too and a local production build is a normal
+     thing to run. Vercel always provides VERCEL_PROJECT_PRODUCTION_URL, so
+     this only fires when something is genuinely misconfigured. */
+  if (process.env.VERCEL) {
+    throw new Error(
+      "No public origin resolved during a deployment build. Set " +
+        "NEXT_PUBLIC_SITE_URL before deploying.",
+    );
+  }
+
   return "http://localhost:3000";
 }
 
@@ -121,6 +137,28 @@ export const profile = {
     "I am early. The record below is an internship, a completed degree, structured coursework and lab work. It is written to be checked, not to impress.",
   ],
 } as const;
+
+/**
+ * Which contact channels actually exist.
+ *
+ * Derived, because it had already drifted: the index described CONTACT as
+ * "03 CHANNELS" and as carrying "an honest state for the GitHub that is not
+ * linked", while the section itself rendered five working channels including
+ * GitHub. Two optional URLs were filled in and the two places that describe
+ * the section were never updated — which is exactly the failure this file's
+ * derived counts exist to prevent. Both the section and the index now read the
+ * same value, so filling or clearing a URL updates every count on the site.
+ *
+ * Email and LinkedIn are unconditional; the rest appear only when their URL is
+ * set, which is the same contract `Contact` renders by.
+ */
+export const contactChannels = [
+  "email",
+  "linkedin",
+  ...(profile.githubUrl ? ["github"] : []),
+  ...(profile.tryHackMeUrl ? ["tryhackme"] : []),
+  ...(profile.credlyUrl ? ["credly"] : []),
+] as const;
 
 /**
  * The four disciplines used by the hero index, the navigation and the
