@@ -163,7 +163,15 @@ export default function WorkReel({
                   key={p.id}
                   className={cn("reel__mark", i === active && "is-live")}
                 >
-                  <b className="tnum">{p.number}</b>
+                  {/* Position in the reel, not the case's archive number.
+                      Those were the same value only while the reel carried
+                      every case in order; once it carries a selection, the
+                      archive number over the reel length reads as "07 / 05",
+                      which is not a fraction of anything. The archive number
+                      still identifies the case everywhere it is identified —
+                      on the dossier row, in the open record, and on the
+                      cursor — but a counter has to count. */}
+                  <b className="tnum">{String(i + 1).padStart(2, "0")}</b>
                   <i className="t-mono-sm">/{String(N).padStart(2, "0")}</i>
                 </span>
               ))}

@@ -255,11 +255,15 @@ export const certifications: Certification[] = [
     name: "Pre-Security",
     nameLines: ["PRE-SECURITY"],
     provider: "TryHackMe",
-    year: "",
+    /* Read off the certificate: Het Patel, 9 January 2026, TryHackMe code
+       THM-QWO4GDKPTL, 7h 38m course duration printed on the document. */
+    year: "2026",
     category: "PATHWAY",
     status: "COMPLETED",
     logo: "tryhackme",
-    credentialUrl: "",
+    ref: "7H 38M",
+    credentialUrl:
+      "https://drive.google.com/file/d/1xDITP8lItNHnIgNZGSNCXL6FKhXpjmmM/view?usp=sharing",
   },
   {
     name: "16 Credly Certifications",
