@@ -11,6 +11,13 @@
   inset: 0;
   z-index: 94;
 }
+/* The dialog takes focus when it opens so the trap has somewhere to start.
+   It is a container, not something you operate, so it shows no focus ring —
+   the controls inside it still show theirs. */
+.selector:focus,
+.selector:focus-visible {
+  outline: none;
+}
 .selector__veil {
   position: absolute;
   inset: 0;

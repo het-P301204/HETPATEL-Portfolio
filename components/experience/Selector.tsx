@@ -169,6 +169,13 @@ export default function Selector() {
     onClose: () => chooseRef.current("standard"),
     owner: "selector",
     ref: root,
+    /* The question arrives on its own, a moment after the name. Landing focus
+       on STANDARD drew a focus ring around the first door before the visitor
+       had touched anything — the browser cannot tell an automatic focus from a
+       keyboard one, so it assumes keyboard and paints the ring. Focus lands on
+       the dialog instead: nothing is drawn, the trap and the announcement are
+       unchanged, and the first Tab still reaches STANDARD. */
+    focusTarget: "container",
   });
 
   return (
@@ -178,6 +185,8 @@ export default function Selector() {
       role="dialog"
       aria-modal="true"
       aria-label="Choose how to enter"
+      /* Focusable by script, never by Tab — it is the dialog, not a control. */
+      tabIndex={-1}
     >
       <div className="selector__veil" data-sel="veil">
         {/* One preview area, two answers. It only draws something once you

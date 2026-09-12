@@ -42,11 +42,28 @@ export function useOverlay({
   /** Unique per overlay, so simultaneous overlays cannot unlock each other. */
   owner,
   ref,
+  /**
+   * Where focus lands when the overlay opens.
+   *
+   * `first` — the first focusable control. Right for an overlay the visitor
+   * opened deliberately: they asked for it, so put them on the thing they came
+   * to use.
+   *
+   * `container` — the dialog itself, which must carry `tabIndex={-1}`. Right
+   * for an overlay that opens on its own. Focusing a *control* programmatically
+   * before the visitor has touched anything makes the browser treat it as
+   * keyboard-initiated, so `:focus-visible` matches and the control is drawn
+   * with a focus ring nobody asked for. A container is not a control and draws
+   * nothing, while a screen reader still announces the dialog and its label.
+   * Both are APG-sanctioned; the difference is who initiated the opening.
+   */
+  focusTarget = "first",
 }: {
   open: boolean;
   onClose: () => void;
   owner: string;
   ref: React.RefObject<HTMLElement | null>;
+  focusTarget?: "first" | "container";
 }) {
   /* The close handler is read at event time, so the listeners never need to be
      torn down and rebuilt when the parent re-renders. */
@@ -72,7 +89,10 @@ export function useOverlay({
       const node = ref.current;
       if (!node) return;
       done = true;
-      const first = node.querySelector<HTMLElement>(FOCUSABLE);
+      const first =
+        focusTarget === "container"
+          ? null
+          : node.querySelector<HTMLElement>(FOCUSABLE);
       (first ?? node).focus?.({ preventScroll: true });
     };
     // A frame is the right moment — the overlay is painted and focusable by
@@ -99,7 +119,13 @@ export function useOverlay({
       const last = items[items.length - 1];
       const active = document.activeElement;
 
-      if (e.shiftKey && (active === first || !node.contains(active))) {
+      /* `active === node` matters when focus was put on the container: without
+         it, Shift+Tab from the container matches nothing here and the browser
+         walks focus out of the dialog entirely. */
+      if (
+        e.shiftKey &&
+        (active === first || active === node || !node.contains(active))
+      ) {
         e.preventDefault();
         last.focus();
       } else if (!e.shiftKey && active === last) {
@@ -125,5 +151,5 @@ export function useOverlay({
         restoreTo.current?.focus?.({ preventScroll: true });
       }
     };
-  }, [open, owner, ref]);
+  }, [open, owner, ref, focusTarget]);
 }
