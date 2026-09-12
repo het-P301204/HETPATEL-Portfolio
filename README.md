@@ -147,6 +147,23 @@ curl -sI https://hetpatel-lemon.vercel.app \
 
 </details>
 
+<br>
+
+**The audit that produced this table.** In September 2026 the deployed site was audited
+against its own claims and repaired — bugs, accessibility, performance, security, and the
+honesty of every count on the page. The record is written to be checked, including the
+parts it could not check:
+
+| Record | What is in it |
+| --- | --- |
+| [`docs/audit/PHASE7_AUDIT.md`](docs/audit/PHASE7_AUDIT.md) | Every defect found, its cause, its fix — and what was deliberately left alone |
+| [`docs/security/SECURITY_REVIEW.md`](docs/security/SECURITY_REVIEW.md) | Findings, plus what was checked and found sound |
+| [`docs/performance/PERFORMANCE_REVIEW.md`](docs/performance/PERFORMANCE_REVIEW.md) | Measurements from the built output, not a synthetic score |
+| [`docs/DECISION_LOG.md` § Phase 7](docs/DECISION_LOG.md) | The decisions, including one that knowingly overrides an earlier one |
+
+There is no linter and no test framework in this repository, so neither was run and neither
+is claimed. `prefers-reduced-motion` was verified by reading its gates, not by watching them.
+
 ---
 
 ## 🔑 Identity values
